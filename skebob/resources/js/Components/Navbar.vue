@@ -42,8 +42,8 @@ const goToUserPage = () => {
 <template>
     <nav>
         <div class="logo">
-            <h1><a href="/">COMTEM</a></h1>
-            <img class="imglogo" src="/m.png"/>
+            <h1><a href="/">SKEBOB</a></h1>
+            <img class="imglogo" src="/skebob.png"/>
         </div>
         <ul>
 <!--            <li><a href="/quiz">Quiz</a></li>-->

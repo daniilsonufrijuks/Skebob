@@ -15,7 +15,7 @@
             <li class="menu__item"><a class="menu__link" href="/contact">Contact</a></li>
             <li class="menu__item"><a class="menu__link" href="/faq">FAQ</a></li>
         </ul>
-        <p>&copy;2025 COMTEM | MADE BY DAN | All Rights Reserved</p>
+        <p>&copy;2025 SKEBOB | MADE BY BRAINCELL Inc. | All Rights Reserved</p>
     </footer>
     <!-- Footer -->
 </template>

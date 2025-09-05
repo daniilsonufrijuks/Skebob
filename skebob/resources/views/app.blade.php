@@ -2,16 +2,16 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <meta name="author" content="daniilsonufrijuks">
-    <meta name="description" content="Laptop, PC, Components shop with auction and ai">
+    <meta name="author" content="daniilsonufrijuks, ralfsmigals, danilavasiljevs">
+    <meta name="description" content="Uniq snacks">
     <meta http-equiv="refresh" content="180">
-    <meta name="keywords" content="auction, e-commerce, buy, sell, deals, online shopping, pc, laptop, components, parts, auction, ai, stores near me, hardware store near me, lv, en">
+    <meta name="keywords" content="snacks, mystery box, meals">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-    <title>COMTEM</title>
+    <title>Skebob</title>
 
-    <link rel="icon" type="image/png" href="{{ asset('m.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('skebob.png') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
