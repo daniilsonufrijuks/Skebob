@@ -5,8 +5,6 @@
     <div class="main-container">
         <Visitit />
         <Categories />
-        <PCCalc />
-        <PCPriceCalculator />
 <!--        <Productsintro />-->
         <div class="products">
             <ProductCardDB v-for="product in products" :key="product.id" :product="product" />

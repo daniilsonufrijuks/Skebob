@@ -102,7 +102,7 @@ export default {
                 // sort_order: this.sortOrder,
             }).toString();
 
-            fetch(`/products/cables?${params}`)
+            fetch(`/products/phones?${params}`)
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);

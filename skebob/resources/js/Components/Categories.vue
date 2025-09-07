@@ -2,51 +2,51 @@
     <!-- Categories -->
     <div class="product-cards">
         <div class="product-card">
-            <img src="/images/front/asuslaptop.png" alt="Product 1">
-            <p>LAPTOPS</p>
-            <button onclick="location.href='/laptops'">VISIT</button>
+            <img src="/images/snacks/chips.png" alt="Chips">
+            <p>CHIPS</p>
+            <button onclick="location.href='/chips'">SHOP NOW</button>
         </div>
 
         <div class="product-card">
-            <img src="/images/front/pc.png" alt="Product 2">
-            <p>PC</p>
-            <button onclick="location.href='/pcs'">VISIT</button>
+            <img src="/images/snacks/chocolate.png" alt="Chocolate">
+            <p>CHOCOLATES</p>
+            <button onclick="location.href='/chocolates'">SHOP NOW</button>
         </div>
 
         <div class="product-card">
-            <img src="/images/front/inteli5.png" alt="Product 3">
-            <p>COMPONENTS</p>
-            <button onclick="location.href='/components'">VISIT</button>
+            <img src="/images/snacks/drinks.png" alt="Drinks">
+            <p>DRINKS</p>
+            <button onclick="location.href='/drinks'">SHOP NOW</button>
         </div>
 
         <div class="product-card">
-            <img src="/images/front/phones.png" alt="Product 5">
-            <p>PHONES</p>
-            <button onclick="location.href='/phones'">VISIT</button>
+            <img src="/images/snacks/nuts.png" alt="Nuts">
+            <p>NUTS</p>
+            <button onclick="location.href='/nuts'">SHOP NOW</button>
         </div>
 
         <div class="product-card">
-            <img src="/images/front/keyboard.png" alt="Product 6">
-            <p>PERIPHERALS</p>
-            <button onclick="location.href='/peripherals'">VISIT</button>
+            <img src="/images/snacks/biscuits.png" alt="Biscuits">
+            <p>BISCUITS</p>
+            <button onclick="location.href='/biscuits'">SHOP NOW</button>
         </div>
 
         <div class="product-card">
-            <img src="/images/front/table.png" alt="Product 5">
-            <p>FURNITURE</p>
-            <button onclick="location.href='/furniture'">VISIT</button>
+            <img src="/images/snacks/fruit.png" alt="Fruit Snacks">
+            <p>FRUIT SNACKS</p>
+            <button onclick="location.href='/fruitsnacks'">SHOP NOW</button>
         </div>
 
         <div class="product-card">
-            <img src="/images/front/cables.png" alt="Product 6">
-            <p>CABLES</p>
-            <button onclick="location.href='/cables'">VISIT</button>
+            <img src="/images/snacks/candy.png" alt="Candy">
+            <p>CANDY</p>
+            <button onclick="location.href='/candy'">SHOP NOW</button>
         </div>
 
         <div class="product-card">
-            <img src="/images/front/games.png" alt="Product 7">
-            <p>GAME ZONE</p>
-            <button onclick="location.href='/games'">VISIT</button>
+            <img src="/images/snacks/specials.png" alt="Specials">
+            <p>SNACK BOXES</p>
+            <button onclick="location.href='/snackboxes'">SHOP NOW</button>
         </div>
     </div>
     <!-- Categories -->
@@ -115,7 +115,7 @@
 /* Media query for screens 500px or less */
 @media (max-width: 500px) {
     .product-card {
-        flex: 1 1 calc(50% - 5px); /* Для экранов меньше 500px, делаем карточки немного уже */
+        flex: 1 1 calc(50% - 5px);
         margin-bottom: 15px;
     }
 }

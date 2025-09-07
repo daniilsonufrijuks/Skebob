@@ -1,7 +1,7 @@
 <template>
 
     <div class="video-section">
-        <h2 class="font-bold">🎥 Watch Our Videos</h2>
+        <h2 class="font-bold">🎥 Watch Mr Beast Videos</h2>
         <div class="videos">
             <div v-for="video in videos" :key="video.id" class="video">
                 <iframe
@@ -31,10 +31,10 @@ export default {
         return {
             videos: [
                 // https://youtu.be/XEEcxYzNOfI?si=HOyKec5_kCK5p_Sm
-                { id: 'b85h_ujZ_vg?si=TxTPv8ABd8wJOF4t', title: 'Video 1' },
-                { id: 'beW8pCezrdI?si=_6FoX2LEQJmPHtQC', title: 'Video 2' },
-                { id: 'WpnLehvOM6E?si=kWKwhcBmqfGb-j0O', title: 'Video 3' },
-                { id: 'XEEcxYzNOfI?si=HOyKec5_kCK5p_Sm', title: 'Video 4' }
+                { id: 'jaRfBM7ESfc?si=Bu8mZgEkmIJC5Wp8', title: 'Video 1' },
+                { id: 'qBu08O4QEP8?si=-4qsrVaKVz2u-qCj', title: 'Video 2' },
+                { id: 'Hwybp38GnZw?si=6P4eK_ji3cDsDoGJ', title: 'Video 3' },
+                { id: 'W0iQguIT_yE?si=NL3Hu3l-BObggdyD', title: 'Video 4' }
             ]
         };
     }

@@ -72,17 +72,17 @@ Route::get('/registration', function () {
     return Inertia::render('Auth/Registration');
 })->name('registration');
 
-Route::get('/laptops', function () {
-    return Inertia::render('Laptops');
-})->name('laptops');
+Route::get('/chips', function () {
+    return Inertia::render('Chips');
+})->name('chips');
 
-Route::get('/pcs', function () {
-    return Inertia::render('Pcs');
-})->name('pcs');
+Route::get('/chocolates', function () {
+    return Inertia::render('Chocolates');
+})->name('chocolates');
 
-Route::get('/components', function () {
-    return Inertia::render('Components');
-})->name('components');
+Route::get('/drinks', function () {
+    return Inertia::render('Drinks');
+})->name('drinks');
 
 Route::get('/cart', function () {
     return Inertia::render('Cart');
@@ -92,33 +92,29 @@ Route::get('/tutor', function () {
     return Inertia::render('Tutorials');
 })->name('tutor');
 
-Route::get('/auction', function () {
-    return Inertia::render('Auction');
-})->name('auction');
-
 Route::get('/quiz', function () {
     return Inertia::render('Quiz');
 })->name('quiz');
 
-Route::get('/phones', function () {
-    return Inertia::render('Phones');
-})->name('phones');
+Route::get('/nuts', function () {
+    return Inertia::render('Nuts');
+})->name('nuts');
 
-Route::get('/peripherals', function () {
-    return Inertia::render('Peripherals');
-})->name('peripherals');
+Route::get('/biscuits', function () {
+    return Inertia::render('Biscuits');
+})->name('biscuits');
 
-Route::get('/furniture', function () {
-    return Inertia::render('Furniture');
-})->name('furniture');
+Route::get('/fruitsnacks', function () {
+    return Inertia::render('Fruitsnacks');
+})->name('fruitsnacks');
 
-Route::get('/cables', function () {
-    return Inertia::render('Cables');
-})->name('cables');
+Route::get('/candy', function () {
+    return Inertia::render('Candy');
+})->name('candy');
 
-Route::get('/games', function () {
-    return Inertia::render('PlayZone');
-})->name('games');
+Route::get('/snackboxes', function () {
+    return Inertia::render('Snackboxes');
+})->name('snackboxes');
 
 Route::get('/faq', function () {
     return Inertia::render('FAQ');
@@ -128,9 +124,6 @@ Route::get('/faq', function () {
 
 
 
-//Route::get('/auction/add', function () {
-//    return Inertia::render('AddAItem');
-//})->name('addaitem');
 
 
 

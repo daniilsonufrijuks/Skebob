@@ -2,9 +2,10 @@
     <section class="testimonial-section">
         <div class="parent-container">
             <blockquote class="responsive-quote">
-                <p>Welcome to Skebob Market
-
-                    Thank you for choosing Skebob Market. We’re excited to be part of your journey!</p> <cite> Braincell DEV GROUP</cite>
+                <p>Welcome to <strong>Skebob Market</strong> – your one-stop destination for unique and delicious snacks!
+                    Thank you for choosing us. We’re excited to be part of your snacking journey and bring you flavors that surprise, delight, and inspire every bite.
+                    Explore our carefully curated selection and discover why Skebob Market is more than just snacks – it’s an experience!</p>
+                <cite>Braincell DEV GROUP</cite>
             </blockquote>
         </div>
     </section>

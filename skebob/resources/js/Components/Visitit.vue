@@ -3,26 +3,26 @@
     <div class="product-cards-top">
         <div class="product-card-top">
             <img src="/images/front/prod1.png" alt="Product 1">
-            <p>Best quality product at an affordable price.</p>
-            <button onclick="location.href='https://www.asus.com/'">Go</button>
+            <p>Best quality chocolate.</p>
+            <button onclick="location.href='https://feastables.com/'">Go</button>
         </div>
 
         <div class="product-card-top">
             <img src="/images/front/prod2.png" alt="Product 2">
             <p>Limited time offer, hurry up!</p>
-            <button onclick="location.href='https://www.bequiet.com/en'">Go</button>
+            <button onclick="location.href='https://www.cheetos.com/'">Go</button>
         </div>
 
         <div class="product-card-top">
             <img src="/images/front/prod3.png" alt="Product 3">
             <p>Top choice among customers this month.</p>
-            <button onclick="location.href='https://www.apple.com/'">Go</button>
+            <button onclick="location.href='https://www.doritos.com/'">Go</button>
         </div>
 
         <div class="product-card-top">
             <img src="/images/front/prod4.png" alt="Product 4">
             <p>Special discount for a limited period.</p>
-            <button onclick="location.href='https://www.msi.com/index.php'">Go</button>
+            <button onclick="location.href='https://www.skittles.com/'">Go</button>
         </div>
     </div>
     <!-- visit this -->

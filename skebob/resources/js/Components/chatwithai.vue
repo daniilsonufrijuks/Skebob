@@ -1,6 +1,6 @@
 <template>
     <div class="chat-container">
-        <h2>Chat with COMTEM AI</h2>
+        <h2>Chat with SKEBOB AI</h2>
         <div class="chat-box" ref="chatBox">
             <div v-for="(message, index) in chatMessages" :key="index" :class="['chat-message', message.sender]">
                 <p>{{ message.text }}</p>

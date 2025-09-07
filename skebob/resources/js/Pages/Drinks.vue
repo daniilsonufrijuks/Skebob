@@ -69,6 +69,7 @@ export default {
     },
     mounted() {
         this.fetchProducts();
+
     },
     computed: {
         // Sort products based on the selected order
@@ -84,7 +85,7 @@ export default {
     },
     methods: {
         // fetchProducts() {
-        //     fetch('/products/pcs') // Adjust API endpoint if necessary
+        //     fetch('/products/laptops') // Adjust API endpoint if necessary
         //         .then((response) => response.json())
         //         .then((data) => {
         //             console.log('Fetched products:', data);
@@ -98,9 +99,10 @@ export default {
             const params = new URLSearchParams({
                 price_min: this.filters.price_min ?? 0,
                 price_max: this.filters.price_max ?? 100000,
+                // sort_order: this.sortOrder,
             }).toString();
 
-            fetch(`/products/pcs?${params}`)
+            fetch(`/products/phones?${params}`)
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -125,15 +127,12 @@ export default {
     flex-direction: column;
     gap: 70px; /* Adjust as needed */
 }
-
 .products {
     display: flex;
     flex-wrap: wrap;
     gap: 20px; /* Adjust spacing between product cards */
     justify-content: center; /* Center product cards */
-    align-items: center;
 }
-
 .filters {
     display: flex;
     justify-content: center;
