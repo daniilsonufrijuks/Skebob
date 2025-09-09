@@ -61,7 +61,7 @@ const submit = () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #420d65;
+    background-color: #d87220;
     column-gap: 30px;
 }
 .form{
@@ -129,12 +129,12 @@ form{
 }
 .field button{
     color: #fff;
-    background-color: #420d65;
+    background-color: #985016;
     transition: all 0.3s ease;
     cursor: pointer;
 }
 .field button:hover{
-    background-color: #420d65;
+    background-color: #d87220;
 }
 .form-link{
     text-align: center;
@@ -147,7 +147,7 @@ form{
     color: #232836;
 }
 .form a{
-    color: #420d65;
+    color: #d87220;
     text-decoration: none;
 }
 .form-content a:hover{
@@ -177,12 +177,12 @@ form{
 }
 a.facebook{
     color: #fff;
-    background-color: #420d65;
+    background-color: #d87220;
 }
 a.facebook .facebook-icon{
     height: 28px;
     width: 28px;
-    color: #420d65;
+    color: #d87220;
     font-size: 20px;
     border-radius: 50%;
     display: flex;

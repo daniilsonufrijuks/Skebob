@@ -10,7 +10,7 @@
         <div class="product-card-top">
             <img src="/images/front/prod2.png" alt="Product 2">
             <p>Vietnamese snack special!<br>Available on website now!</p>
-            <button onclick="location.href='https://www.oishi.com.vn/san-pham'">Visit oishi.com.vn/san-pham</button>
+            <button onclick="location.href='https://www.oishi.com.vn/san-pham'">Visit oishi.com.vn</button>
         </div>
 
         <div class="product-card-top">
