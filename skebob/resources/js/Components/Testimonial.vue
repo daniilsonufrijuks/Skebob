@@ -15,7 +15,7 @@
 <style scoped>
 
 .testimonial-section {
-    background-color: #420d65;
+    background-color: #d87220;
     margin-top: 100px;
 }
 
@@ -23,7 +23,7 @@
     position: relative;
     margin: 130px 0;
     padding: 40px;
-    background-color: #c785d0;
+    background-color: #f1a86d;
     border-radius: 16px;
 }
 

@@ -10,7 +10,7 @@
         <ul class="menu">
             <li class="menu__item"><a class="menu__link" href="/">Home</a></li>
             <li class="menu__item"><a class="menu__link" href="/about">About</a></li>
-            <li class="menu__item"><a class="menu__link" href="https://github.com/daniilsonufrijuks">DAN</a></li>
+            <li class="menu__item"><a class="menu__link" href="https://github.com/daniilsonufrijuks/Skebob">SOURCES</a></li>
             <li class="menu__item"><a class="menu__link" href="#">Team</a></li>
             <li class="menu__item"><a class="menu__link" href="/contact">Contact</a></li>
             <li class="menu__item"><a class="menu__link" href="/faq">FAQ</a></li>
@@ -23,14 +23,14 @@
 
 <style scoped>
 .footer {
-    background: #420d65;
+    background: #d87220;
     padding: 20px 50px;
     text-align: center;
-    position: relative; /* Fix the footer to the bottom of the page */
-    bottom: 0; /* Position the footer at the bottom */
+    position: relative;
+    bottom: 0;
     left: 0;
-    width: 100%; /* Make sure it spans the entire width */
-    z-index: 1000; /* Keep it above other content */
+    width: 100%;
+    z-index: 1000;
     margin: 0;
 }
 
@@ -41,6 +41,7 @@
     margin: 10px 0;
     flex-wrap: wrap;
     justify-content: center;
+    list-style: none;
 }
 
 .menu__link {

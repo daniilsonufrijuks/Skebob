@@ -62,6 +62,7 @@ const submit = () => {
     position: relative;
     padding-top: 50px;
     padding-bottom: 290px;
+    border-radius: 25px;
 }
 
 .contact_section .container-bg {
@@ -84,7 +85,7 @@ const submit = () => {
     padding: 45px 20px;
 }
 
-.contact_section input {
+.contact_section input, textarea {
     width: 100%;
     border: 1px solid #919191;
     height: 50px;
@@ -93,6 +94,7 @@ const submit = () => {
     background-color: transparent;
     outline: none;
     color: #101010;
+    border-radius: 7px;
 }
 
 .contact_section input::-webkit-input-placeholder {
@@ -118,9 +120,8 @@ const submit = () => {
 .contact_section button {
     display: inline-block;
     padding: 12px 45px;
-    background-color: #420d65;
-    color: #ffffff;
-    border: 1px solid #420d65;
+    background-color: #d87220;
+    border: 1px solid #d87220;
     border-radius: 0;
     -webkit-transition: all .3s;
     transition: all .3s;
@@ -131,7 +132,7 @@ const submit = () => {
 
 .contact_section button:hover {
     background-color: transparent;
-    color: #420d65;
+    color: #985016;
 }
 
 .contact_section .map_container {

@@ -127,31 +127,32 @@ const goToUserPage = () => {
 
 <style scoped>
 .menubar ul {
-    list-style-type: none; /* Remove bullet points */
+    list-style-type: none;
     padding: 0;
     margin: 0;
-    display: flex; /* Use flexbox for layout */
-    flex-direction: column; /* Stack items vertically */
-    align-items: center; /* Center items horizontally */
-    justify-content: center; /* Center items vertically */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .menubar li {
-    margin: 10px 0; /* Add some spacing between menu items */
+    margin: 10px 0;
 }
 
 .menubar i.icon {
-    font-size: 24px; /* Adjust icon size */
+    font-size: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 nav {
-    background-color: #420d65;
+    background-color: #d87220;
     padding: 5px 2%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    align-content: center;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
     rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     z-index: 1;
@@ -160,25 +161,40 @@ nav {
 nav .logo {
     display: flex;
     align-items: center;
+    align-content: center;
+    gap: 10px;
 }
 nav .logo img {
     height: 25px;
     width: auto;
-    margin-right: 10px;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+
 }
 nav .logo h1 {
     font-size: 1.5rem;
-    background: linear-gradient(to right, #c593dc 0%, #e0cae4 100%);
+    background: linear-gradient(to right, #000000 0%, #272527 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    margin: 0;
 }
 
 nav ul {
     list-style: none;
     display: flex;
+    align-items: center;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 nav ul li {
+    display: flex;
+    align-items: center;
+    height: 100%;
     margin-left: 0.5rem;
 }
 nav ul li a {
@@ -191,7 +207,7 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    background-color: #a34faf;
+    background-color: #703505;
 }
 
 .hamburger {
@@ -272,7 +288,7 @@ nav ul li a:hover {
 }
 
 .menubar ul li a:hover {
-    background-color: #ac60bf;
+    background-color: #703505;
 }
 
 .imglogo {

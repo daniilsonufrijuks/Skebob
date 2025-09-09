@@ -57,7 +57,7 @@
     justify-content: space-between; /* This will push the button to the bottom */
     background-color: #f9f9f9;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 30px;
     width: 23%;
     text-align: center;
     padding: 15px;
@@ -86,7 +86,7 @@
 
 .product-card-top button {
     padding: 10px 20px;
-    background-color: #007BFF;
+    background-color: #d87220;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -95,7 +95,7 @@
 }
 
 .product-card-top button:hover {
-    background-color: #0056b3;
+    background-color: #d87220;
 }
 
 /* Media query for phones */

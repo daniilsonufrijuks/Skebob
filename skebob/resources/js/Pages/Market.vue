@@ -24,13 +24,10 @@ import Categories from "../Components/Categories.vue";
 import Navbar from "@/Components/Navbar.vue";
 import Footer from "@/Components/Footer.vue";
 import ProductCardDB from "@/Components/ProductCardDB.vue";
-import PCCalc from "@/Components/PCCalc.vue";
-import PCPriceCalculator from "@/Components/PCPriceCalc.vue";
 
 export default {
     name: 'Market',
     components: {
-        PCPriceCalculator,
         ProductCardDB,
         Navbar,
         Visitit,
@@ -40,7 +37,6 @@ export default {
         Search,
         Categories,
         Footer,
-        PCCalc,
     },
     props: {
         routes: Object

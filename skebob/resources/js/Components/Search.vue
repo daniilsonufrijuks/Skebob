@@ -89,13 +89,14 @@ export default {
     position: relative;
     box-shadow: 0 0 40px rgba(51, 51, 51, .1);
     align-items: center;
+    height: 40px;
 }
 
 .search i.fa {
-    width: 60px; /* Increase this to make the icon area larger */
+    width: 60px;
     display: inline-block;
-    text-align: center; /* Center the icon inside the box */
-    padding-left: 10px; /* Adjust padding to align the icon nicely */
+    text-align: center;
+    padding-left: 10px;
 }
 
 .container_search {
@@ -104,7 +105,7 @@ export default {
 
 .search input {
     flex-grow: 1;
-    height: 60px;
+    height: 40px;
     text-indent: 25px;
     border: 2px solid #d6d4d4;
 }
@@ -116,15 +117,14 @@ export default {
 
 .search button {
     position: absolute;
-    top: 5px;
-    right: 5px;
-    height: 50px;
+    right: 1px;
+    height: 40px;
     width: 110px;
-    background: #420d65;
+    background: #d87220;
 }
 
 .search button:hover {
-    background: #8311cf;
+    background: #985016;
 }
 
 /* Suggestions list style */

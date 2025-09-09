@@ -166,14 +166,14 @@ h2 {
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 5px;
-    background: #007bff;
+    background: #d87220;
     color: white;
     cursor: pointer;
     transition: background 0.3s ease;
 }
 
 .chat-input button:hover {
-    background: #0056b3;
+    background: #d87220;
 }
 
 /* Media query for screens 500px or less */

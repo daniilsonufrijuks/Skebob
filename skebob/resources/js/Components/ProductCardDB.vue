@@ -134,7 +134,7 @@ export default {
 
 .product-card button {
     padding: 10px 20px;
-    background-color: #007BFF;
+    background-color: #d87220;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -142,7 +142,7 @@ export default {
 }
 
 .product-card button:hover {
-    background-color: #0056b3;
+    background-color: #d87220;
 }
 
 
