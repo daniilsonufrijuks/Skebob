@@ -11,7 +11,7 @@
             <input
                 type="text"
                 v-model="userInput"
-                placeholder="Ask about PC components..."
+                placeholder="Ask about yum yums or stuff..."
                 required
                 aria-label="Chat input"
             />
@@ -27,7 +27,7 @@ export default {
         return {
             userInput: "",
             chatMessages: [
-                { sender: "ai", text: "Hello! Ask me anything about PC components." },
+                { sender: "ai", text: "Hello! Ask me anything about snacks. That's all I can do :D" },
             ],
             isLoading: false,
         };

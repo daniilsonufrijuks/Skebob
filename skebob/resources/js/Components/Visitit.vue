@@ -3,26 +3,27 @@
     <div class="product-cards-top">
         <div class="product-card-top">
             <img src="/images/front/prod1.png" alt="Product 1">
-            <p>Best quality chocolate.</p>
-            <button onclick="location.href='https://feastables.com/'">Go</button>
+            <p>Best feasting chocolate!</p>
+            <button onclick="location.href='https://feastables.com/'">Visit feastables.com</button>
         </div>
 
         <div class="product-card-top">
             <img src="/images/front/prod2.png" alt="Product 2">
-            <p>Limited time offer, hurry up!</p>
-            <button onclick="location.href='https://www.cheetos.com/'">Go</button>
+            <p>Vietnamese snack special!<br>Available on website now!</p>
+            <button onclick="location.href='https://www.oishi.com.vn/san-pham'">Visit oishi.com.vn/san-pham</button>
         </div>
 
         <div class="product-card-top">
             <img src="/images/front/prod3.png" alt="Product 3">
-            <p>Top choice among customers this month.</p>
-            <button onclick="location.href='https://www.doritos.com/'">Go</button>
+<!--            <p>Top choice among customers this month.</p>-->
+            <p>Limited Edition Doritos,<br>don't miss 'em!</p>
+            <button onclick="location.href='https://www.doritos.com/'">Visit doritos.com</button>
         </div>
 
         <div class="product-card-top">
             <img src="/images/front/prod4.png" alt="Product 4">
             <p>Special discount for a limited period.</p>
-            <button onclick="location.href='https://www.skittles.com/'">Go</button>
+            <button onclick="location.href='https://www.skittles.com/'">Visit skittles.com</button>
         </div>
     </div>
     <!-- visit this -->
@@ -111,3 +112,5 @@
 }
 /* Cards near top */
 </style>
+<script setup lang="ts">
+</script>

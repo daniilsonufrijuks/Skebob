@@ -2,8 +2,8 @@
     <section class="testimonial-section">
         <div class="parent-container">
             <blockquote class="responsive-quote">
-                <p>Dear Valued Customer,
-                    We are thrilled to welcome you to Skibob – your ultimate destination for unique and flavorful snacks!
+                <p>Dear valued customer,<br>
+                    We are thrilled to welcome you to Skebob – your ultimate destination for unique and flavorful snacks!
                     Whether you’re craving something sweet, savory, or adventurous, our carefully curated collection is designed to satisfy every taste bud.
                     From rare international treats to exclusive Skibob specialties, we make snacking an experience you’ll love.</p> <cite>Skibob Snack Group</cite>
             </blockquote>
