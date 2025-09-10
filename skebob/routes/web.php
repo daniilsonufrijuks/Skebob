@@ -120,6 +120,9 @@ Route::get('/faq', function () {
     return Inertia::render('FAQ');
 })->name('faq');
 
+Route::get('/gifts', function () {
+    return Inertia::render('Gifts');
+})->name('gifts');
 
 
 
@@ -188,18 +191,18 @@ Route::post('/logout', function () {
 
 
 // for getting products for pages for categories
-Route::get('/products/components', [ProductsController::class, 'getComponentsProducts']);
-Route::get('/products/laptops', [ProductsController::class, 'getLaptopsProducts']);
-Route::get('/products/pcs', [ProductsController::class, 'getPcsProducts']);
-Route::get('/products/phones', [ProductsController::class, 'getPhonesProducts']);
+Route::get('/products/chips', [ProductsController::class, 'getChipsProducts']);
+Route::get('/products/chocolates', [ProductsController::class, 'getChocolatesProducts']);
+Route::get('/products/drinks', [ProductsController::class, 'getDrinksProducts']);
+Route::get('/products/nuts', [ProductsController::class, 'getNutsProducts']);
 
-Route::get('/products/furniture', [ProductsController::class, 'getFurnitureProducts']);
+Route::get('/products/biscuits', [ProductsController::class, 'getBiscuitsProducts']);
 
-Route::get('/products/cables', [ProductsController::class, 'getCablesProducts']);
+Route::get('/products/fruitsnacks', [ProductsController::class, 'getFruitsnacksProducts']);
 
-Route::get('/products/peripherals', [ProductsController::class, 'getPeripheralsProducts']);
+Route::get('/products/candy', [ProductsController::class, 'getCandyProducts']);
 
-Route::get('/products/games', [ProductsController::class, 'getGamesProducts']);
+Route::get('/products/snackboxes', [ProductsController::class, 'getSnackboxesProducts']);
 
 Route::get('/products/{id}', [ProductsController::class, 'show']);
 

@@ -48,10 +48,11 @@ const goToUserPage = () => {
         <ul>
 <!--            <li><a href="/quiz">Quiz</a></li>-->
             <li><a href="/">Home</a></li>
+            <li><a href="/market">Market</a></li>
+            <li><a href="/gifts">Gifts</a></li>
             <li><a href="/about">About</a></li>
             <li><a href="/contacts">Contacts</a></li>
             <li><a href="/tutor">Blog</a></li>
-            <li><a href="/market">Market</a></li>
             <li><a href="/login">Login</a></li>
             <li v-if="isLoggedIn">
                 <!-- User is logged in: show user avatar -->
@@ -89,10 +90,11 @@ const goToUserPage = () => {
     <div class="menubar" :class="{ active: isMenuActive }">
         <ul>
             <li><a href="/">Home</a></li>
+            <li><a href="/market">Market</a></li>
+            <li><a href="/gifts">Gifts</a></li>
             <li><a href="/about">About</a></li>
             <li><a href="/contacts">Contacts</a></li>
             <li><a href="/tutor">Blog</a></li>
-            <li><a href="/market">Market</a></li>
             <li><a href="/login">Login</a></li>
 <!--            <li><a :href="routes.login">Login</a></li>-->
             <li v-if="isLoggedIn">
