@@ -1,69 +1,348 @@
 <template>
-    <section class="testimonial-section">
-        <div class="parent-container">
-            <blockquote class="responsive-quote">
-                <p>Dear valued customer,<br>
-                    We are thrilled to welcome you to Skebob – your ultimate destination for unique and flavorful snacks!
-                    Whether you’re craving something sweet, savory, or adventurous, our carefully curated collection is designed to satisfy every taste bud.
-                    From rare international treats to exclusive Skibob specialties, we make snacking an experience you’ll love.</p> <cite>Skibob Snack Group</cite>
-            </blockquote>
+    <section class="testimonials-section">
+        <div class="testimonials-container">
+            <div class="testimonials-header">
+                <h2 class="testimonials-title">What Our Customers Say</h2>
+                <p class="testimonials-subtitle">
+                    Join thousands of satisfied snack lovers who have discovered their new favorites with Skebob.
+                </p>
+            </div>
+
+            <div class="main-testimonial">
+                <div class="main-testimonial-content">
+                    <div class="testimonial-inner">
+                        <svg class="quote-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z"></path>
+                        </svg>
+
+                        <div class="welcome-message">
+                            <p class="welcome-text">
+                                Dear valued customer,<br/><br/>
+                                We are thrilled to welcome you to Skebob – your ultimate destination for unique and flavorful snacks!
+                                Whether you're craving something sweet, savory, or adventurous, our carefully curated collection is
+                                designed to satisfy every taste bud. From rare international treats to exclusive Skibob specialties,
+                                we make snacking an experience you'll love.
+                            </p>
+                        </div>
+
+                        <div class="star-rating">
+                            <svg v-for="n in 5" :key="n" class="star" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        </div>
+
+                        <div class="testimonial-author">
+                            <p class="author-name">Skebob Snack Group</p>
+                            <p class="author-role">Official Welcome Message</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional customer testimonials -->
+            <div class="additional-testimonials">
+                <div
+                    v-for="testimonial in additionalTestimonials"
+                    :key="testimonial.id"
+                    class="customer-testimonial"
+                >
+                    <div class="customer-testimonial-content">
+                        <div class="customer-star-rating">
+                            <svg v-for="n in testimonial.rating" :key="n" class="customer-star" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        </div>
+                        <p class="customer-text">{{ testimonial.text }}</p>
+                        <div class="customer-author">
+                            <p class="customer-author-name">{{ testimonial.author }}</p>
+                            <p class="customer-author-role">{{ testimonial.role }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </template>
 
+<script setup>
+import { ref } from 'vue';
+
+const additionalTestimonials = ref([
+    {
+        id: 1,
+        text: "Absolutely amazing selection! I discovered snacks I never knew existed. The mystery box was such a fun surprise!",
+        author: "Sarah M.",
+        role: "Verified Customer",
+        rating: 5
+    },
+    {
+        id: 2,
+        text: "The quality is exceptional and the international variety is incredible. Skebob has become my go-to for unique treats!",
+        author: "Mike T.",
+        role: "Verified Customer",
+        rating: 5
+    }
+]);
+</script>
 
 <style scoped>
-
-.testimonial-section {
+/* Testimonials Section Styles */
+.testimonials-section {
+    padding: 4rem 0;
     background-color: #d87220;
-    margin-top: 100px;
+    color: white;
 }
 
-.responsive-quote {
-    position: relative;
-    margin: 130px 0;
-    padding: 40px;
-    background-color: #f1a86d;
-    border-radius: 16px;
-}
-
-.responsive-quote::before {
-    content: url("data:image/svg+xml,%3Csvg class='quote-svg' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M7.56863 4H4.43137C2.56863 4 1 5.6 1 7.5V10.8C1 12.7 2.56863 14.3 4.43137 14.3H6.78431C7.56863 14.3 8.35294 14 9.03922 13.6V15.7C9.03922 17 8.05882 18 6.78431 18H5.21569C4.62745 18 4.23529 18.4 4.23529 19C4.23529 19.6 4.62745 20 5.21569 20H6.78431C9.13725 20 11 18.1 11 15.7V10V7.5C11 5.6 9.43137 4 7.56863 4Z'%3E%3C/path%3E%3Cpath d='M19.6638 4H16.4299C14.5679 4 13 5.6 13 7.5V10.8C13 12.7 14.5679 14.3 16.4299 14.3H18.7818C19.5658 14.3 20.3497 14 21.0357 13.6V15.7C21.0357 17 20.0557 18 18.7818 18H17.2138C16.6259 18 16.2339 18.4 16.2339 19C16.2339 19.6 16.6259 20 17.2138 20H18.7818C21.1337 20 22.9956 18.1 22.9956 15.7V10V7.5C23.0936 5.6 21.5257 4 19.6638 4Z'%3E%3C/path%3E%3C/svg%3E");
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    transform: scale(2);
-    opacity: 0.1;
-}
-
-.responsive-quote::after {
-    content: url("data:image/svg+xml,%3Csvg class='quote-svg' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M7.56863 4H4.43137C2.56863 4 1 5.6 1 7.5V10.8C1 12.7 2.56863 14.3 4.43137 14.3H6.78431C7.56863 14.3 8.35294 14 9.03922 13.6V15.7C9.03922 17 8.05882 18 6.78431 18H5.21569C4.62745 18 4.23529 18.4 4.23529 19C4.23529 19.6 4.62745 20 5.21569 20H6.78431C9.13725 20 11 18.1 11 15.7V10V7.5C11 5.6 9.43137 4 7.56863 4Z'%3E%3C/path%3E%3Cpath d='M19.6638 4H16.4299C14.5679 4 13 5.6 13 7.5V10.8C13 12.7 14.5679 14.3 16.4299 14.3H18.7818C19.5658 14.3 20.3497 14 21.0357 13.6V15.7C21.0357 17 20.0557 18 18.7818 18H17.2138C16.6259 18 16.2339 18.4 16.2339 19C16.2339 19.6 16.6259 20 17.2138 20H18.7818C21.1337 20 22.9956 18.1 22.9956 15.7V10V7.5C23.0936 5.6 21.5257 4 19.6638 4Z'%3E%3C/path%3E%3C/svg%3E");
-    position: absolute;
-    bottom: -10px;
-    right: -10px;
-    transform: scale(2) rotate(180deg);
-    opacity: 0.1;
-}
-.responsive-quote p {
-    font-size: calc(16px + 0.25vw);
-}
-
-.responsive-quote cite {
-    font-size: calc(14px + 0.25vw);
-}
-
-.parent-container {
-    width: 90%;
-    max-width: 800px;
+.testimonials-container {
+    max-width: 64rem;
     margin: 0 auto;
+    padding: 0 1rem;
 }
 
-@media (max-width: 500px) {
-    .responsive-quote {
-        font-size: 1.2em; /* Уменьшаем размер текста на маленьких экранах */
-        padding: 15px; /* Уменьшаем отступы */
-        margin: 10px;  /* Уменьшаем внешние отступы */
-        line-height: 1.4; /* Немного уменьшаем межстрочный интервал */
+.testimonials-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.testimonials-title {
+    margin-bottom: 1rem;
+    color: white;
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+}
+
+.testimonials-subtitle {
+    color: rgba(255, 237, 213, 1); /* orange-100 */
+    max-width: 32rem;
+    margin: 0 auto;
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+}
+
+/* Main Testimonial Styles */
+.main-testimonial {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.5rem;
+    margin-bottom: 3rem;
+}
+
+.main-testimonial-content {
+    padding: 2rem;
+}
+
+.testimonial-inner {
+    text-align: center;
+}
+
+.quote-icon {
+    width: 3rem;
+    height: 3rem;
+    color: rgba(254, 215, 170, 1); /* orange-200 */
+    margin: 0 auto 1.5rem auto;
+    display: block;
+}
+
+.welcome-message {
+    margin-bottom: 1.5rem;
+}
+
+.welcome-text {
+    color: white;
+    font-size: 1.125rem;
+    line-height: 1.625;
+    font-weight: var(--font-weight-normal);
+}
+
+.star-rating {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+    gap: 0.25rem;
+}
+
+.star {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: #facc15; /* yellow-400 */
+    fill: currentColor;
+}
+
+.testimonial-author {
+    color: rgba(255, 237, 213, 1); /* orange-100 */
+}
+
+.author-name {
+    font-weight: var(--font-weight-medium);
+    margin-bottom: 0.25rem;
+    font-size: var(--text-base);
+    line-height: 1.5;
+}
+
+.author-role {
+    font-size: 0.875rem;
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+}
+
+/* Additional Testimonials Styles */
+.additional-testimonials {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .additional-testimonials {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.customer-testimonial {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.5rem;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.customer-testimonial:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.customer-testimonial-content {
+    padding: 1.5rem;
+}
+
+.customer-star-rating {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+    gap: 0.25rem;
+}
+
+.customer-star {
+    width: 1rem;
+    height: 1rem;
+    color: #facc15; /* yellow-400 */
+    fill: currentColor;
+}
+
+.customer-text {
+    color: white;
+    margin-bottom: 1rem;
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+}
+
+.customer-author {
+    color: rgba(255, 237, 213, 1); /* orange-100 */
+}
+
+.customer-author-name {
+    font-weight: var(--font-weight-medium);
+    margin-bottom: 0.25rem;
+    font-size: var(--text-base);
+    line-height: 1.5;
+}
+
+.customer-author-role {
+    font-size: 0.875rem;
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+    .testimonials-section {
+        padding: 2rem 0;
+    }
+
+    .testimonials-container {
+        padding: 0 0.5rem;
+    }
+
+    .testimonials-header {
+        margin-bottom: 2rem;
+    }
+
+    .main-testimonial-content {
+        padding: 1.5rem;
+    }
+
+    .welcome-text {
+        font-size: 1rem;
+    }
+
+    .quote-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        margin-bottom: 1rem;
+    }
+}
+
+/* Animation Effects */
+.main-testimonial {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.customer-testimonial {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.customer-testimonial:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.customer-testimonial:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Focus and Accessibility */
+.customer-testimonial:focus-within {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+    .testimonials-section {
+        background-color: transparent !important;
+        color: black !important;
+    }
+
+    .main-testimonial,
+    .customer-testimonial {
+        background-color: transparent !important;
+        border: 1px solid #ccc !important;
+    }
+
+    .testimonials-title,
+    .welcome-text,
+    .customer-text {
+        color: black !important;
+    }
+
+    .testimonials-subtitle,
+    .testimonial-author,
+    .customer-author {
+        color: #666 !important;
     }
 }
 </style>

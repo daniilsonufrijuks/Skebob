@@ -68,7 +68,7 @@ export default {
         };
     },
     mounted() {
-        this.fetchProducts();
+        // this.fetchProducts();
     },
     methods: {
         // fetchProducts() {
