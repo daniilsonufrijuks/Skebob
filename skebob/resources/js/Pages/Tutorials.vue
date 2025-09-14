@@ -5,6 +5,7 @@
     <Slider/>
     <div class="main-container">
         <Visitit />
+        <Article/>
 <!--        <div class="video-section">-->
 <!--            <h2>Watch Our Videos</h2>-->
 <!--            <div class="videos">-->
@@ -37,7 +38,7 @@
 <!--                </iframe>-->
 <!--            </div>-->
 <!--        </div>-->
-        <VideosTutor />
+<!--        <VideosTutor />-->
 <!--        <BooksLibrary />-->
         <!--        <Productsintro />-->
         <Testimonial />
@@ -60,11 +61,13 @@ import Footer from "@/Components/Footer.vue";
 import ProductCardDB from "@/Components/ProductCardDB.vue";
 import chatwithai from "@/Components/chatwithai.vue";
 import VideosTutor from "@/Components/VideosTutor.vue";
+import Article from "../Components/Article.vue";
 // import BooksLibrary from "@/Components/BooksLib.vue";
 
 export default {
     name: 'Home',
     components: {
+        Article,
         // BooksLibrary,
         ProductCardDB,
         Navbar,
