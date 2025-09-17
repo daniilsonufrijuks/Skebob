@@ -1,6 +1,7 @@
 <script setup>
 import {route} from "ziggy-js";
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import Wave from "../../Components/Wave.vue";
 
 const form = useForm({
     email: '',
@@ -17,6 +18,7 @@ const submit = () => {
 <template>
     <section class="container forms">
         <div class="form login">
+            <img class="imglogo" src="/skebob.png"/>
             <div class="form-content">
                 <header>Login</header>
                 <form @submit.prevent="submit"  autocomplete="off">
@@ -55,17 +57,29 @@ const submit = () => {
 <!--            </div>-->
         </div>
     </section>
+    <Wave/>
 </template>
 
 
 <style scoped>
+body {
+    background-color: #7e411e;
+}
+
+.imglogo {
+    max-width: 50px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
 .container{
     height: 100vh;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #d87220;
+    /*background-color: #d87220;*/
     column-gap: 30px;
 }
 
@@ -79,6 +93,7 @@ const submit = () => {
     padding: 30px;
     border-radius: 6px;
     background: #FFF;
+    outline: #d87220 solid 2px;
 }
 .form.signup{
     opacity: 0;

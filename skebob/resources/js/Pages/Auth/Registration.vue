@@ -1,6 +1,7 @@
 <script setup>
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import {route} from "ziggy-js";
+import Wave from "../../Components/Wave.vue";
 
 const form = useForm({
     // name: '',
@@ -26,7 +27,8 @@ const submit = () => {
 
 <template>
     <section class="container forms">
-        <div class="form login">
+        <div class="form registration">
+            <img class="imglogo" src="/skebob.png"/>
             <div class="form-content">
                 <header>Registration</header>
                 <form @submit.prevent="submit">
@@ -51,10 +53,18 @@ const submit = () => {
             </div>
         </div>
     </section>
+    <Wave/>
 </template>
 
 
 <style scoped>
+.imglogo {
+    max-width: 50px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
 .container{
     height: 100vh;
     width: 100%;
