@@ -2,6 +2,7 @@
 import {route} from "ziggy-js";
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import Wave from "../../Components/Wave.vue";
+import Particles from "../../Components/BG_Particles.vue";
 
 const form = useForm({
     email: '',
@@ -17,6 +18,8 @@ const submit = () => {
 
 <template>
     <section class="container forms">
+        <Particles/>
+
         <div class="form login">
             <img class="imglogo" src="/skebob.png"/>
             <div class="form-content">

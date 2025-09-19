@@ -2,6 +2,7 @@
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import {route} from "ziggy-js";
 import Wave from "../../Components/Wave.vue";
+import Particles from "../../Components/BG_Particles.vue";
 
 const form = useForm({
     // name: '',
@@ -27,6 +28,8 @@ const submit = () => {
 
 <template>
     <section class="container forms">
+        <Particles/>
+
         <div class="form registration">
             <img class="imglogo" src="/skebob.png"/>
             <div class="form-content">
@@ -71,7 +74,7 @@ const submit = () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #d87220;
+    /*background-color: #d87220;*/
     column-gap: 30px;
 }
 .form{
@@ -81,6 +84,7 @@ const submit = () => {
     padding: 30px;
     border-radius: 6px;
     background: #FFF;
+    outline: #d87220 solid 2px;
 }
 .form.signup{
     opacity: 0;
