@@ -10,7 +10,7 @@
         <div class="product-card">
             <img :src="product.image" style="justify-content: center; align-items: center" class="product-img" alt="Product 4">
             <h5>{{ product.name }}</h5>
-            <p>{{ product.description }}.</p>
+            <p>{{ product.ingredients }}.</p>
             <p><strong>Price:</strong> {{ product.price }}</p>
             <button  @click="goToProductPage(this.product.id)">Buy</button>
         </div>

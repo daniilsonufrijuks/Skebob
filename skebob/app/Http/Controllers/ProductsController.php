@@ -9,15 +9,11 @@ use Inertia\Inertia;
 
 class ProductsController extends Controller
 {
-    public function getComponentsProducts(Request $request): \Illuminate\Http\JsonResponse
+    public function getChipsProducts(Request $request): \Illuminate\Http\JsonResponse
     {
-//        $products = Products::where('category', 'Component')->get(['name', 'price', 'description', 'image']);
-//        return response()->json($products);
 
-
-        // Base query for "Component" category
         //global $request;
-        $query = Products::where('category', 'Component');
+        $query = Products::where('category_id', '1');
 
         // Apply filters based on query parameters
         // Handle price_min only if not null
@@ -32,7 +28,7 @@ class ProductsController extends Controller
         }
 
         // Fetch the filtered results
-        $products = $query->get(['id', 'name', 'price', 'description', 'image']);
+        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image']);
 
         return response()->json($products);
     }
