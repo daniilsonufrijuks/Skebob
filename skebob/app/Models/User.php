@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
@@ -15,7 +16,7 @@ class User extends Authenticatable
     use Billable;
 
     /**
-     * The attributes that are mass assignable.
+     * Masveidā piešķiramie atribūti.
      *
      * @var array<int, string>
      */
@@ -23,10 +24,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'has_subscription'
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * Atribūti, kas jāslēpj serializācijai.
      *
      * @var array<int, string>
      */
@@ -35,12 +37,21 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-//    public static function create(array $attributes)
-//    {
-//        return static::query()->create($attributes);
-//    }
     /**
-     * Get the attributes that should be cast.
+     * Atribūti kas jānodod (cast).
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'has_subscription' => 'boolean',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    /**
+     * Iegūt atribūtus, kas jānodod (cast).
      *
      * @return array<string, string>
      */
@@ -50,5 +61,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Iegūt šī lietotāja komentārus.
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Iegūt šī lietotāja pasūtījumus.
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Orders::class);
     }
 }
