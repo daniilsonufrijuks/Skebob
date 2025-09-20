@@ -68,7 +68,7 @@ export default {
         };
     },
     mounted() {
-        // this.fetchProducts();
+        this.fetchProducts();
     },
     methods: {
         // fetchProducts() {
@@ -88,7 +88,7 @@ export default {
                 price_max: this.filters.price_max ?? 100000,
             }).toString();
 
-            fetch(`/products/laptops?${params}`)
+            fetch(`/products/chips?${params}`)
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
