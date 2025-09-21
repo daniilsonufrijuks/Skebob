@@ -9,15 +9,11 @@ use Inertia\Inertia;
 
 class ProductsController extends Controller
 {
-    public function getComponentsProducts(Request $request): \Illuminate\Http\JsonResponse
+    public function getChipsProducts(Request $request): \Illuminate\Http\JsonResponse
     {
-//        $products = Products::where('category', 'Component')->get(['name', 'price', 'description', 'image']);
-//        return response()->json($products);
 
-
-        // Base query for "Component" category
         //global $request;
-        $query = Products::where('category', 'Component');
+        $query = Products::where('category_id', '1');
 
         // Apply filters based on query parameters
         // Handle price_min only if not null
@@ -32,7 +28,7 @@ class ProductsController extends Controller
         }
 
         // Fetch the filtered results
-        $products = $query->get(['id', 'name', 'price', 'description', 'image']);
+        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image']);
 
         return response()->json($products);
     }
@@ -236,14 +232,7 @@ class ProductsController extends Controller
 
     public function show($id): \Illuminate\Http\JsonResponse
     {
-//        $query = Products::find($id);
-//        // Fetch the filtered results
-//        $product = $query->get(['name', 'price', 'description', 'image', 'category']);
-//        return response()->json($product);
-
-
-
-        $products = Products::find($id, ['id', 'name', 'price', 'description', 'image', 'category']);
+        $products = Products::find($id, ['id', 'name', 'price', 'ingredients', 'image', 'category_id']);
 
         if (!$products) {
             return response()->json(['error' => 'Product not found'], 404);
@@ -258,7 +247,7 @@ class ProductsController extends Controller
         $query = $request->input('query');
 
         $products = Products::where('name', 'LIKE', "%{$query}%")
-            ->orWhere('description', 'LIKE', "%{$query}%")
+            ->orWhere('ingredients', 'LIKE', "%{$query}%")
             ->get();
 
 //        return view('products.search-results', compact('products', 'query'));

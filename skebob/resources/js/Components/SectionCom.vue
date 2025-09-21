@@ -31,10 +31,10 @@
                 <div v-else>
                     <div v-for="comment in comments" :key="comment.id" class="comment">
                         <div class="comment-header">
-                            <div class="user-avatar">{{ comment.user.name.charAt(0) }}</div>
+<!--                            <div class="user-avatar">{{ comment.user.name.charAt(0) }}</div>-->
                             <div>
-                                <div class="user-name">{{ comment.user.name }}</div>
-                                <div class="timestamp">{{ formatDate(comment.created_at) }}</div>
+<!--                                <div class="user-name">{{ comment.user.name }}</div>-->
+<!--                                <div class="timestamp">{{ formatDate(comment.created_at) }}</div>-->
                             </div>
                         </div>
                         <p class="comment-body">{{ comment.body }}</p>
