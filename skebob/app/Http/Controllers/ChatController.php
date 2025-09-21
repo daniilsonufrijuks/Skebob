@@ -48,7 +48,7 @@ class ChatController extends Controller
                     'messages' => [
                         [
                             'role' => 'system',
-                            'content' => 'You are a helpful assistant specialized in PC components and computer hardware.'
+                            'content' => 'You are a helpful assistant specialized in food and snacks from around the world'
                         ],
                         [
                             'role' => 'user',
