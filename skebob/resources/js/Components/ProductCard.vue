@@ -21,7 +21,7 @@
             <input type="number" v-model="quantity" value="1">
             <button class="normal" @click="addToCart(this.product)">Add to Cart</button>
             <h4>Product Details</h4>
-            <span class="gcardt">{{ product.description }}.</span>
+            <span class="gcardt">{{ product.ingredients }}.</span>
         </div>
     </section>
     <p v-else>Loading product details...</p>

@@ -232,14 +232,7 @@ class ProductsController extends Controller
 
     public function show($id): \Illuminate\Http\JsonResponse
     {
-//        $query = Products::find($id);
-//        // Fetch the filtered results
-//        $product = $query->get(['name', 'price', 'description', 'image', 'category']);
-//        return response()->json($product);
-
-
-
-        $products = Products::find($id, ['id', 'name', 'price', 'description', 'image', 'category']);
+        $products = Products::find($id, ['id', 'name', 'price', 'ingredients', 'image', 'category_id']);
 
         if (!$products) {
             return response()->json(['error' => 'Product not found'], 404);
@@ -254,7 +247,7 @@ class ProductsController extends Controller
         $query = $request->input('query');
 
         $products = Products::where('name', 'LIKE', "%{$query}%")
-            ->orWhere('description', 'LIKE', "%{$query}%")
+            ->orWhere('ingredients', 'LIKE', "%{$query}%")
             ->get();
 
 //        return view('products.search-results', compact('products', 'query'));
