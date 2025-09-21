@@ -102,7 +102,10 @@ export default {
                 // sort_order: this.sortOrder,
             }).toString();
 
-            fetch(`/products/phones?${params}`)
+            // https://candybar.snackcrate.com/snack/sparkling-mango-soda/
+            // https://www.salamat.gr/EN/coconut-water-250ml-philippine?srsltid=AfmBOorF18i-JZgOCjdlQG6fkWIU96vZiYThGz25-NSF1Y3UC5-tm6MM
+            // https://thaiasia.si/en/products/lychee-iced-tea-500ml-pokka/
+            fetch(`/products/drinks?${params}`)
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
