@@ -33,15 +33,10 @@ class ProductsController extends Controller
         return response()->json($products);
     }
 
-    public function getLaptopsProducts(Request $request): \Illuminate\Http\JsonResponse
+    public function getChocolatesProducts(Request $request): \Illuminate\Http\JsonResponse
     {
-//        $products = Products::where('category', 'Laptop')->get(['name', 'price', 'description', 'image']);
-//        return response()->json($products);
-
-
-        // Base query for "Laptop" category
         //global $request;
-        $query = Products::where('category', 'Laptop');
+        $query = Products::where('category_id', '2');
 
         // Apply filters based on query parameters
         // Handle price_min only if not null
@@ -56,7 +51,7 @@ class ProductsController extends Controller
         }
 
         // Fetch the filtered results
-        $products = $query->get(['id', 'name', 'price', 'description', 'image']);
+        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image']);
 
         return response()->json($products);
     }
