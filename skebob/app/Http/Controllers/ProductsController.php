@@ -104,14 +104,10 @@ class ProductsController extends Controller
     }
 
 //    for periph
-    public function getPeripheralsProducts(Request $request): \Illuminate\Http\JsonResponse
+    public function getBiscuitsProducts(Request $request): \Illuminate\Http\JsonResponse
     {
-//        $products = Products::where('category', 'Pc')->get(['name', 'price', 'description', 'image']);
-//        return response()->json($products);
-
-        // Base query for "Pc" category
         //global $request;
-        $query = Products::where('category', 'Peripheral');
+        $query = Products::where('category_id', '5');
 
         // Apply filters based on query parameters
         // Handle price_min only if not null
@@ -126,10 +122,9 @@ class ProductsController extends Controller
         }
 
         // Fetch the filtered results
-        $products = $query->get(['id', 'name', 'price', 'description', 'image']);
+        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image']);
 
         return response()->json($products);
-
     }
 
     public function getFurnitureProducts(Request $request): \Illuminate\Http\JsonResponse

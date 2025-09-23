@@ -102,7 +102,10 @@ export default {
                 // sort_order: this.sortOrder,
             }).toString();
 
-            fetch(`/products/phones?${params}`)
+            // https://www.french-corner-shop.com/en/welcome/803-pepito-chocolate-flavored-cookies.html
+            // https://buysnacksuk.com/products/foxs-milk-chocolate-viennese-biscuit-sandwich-by-foxs-120g-pack?srsltid=AfmBOoonwzHa5IcqmWsO_UqDAjvyNIzO6tscz13FjXIMbP-nwfUidOt5
+            // https://premiumco.com.au/products/ito-seika-languly-matcha-biscuits-161-g?srsltid=AfmBOorCjcKCI2ZoAnzk1n8ZDvJ39BfgG7go-ML24-2swHa5nrm43u5F
+            fetch(`/products/biscuits?${params}`)
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
