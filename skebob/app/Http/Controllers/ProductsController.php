@@ -175,10 +175,10 @@ class ProductsController extends Controller
         return response()->json($products);
     }
 
-    public function getGamesProducts(Request $request): \Illuminate\Http\JsonResponse
+    public function getSnackboxesProducts(Request $request): \Illuminate\Http\JsonResponse
     {
         //global $request;
-        $query = Products::where('category', 'Games');
+        $query = Products::where('category_id', '8');
 
         // Apply filters based on query parameters
         // Handle price_min only if not null
@@ -193,10 +193,9 @@ class ProductsController extends Controller
         }
 
         // Fetch the filtered results
-        $products = $query->get(['id', 'name', 'price', 'description', 'image']);
+        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image']);
 
         return response()->json($products);
-
     }
 
 

@@ -102,7 +102,10 @@ export default {
                 // sort_order: this.sortOrder,
             }).toString();
 
-            fetch(`/products/phones?${params}`)
+            // https://www.tofucute.com/lotte-pepero-cookie-cream-biscuit-sticks~p1809.html
+            //https://www.tofucute.com/pocky-cloud-biscuit-sticks-cheesecake~p16759.html
+            // https://www.tofucute.com/glico-pretz-pretzel-sticks-salt-lemon~p16658.html
+            fetch(`/products/snackboxes?${params}`)
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);

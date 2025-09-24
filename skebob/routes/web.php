@@ -197,11 +197,8 @@ Route::get('/products/drinks', [ProductsController::class, 'getDrinksProducts'])
 Route::get('/products/nuts', [ProductsController::class, 'getNutsProducts']);
 
 Route::get('/products/biscuits', [ProductsController::class, 'getBiscuitsProducts']);
-
 Route::get('/products/fruitsnacks', [ProductsController::class, 'getFruitsnacksProducts']);
-
 Route::get('/products/candy', [ProductsController::class, 'getCandyProducts']);
-
 Route::get('/products/snackboxes', [ProductsController::class, 'getSnackboxesProducts']);
 
 Route::get('/products/{id}', [ProductsController::class, 'show']);
