@@ -102,7 +102,10 @@ export default {
                 // sort_order: this.sortOrder,
             }).toString();
 
-            fetch(`/products/phones?${params}`)
+            // https://theaustralianfoodshop.com/product/mcvities-jaffa-cakes-10-pack-106g/?srsltid=AfmBOopb1CmBBifd4ETviqKAp-yBtLJuNvn-ggl8xb7AZU62IRCYpchF
+            // https://www.morinaga.co.jp/hi-chew/en/
+            // https://dori.com.br/jubes-fruit-snacks-300g/
+            fetch(`/products/fruitsnacks?${params}`)
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
