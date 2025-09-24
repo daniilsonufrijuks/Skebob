@@ -102,7 +102,10 @@ export default {
                 // sort_order: this.sortOrder,
             }).toString();
 
-            fetch(`/products/phones?${params}`)
+            // https://www.cachina.eu/products/da-colonia-pacoca-tradicional-210g
+            // https://www.thetasteofgermany.com/haribo-stars-and-stripes-sour-gummies-175g-made-in-germany/
+            // https://www.tofucute.com/yuki-love-mochi-rice-cakes-strawberry~p16647.html
+            fetch(`/products/candy?${params}`)
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
