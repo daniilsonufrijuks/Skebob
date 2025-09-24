@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Enums\OrderStatus;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 
-class Orders extends Model
+class Order extends Model
 {
     use HasFactory;
 
@@ -61,9 +62,9 @@ class Orders extends Model
     }
 
     /**
-     * Iegūt pasūtījuma rindas
+     * Iegūt pasūtījuma rindas.
      */
-    public function items(): HasMany
+    public function items(): HasOneOrMany
     {
         return $this->hasMany(OrderItem::class);
     }

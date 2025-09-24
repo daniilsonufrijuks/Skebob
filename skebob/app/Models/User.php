@@ -60,6 +60,9 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'has_subscription' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 
@@ -76,6 +79,6 @@ class User extends Authenticatable
      */
     public function orders(): HasMany
     {
-        return $this->hasMany(Orders::class);
+        return $this->hasMany(Order::class);
     }
 }

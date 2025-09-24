@@ -8,11 +8,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Brand;
 use App\Models\Category;
 
-class Admins extends Authenticatable
+class Admin extends Authenticatable
 {
     protected $fillable = ['name', 'password'];
     protected $hidden = ['password'];
-    protected $primaryKey = 'id'; // vai tava īsta PK kolonnas nosaukums
+    protected $primaryKey = 'id';
 
     /**
      * Iegūt zīmolus, kuri pieder šim administratoram.
@@ -28,6 +28,14 @@ class Admins extends Authenticatable
     public function categories(): HasMany
     {
         return $this->hasMany(Category::class, 'admin_id');
+    }
+
+    /**
+     * Iegūt preces, kuras pieder šim administratoram.
+     */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'admin_id');
     }
 
 }

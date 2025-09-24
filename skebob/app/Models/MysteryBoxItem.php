@@ -2,24 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class OrderItem extends Model
+class MysteryBoxItem extends Model
 {
     use HasFactory;
-    protected $table = 'order_items';
+    protected $table = 'mystery_box_items';
 
     /**
      * Masveidā piešķiramie atribūti.
      */
     protected $fillable = [
         'quantity',
-        'unit_price',
-        'subtotal',
-        'order_id',
-        'product_id',
+        'mystery_box_id',
+        'product_id'
     ];
 
     /**
@@ -29,8 +27,6 @@ class OrderItem extends Model
      */
     protected $casts = [
         'quantity' => 'integer',
-        'unit_price' => 'decimal:2',
-        'subtotal' => 'decimal:2',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -44,42 +40,25 @@ class OrderItem extends Model
     {
         return [
             'quantity' => 'integer',
-            'unit_price' => 'decimal:2',
-            'subtotal' => 'decimal:2',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
     }
 
     /**
-     * Iegūt pasūtījumu, kurai ir šis pasūtījuma rinda.
+     * Iegūt saistīto noslēpuma kastes (MysteryBox) ierakstu.
      */
-    public function order(): BelongsTo
+    public function mysteryBox(): BelongsTo
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(MysteryBox::class, 'mystery_box_id', 'id');
     }
 
     /**
-     * Iegūt preci, kas pieder šai pasūtījuma rindai.
+     * Iegūt preci, kas pieder šai kastes rindai.
      */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
-    /**
-     * Aprēķināt starpsummu (quantity * unit_price).
-     */
-    public function calculateSubtotal(): float
-    {
-        return $this->quantity * $this->unit_price;
-    }
-
-    /**
-     * Atjauniniet starpsummu, pamatojoties uz pašreizējo quantity and unit_price.
-     */
-    public function updateSubtotal(): void
-    {
-        $this->update(['subtotal' => $this->calculateSubtotal()]);
-    }
 }
