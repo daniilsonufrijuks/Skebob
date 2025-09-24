@@ -4,13 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Admins;
+use App\Models\Admin;
 use App\Models\Brand;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 
-class Products extends Model
+class Product extends Model
 {
     use HasFactory;
 
@@ -71,7 +73,7 @@ class Products extends Model
      */
     public function admin(): BelongsTo
     {
-        return $this->belongsTo(Admins::class);
+        return $this->belongsTo(Admin::class);
     }
 
     /**
@@ -93,9 +95,33 @@ class Products extends Model
     /**
      * Iegūt pasūtījuma rindas, kurās ir šī prece.
      */
-    public function items(): HasMany
+    public function items(): HasOneOrMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    /**
+     * Iegūt saistīto noslēpuma kastes (MysteryBox) ierakstu (ieraksta var nebūt, ja prece nav noslēpuma kaste).
+     */
+    public function mysteryBox(): HasOne
+    {
+        return $this->hasOne(MysteryBox::class);
+    }
+
+    /**
+     * Iegūt noslēpuma kastes rindas, kurās ir šī prece.
+     */
+    public function mysteryBoxItems(): HasOneOrMany
+    {
+        return $this->hasMany(MysteryBoxItem::class);
+    }
+
+    /**
+     * Pārbaudīt, vai prece ir noslēpuma kaste (MysteryBox)
+     */
+    public function isMysteryBox(): bool
+    {
+        return $this->is_mystery_box === true;
     }
 
 }

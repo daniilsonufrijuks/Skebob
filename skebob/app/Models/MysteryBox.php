@@ -2,25 +2,25 @@
 
 namespace App\Models;
 
+use App\Enums\MysteryBoxCategory;
+use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\Admin;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 
-class Brand extends Model
+class MysteryBox extends Model
 {
     use HasFactory;
+    protected $table = 'mystery_boxes';
 
     /**
      * Masveidā piešķiramie atribūti.
-     *
-     * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'slug',
-        'admin_id'
+        'category',
+        'description',
+        'product_id'
     ];
 
     /**
@@ -29,6 +29,7 @@ class Brand extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'status' => MysteryBoxCategory::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -41,25 +42,26 @@ class Brand extends Model
     protected function casts(): array
     {
         return [
+            'status' => MysteryBoxCategory::class,
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
     }
 
     /**
-     * Iegūt administratoru, kam pieder produkts.
+     * Iegūt saistīto preces ierakstu (var nebūt, ja prece nav noslēpuma kaste).
      */
-    public function admin(): BelongsTo
+    public function product(): BelongsTo
     {
-        return $this->belongsTo(Admin::class);
+        return $this->belongsTo(Product::class);
     }
 
     /**
-     * Iegūt šī zīmola preces.
+     * Iegūt noslēpuma kastes rindas.
      */
-    public function products(): HasMany
+    public function mysteryBoxItems(): HasOneOrMany
     {
-        return $this->hasMany(Product::class, 'brand_id');
+        return $this->hasMany(MysteryBoxItem::class);
     }
 
 }

@@ -5,7 +5,7 @@ namespace App\Enums;
 enum OrderStatus: string
 {
     /**
-     * Uzskaitījums pasūtījuma (Order) laukam 'statusca'
+     * Uzskaitījums pasūtījuma (Order) laukam 'status'
      */
     case Cart = 'cart';
     case Pending = 'pending';
