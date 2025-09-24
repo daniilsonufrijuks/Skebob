@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Orders;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Stripe\StripeClient;
 
@@ -28,7 +28,7 @@ class OrderController extends Controller
 //        $orderNumber = uniqid();
         $orderNumber = uniqid();
 
-        $order = Orders::create([
+        $order = Order::create([
             'user_id' => auth()->id(),
 //            'items' => json_encode($request->items),
 //            'items' => $orderNumber,
@@ -70,7 +70,7 @@ class OrderController extends Controller
 
         foreach ($request->items as $item) {
 //            \Log::info('Processing item:', $item);
-            $orderItem = \App\Models\OrderGoods::create([
+            $orderItem = \App\Models\OrderItem::create([
                 'order_id' => $order->id,
 //                'order_number' => $orderNumber,
                 'status' => 'pending',

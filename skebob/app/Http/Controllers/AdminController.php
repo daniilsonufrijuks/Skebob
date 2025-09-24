@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Orders;
-use App\Models\Products;
+use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -12,11 +12,11 @@ class AdminController extends Controller
 {
     public function dashboard(): \Inertia\Response
     {
-        $orders = Orders::with('user')->get(); // Existing
+        $orders = Order::with('user')->get(); // Existing
 
-        $products = Products::select(['id', 'name', 'price', 'description', 'image', 'category'])->get();
+        $products = Product::select(['id', 'name', 'price', 'description', 'image', 'category'])->get();
 
-        $ordersj = Orders::join('users', 'orders.user_id', '=', 'users.id')
+        $ordersj = Order::join('users', 'orders.user_id', '=', 'users.id')
             ->join('goods_orders', 'orders.id', '=', 'goods_orders.order_id')
             ->select(
                 'orders.id as order_id',
@@ -52,7 +52,7 @@ class AdminController extends Controller
 
         // Fetch the filtered results
 //        $orders = Orders::select(['id', 'user_id', 'items', 'status', 'total', 'created_at'])->get();
-        $orders = Orders::with(['orderGoods', 'user:id,name,email']) // add any user fields you need
+        $orders = Order::with(['orderGoods', 'user:id,name,email']) // add any user fields you need
         ->select(['id', 'user_id', 'status', 'total', 'ordered_at', 'created_at'])
             ->get();
 
@@ -61,7 +61,7 @@ class AdminController extends Controller
 
     public function showProducts(Request $request): \Illuminate\Http\JsonResponse
     {
-        $products = Products::select(['name', 'price', 'description', 'image', 'category'])->get();
+        $products = Product::select(['name', 'price', 'description', 'image', 'category'])->get();
         return response()->json($products);
     }
 
@@ -96,7 +96,7 @@ class AdminController extends Controller
 //            'category' => $request->category,
 //        ]);
         try {
-            Products::create([
+            Product::create([
                 'name' => $request->name,
                 'price' => $request->price,
                 'description' => $request->description,
@@ -129,7 +129,7 @@ class AdminController extends Controller
 //                'users.email as customer_email'
 //            )
 //            ->get();
-        $orders = Orders::join('users', 'orders.user_id', '=', 'users.id')
+        $orders = Order::join('users', 'orders.user_id', '=', 'users.id')
             ->join('goods_orders', 'orders.id', '=', 'goods_orders.order_id')
             ->select(
                 'orders.id as order_id',
@@ -151,17 +151,17 @@ class AdminController extends Controller
     }
 
     public function destroyProduct($id) {
-        Products::findOrFail($id)->delete();
+        Product::findOrFail($id)->delete();
         return redirect()->back();
     }
     public function destroyOrder($id) {
-        Orders::findOrFail($id)->delete();
+        Order::findOrFail($id)->delete();
         return redirect()->back();
     }
 
     public function update(Request $request, $id)
     {
-        $product = Products::findOrFail($id);
+        $product = Product::findOrFail($id);
         $product->update($request->only('name', 'price', 'category', 'description'));
 
         return redirect()->back();
