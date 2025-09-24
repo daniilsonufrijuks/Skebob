@@ -73,19 +73,19 @@ export default {
 
             // Fetch both PCs and Laptops in parallel
             Promise.all([
-                fetch(`/products/pcs?${params}`),
-                fetch(`/products/laptops?${params}`)
+                fetch(`/products/chips?${params}`),
+                fetch(`/products/drinks?${params}`)
             ])
-                .then(([pcsResponse, laptopsResponse]) => {
-                    if (!pcsResponse.ok || !laptopsResponse.ok) {
+                .then(([chipsResponse, drinksResponse]) => {
+                    if (!chipsResponse.ok || !drinksResponse.ok) {
                         throw new Error('Error fetching products');
                     }
-                    return Promise.all([pcsResponse.json(), laptopsResponse.json()]);
+                    return Promise.all([chipsResponse.json(), drinksResponse.json()]);
                 })
-                .then(([pcs, laptops]) => {
-                    console.log('Fetched PCs:', pcs);
-                    console.log('Fetched Laptops:', laptops);
-                    this.products = [...pcs, ...laptops]; // Combine the results
+                .then(([chips, drinks]) => {
+                    console.log('Fetched chips:', chips);
+                    console.log('Fetched drinks:', drinks);
+                    this.products = [...chips, ...drinks]; // Combine the results
                 })
                 .catch((error) => {
                     console.error('Error fetching products:', error);

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Products;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -13,7 +13,7 @@ class ProductsController extends Controller
     {
 
         //global $request;
-        $query = Products::where('category_id', '1');
+        $query = Product::where('category_id', '1');
 
         // Apply filters based on query parameters
         // Handle price_min only if not null
@@ -36,7 +36,7 @@ class ProductsController extends Controller
     public function getChocolatesProducts(Request $request): \Illuminate\Http\JsonResponse
     {
         //global $request;
-        $query = Products::where('category_id', '2');
+        $query = Product::where('category_id', '2');
 
         // Apply filters based on query parameters
         // Handle price_min only if not null
@@ -59,7 +59,7 @@ class ProductsController extends Controller
     public function getDrinksProducts(Request $request): \Illuminate\Http\JsonResponse
     {
         //global $request;
-        $query = Products::where('category_id', '3');
+        $query = Product::where('category_id', '3');
 
         // Apply filters based on query parameters
         // Handle price_min only if not null
@@ -83,7 +83,7 @@ class ProductsController extends Controller
     public function getNutsProducts(Request $request): \Illuminate\Http\JsonResponse
     {
         //global $request;
-        $query = Products::where('category_id', '4');
+        $query = Product::where('category_id', '4');
 
         // Apply filters based on query parameters
         // Handle price_min only if not null
@@ -107,7 +107,7 @@ class ProductsController extends Controller
     public function getBiscuitsProducts(Request $request): \Illuminate\Http\JsonResponse
     {
         //global $request;
-        $query = Products::where('category_id', '5');
+        $query = Product::where('category_id', '5');
 
         // Apply filters based on query parameters
         // Handle price_min only if not null
@@ -130,7 +130,7 @@ class ProductsController extends Controller
     public function getFruitsnacksProducts(Request $request): \Illuminate\Http\JsonResponse
     {
         //global $request;
-        $query = Products::where('category_id', '6');
+        $query = Product::where('category_id', '6');
 
         // Apply filters based on query parameters
         // Handle price_min only if not null
@@ -155,7 +155,7 @@ class ProductsController extends Controller
     public function getCandyProducts(Request $request): \Illuminate\Http\JsonResponse
     {
         //global $request;
-        $query = Products::where('category_id', '7');
+        $query = Product::where('category_id', '7');
 
         // Apply filters based on query parameters
         // Handle price_min only if not null
@@ -178,7 +178,7 @@ class ProductsController extends Controller
     public function getSnackboxesProducts(Request $request): \Illuminate\Http\JsonResponse
     {
         //global $request;
-        $query = Products::where('category_id', '8');
+        $query = Product::where('category_id', '8');
 
         // Apply filters based on query parameters
         // Handle price_min only if not null
@@ -201,7 +201,7 @@ class ProductsController extends Controller
 
     public function show($id): \Illuminate\Http\JsonResponse
     {
-        $products = Products::find($id, ['id', 'name', 'price', 'ingredients', 'image', 'category_id']);
+        $products = Product::find($id, ['id', 'name', 'price', 'ingredients', 'image', 'category_id']);
 
         if (!$products) {
             return response()->json(['error' => 'Product not found'], 404);
@@ -215,7 +215,7 @@ class ProductsController extends Controller
     {
         $query = $request->input('query');
 
-        $products = Products::where('name', 'LIKE', "%{$query}%")
+        $products = Product::where('name', 'LIKE', "%{$query}%")
             ->orWhere('ingredients', 'LIKE', "%{$query}%")
             ->get();
 

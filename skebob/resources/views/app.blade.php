@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <meta name="author" content="daniilsonufrijuks, ralfsmigals, danilavasiljevs">
+    <meta name="author" content="daniilsonufrijuks, ralfsmigals, danilavasiljevs, patricijagriniceva">
     <meta name="description" content="Uniq snacks">
     <meta http-equiv="refresh" content="180">
     <meta name="keywords" content="snacks, mystery box, meals">
