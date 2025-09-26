@@ -76,7 +76,7 @@ class RegisteredUserController extends Controller
 //        Auth::login($user);
 //        auth()->login($user);
 
-        return redirect(route('quiz', absolute: false));
+        return redirect(route('home', absolute: false));
 
     }
 }
