@@ -48,7 +48,6 @@ const goToUserPage = () => {
             </div>
         </a>
         <ul>
-            <!--            <li><a href="/quiz">Quiz</a></li>-->
             <li><a href="/">Home</a></li>
             <li><a href="/market">Market</a></li>
             <li><a href="/gifts">Gifts</a></li>
@@ -76,7 +75,6 @@ const goToUserPage = () => {
                 <a href="/login">Login</a>
                 <a href="/registration">Sign up</a>
             </li>
-            <!--            <li @click="logout" style="color:white">Logout</li>-->
         </ul>
         <!-- Hamburger Menu -->
         <div class="hamburger" @click="toggleNav">
@@ -112,10 +110,6 @@ const goToUserPage = () => {
                 </i>
             </li>
             <li v-else>
-                <!--                &lt;!&ndash; User is not logged in: show login icon &ndash;&gt;-->
-                <!--                <i class="fa fa-user-circle icon"-->
-                <!--                   :style="{ color: 'black' }"-->
-                <!--                ></i> &lt;!&ndash; FontAwesome icon &ndash;&gt;-->
                 <a href="/login">Login</a>
                 <a href="/registration">Sign up</a>
             </li>
