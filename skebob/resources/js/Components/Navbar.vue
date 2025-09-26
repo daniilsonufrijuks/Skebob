@@ -41,42 +41,39 @@ const goToUserPage = () => {
 
 <template>
     <nav>
-        <div class="logo">
-            <h1><a href="/">SKEBOB</a></h1>
-            <img class="imglogo" src="/skebob.png"/>
-        </div>
+        <a href="/" style="text-decoration:none!important;">
+            <div class="logo">
+                <h1><a>SKEBOB</a></h1>
+                <img class="imglogo" src="/skebob.png" alt="Skebob logo"/>
+            </div>
+        </a>
         <ul>
-<!--            <li><a href="/quiz">Quiz</a></li>-->
             <li><a href="/">Home</a></li>
             <li><a href="/market">Market</a></li>
             <li><a href="/gifts">Gifts</a></li>
             <li><a href="/about">About</a></li>
             <li><a href="/contacts">Contacts</a></li>
             <li><a href="/tutor">Blog</a></li>
-            <li><a href="/login">Login</a></li>
             <li v-if="isLoggedIn">
                 <!-- User is logged in: show user avatar -->
-                <i class="fa fa-user icon"
+                <i class="fa fa-user icon user-icon"
                    :style="{color: 'white', cursor: 'pointer'}"
                    :title="user?.name || 'User'"
                    @click="goToUserPage"
                 ></i>
+                <i @click="logout" style="cursor: pointer;">
+                    <i class="fa fa-sign-out icon sign-out-icon" style="color: white;" title="Logout"></i>
+                </i>
+                <i>
+                    <a href="/cart" style="position: relative;">
+                        <i class="fa fa-shopping-cart icon" style="color: white;"></i>
+                        <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
+                    </a>
+                </i>
             </li>
             <li v-else>
-                <!-- User is not logged in: show login icon -->
-                <i class="fa fa-user-circle icon"
-                   :style="{ color: 'white' }"
-                ></i> <!-- FontAwesome icon -->
-            </li>
-<!--            <li @click="logout" style="color:white">Logout</li>-->
-            <li @click="logout" style="cursor: pointer;">
-                <i class="fa fa-sign-out icon" style="color: white;" title="Logout"></i>
-            </li>
-            <li>
-                <a href="/cart" style="position: relative;">
-                    <i class="fa fa-shopping-cart icon" style="color: white;"></i>
-                    <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
-                </a>
+                <a href="/login">Login</a>
+                <a href="/registration">Sign up</a>
             </li>
         </ul>
         <!-- Hamburger Menu -->
@@ -95,31 +92,26 @@ const goToUserPage = () => {
             <li><a href="/about">About</a></li>
             <li><a href="/contacts">Contacts</a></li>
             <li><a href="/tutor">Blog</a></li>
-            <li><a href="/login">Login</a></li>
-<!--            <li><a :href="routes.login">Login</a></li>-->
             <li v-if="isLoggedIn">
                 <!-- User is logged in: show user avatar -->
-                <i class="fa fa-user icon"
+                <i class="fa fa-user icon menubar-user-icon"
                    :style="{color: 'black', cursor: 'pointer'}"
                    :title="user?.name || 'User'"
                    @click="goToUserPage"
                 ></i>
+                <i @click="logout" style="cursor: pointer;">
+                    <i class="fa fa-sign-out icon" style="color: black;" title="Logout"></i>
+                </i>
+                <i>
+                    <a href="/cart" style="position: relative; background: none;">
+                        <i class="fa fa-shopping-cart icon" style="color: black;"></i>
+                        <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
+                    </a>
+                </i>
             </li>
             <li v-else>
-                <!-- User is not logged in: show login icon -->
-                <i class="fa fa-user-circle icon"
-                   :style="{ color: 'black' }"
-                ></i> <!-- FontAwesome icon -->
-            </li>
-            <!--            <li @click="logout" style="color:white">Logout</li>-->
-            <li @click="logout" style="cursor: pointer;">
-                <i class="fa fa-sign-out icon" style="color: black;" title="Logout"></i>
-            </li>
-            <li>
-                <a href="/cart" style="position: relative;">
-                    <i class="fa fa-shopping-cart icon" style="color: black;"></i>
-                    <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
-                </a>
+                <a href="/login">Login</a>
+                <a href="/registration">Sign up</a>
             </li>
         </ul>
     </div>
@@ -257,7 +249,7 @@ nav ul li a:hover {
     justify-content: center;
     align-items: flex-start;
     width: 60%;
-    height: 100vh;
+    height: 110vh;
     padding: 20% 0;
     background: rgba(255, 255, 255);
     transition: all 0.5s ease-in;
@@ -290,11 +282,19 @@ nav ul li a:hover {
 }
 
 .menubar ul li a:hover {
-    background-color: #703505;
+    background-color: #e3985a;
 }
 
 .imglogo {
     margin-left: 10px;
+}
+
+.user-icon {
+    margin-right: 15px;
+}
+
+.menubar-user-icon {
+    margin-bottom: 15px;
 }
 
 /* Media Query for Mobile */
