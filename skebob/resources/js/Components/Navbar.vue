@@ -64,16 +64,16 @@ const goToUserPage = () => {
                 <i @click="logout" style="cursor: pointer;">
                     <i class="fa fa-sign-out icon sign-out-icon" style="color: white;" title="Logout"></i>
                 </i>
-                <i>
-                    <a href="/cart" style="position: relative;">
-                        <i class="fa fa-shopping-cart icon" style="color: white;"></i>
-                        <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
-                    </a>
-                </i>
             </li>
             <li v-else>
                 <a href="/login">Login</a>
                 <a href="/registration">Sign up</a>
+            </li>
+            <li>
+                <a href="/cart" style="position: relative;">
+                    <i class="fa fa-shopping-cart icon" style="color: white;"></i>
+                    <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
+                </a>
             </li>
         </ul>
         <!-- Hamburger Menu -->
