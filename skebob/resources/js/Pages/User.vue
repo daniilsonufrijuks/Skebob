@@ -99,7 +99,6 @@
             </div>
         </div>
         <Visitit />
-        <Roulette />
         <div class="products">
             <ProductCardDB v-for="product in products" :key="product.id" :product="product" />
         </div>
@@ -184,7 +183,7 @@ export default {
                 price_max: this.filters.price_max ?? 100000,
             }).toString();
 
-            fetch(`/products/laptops?${params}`)
+            fetch(`/products/drinks?${params}`)
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
