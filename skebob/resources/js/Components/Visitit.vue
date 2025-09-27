@@ -39,6 +39,7 @@
     max-width: 1200px;
     gap: 20px;
     align-items: stretch;
+    margin-bottom: 70px;
 }
 
 /* .product-card-top {

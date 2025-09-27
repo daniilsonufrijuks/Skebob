@@ -323,8 +323,7 @@ Route::get('/search', [ProductsController::class, 'search']);
 
 
 
-// roulette
-Route::get('/spin', [RouletteController::class, 'spin']);
+
 
 
 
