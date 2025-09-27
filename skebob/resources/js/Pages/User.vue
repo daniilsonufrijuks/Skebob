@@ -161,7 +161,7 @@ export default {
         };
     },
     mounted() {
-        this.fetchProducts();
+        // this.fetchProducts();
         this.editForm.name = this.user?.name || '';
         this.editForm.email = this.user?.email || '';
     },
