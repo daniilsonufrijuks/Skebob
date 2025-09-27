@@ -15,14 +15,15 @@ class OrderController extends Controller
             'items' => 'required|array',
             'items.*.name' => 'required|string',
             'items.*.price' => 'required|numeric',
-            'items.*.description' => 'nullable|string',
+            'items.*.ingredients' => 'nullable|string',
             'items.*.image' => 'nullable|string',
-            'items.*.category' => 'required|string',
+            'items.*.category_id' => 'required|int',
             'items.*.total_price' => 'required|numeric',
             'items.*.shipping_address' => 'nullable|string',
             'items.*.id' => 'required|integer',
             'items.*.quantity' => 'required|integer|min:1',
             'total' => 'required|numeric',
+            'unit_price' => 'nullable|numeric',
         ]);
 
 //        $orderNumber = uniqid();
@@ -73,22 +74,24 @@ class OrderController extends Controller
             $orderItem = \App\Models\OrderItem::create([
                 'order_id' => $order->id,
 //                'order_number' => $orderNumber,
-                'status' => 'pending',
-                'name' => $item['name'],
-                'price' => $item['price'],
-                'description' => $item['description'] ?? null,
-                'image' => $item['image'] ?? null,
+                'product_id' => $item['id'],
+//                'status' => 'pending',
+//                'name' => $item['name'],
+//                'unit_price' => $item['price'],
+//                'ingredients' => $item['ingredients'] ?? null,
+//                'image' => $item['image'] ?? null,
 //                'category' => $item['category'],
-                'category' => $item['category'] ?? null,  // Check if category exists
-                'total_price' => $item['total_price'] ?? null,
-                'shipping_address' => $item['shipping_address'] ?? null,
+                'category_id' => $item['category_id'] ?? null,  // Check if category exists
+                'quantity' => $item['quantity'],
+//                'total_price' => $item['total_price'] ?? null,
+//                'shipping_address' => $item['shipping_address'] ?? null,
             ]);
 
             $itemIds[] = $orderItem->id;
 
             $order->products()->attach($item['id'], [
                 'quantity' => $item['quantity'],
-                'price' => $item['price'],
+                'unit-price' => $item['price'],
             ]);
         }
 

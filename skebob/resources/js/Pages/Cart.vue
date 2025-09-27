@@ -101,6 +101,7 @@ import {mapState, useStore} from "vuex";
 import {computed} from "vue";
 import {usePage} from "@inertiajs/vue3";
 import {loadStripe} from "@stripe/stripe-js";
+import {useUser} from "../Composables/useUser.js";
 // import * as response from "autoprefixer";
 
 export default {
@@ -130,6 +131,7 @@ export default {
     },
     setup()
     {
+        const { isLoggedIn, user } = useUser();
         const store = useStore();
 
         const cartItems = computed(() => store.getters.cartItems);
@@ -143,10 +145,7 @@ export default {
         const page = usePage();  // Ensure to get the page props
 
         // Computed property for checking if the user is authenticated
-        const isAuthenticated = computed(() => {
-            return !!(page.props.auth && page.props.auth.user);
-        });
-
+        const isAuthenticated = isLoggedIn;
         const clearCart = () => {
             store.commit('CLEAR_CART');
         };
@@ -160,15 +159,18 @@ export default {
                 if (Array.isArray(store.state.cart) && store.state.cart.length > 0) {
                     // console.log(item.id, item.name, item.price, item.category)
 
+                    const shippingAddress = "User's address";
+
                     const sanitizedCart = store.state.cart.map(item => ({
                         id: item.id,
                         name: item.name,
-                        price: parseFloat(item.price), // ensure it's a number
-                        quantity: parseInt(item.quantity), // ensure it's an integer
-                        description: item.description || '',  // add missing fields
+                        price: parseFloat(item.price),
+                        quantity: parseInt(item.quantity),
+                        ingredients: item.ingredients || '',
                         image: item.image || '',
-                        category: item.category || '',
+                        category_id: item.category_id || '',
                         total_price: parseFloat(item.price) * item.quantity,
+                        shipping_address: shippingAddress || '',
                     }));
                     console.log(store.state.cart)
 
