@@ -14,6 +14,7 @@
         </div>
 <!--        <Productsintro />-->
         <Testimonial />
+        <SnackMap />
         <chatwithai />
         <SectionCom />
         <Contact />
@@ -36,10 +37,12 @@ import chatwithai from "@/Components/chatwithai.vue";
 import SectionCom from "@/Components/SectionCom.vue";
 import BrandList from "../Components/BrandList.vue";
 import MysteryBox from "../Components/MysteryBox.vue";
+import SnackMap from "../Components/SnackMap.vue";
 
 export default {
     name: 'Home',
     components: {
+        SnackMap,
         MysteryBox,
         BrandList,
         SectionCom,
