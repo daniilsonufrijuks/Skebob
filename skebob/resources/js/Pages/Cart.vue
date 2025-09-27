@@ -333,14 +333,14 @@ export default {
 
 .cart-total button {
     padding: 10px 20px;
-    background-color: #420d65;
+    background-color: #d87220;
     color: white;
     border: none;
     cursor: pointer;
 }
 
 .cart-total button:hover {
-    background-color: #6a0dad;
+    background-color: #a5500d;
 }
 
 .cart-item {
@@ -365,7 +365,7 @@ export default {
 }
 
 .cart-total button {
-    background-color: #420d65;
+    background-color: #d87220;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -373,7 +373,7 @@ export default {
 }
 
 .cart-total button:hover {
-    background-color: #6a0dad;
+    background-color: #a3500e;
 }
 </style>
 
