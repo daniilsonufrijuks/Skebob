@@ -159,20 +159,20 @@ export default {
                 if (Array.isArray(store.state.cart) && store.state.cart.length > 0) {
                     // console.log(item.id, item.name, item.price, item.category)
 
-                    const shippingAddress = "User's address";
-
-                    const sanitizedCart = store.state.cart.map(item => ({
-                        id: item.id,
-                        name: item.name,
-                        price: parseFloat(item.price),
-                        quantity: parseInt(item.quantity),
-                        ingredients: item.ingredients || '',
-                        image: item.image || '',
-                        category_id: item.category_id || '',
-                        total_price: parseFloat(item.price) * item.quantity,
-                        shipping_address: shippingAddress || '',
-                    }));
-                    console.log(store.state.cart)
+                    // const shippingAddress = "User's address";
+                    //
+                    // const sanitizedCart = store.state.cart.map(item => ({
+                    //     id: item.id,
+                    //     name: item.name,
+                    //     price: parseFloat(item.price),
+                    //     quantity: parseInt(item.quantity),
+                    //     ingredients: item.ingredients || '',
+                    //     image: item.image || '',
+                    //     category_id: item.category_id || '',
+                    //     total_price: parseFloat(item.price) * item.quantity,
+                    //     shipping_address: shippingAddress || '',
+                    // }));
+                    // console.log(store.state.cart)
 
 
                     // const response = await axios.get('/auth/user');-->
@@ -184,39 +184,40 @@ export default {
                         console.log("Please log in first.");
                     } else {
                         // Send sanitized cart data to the backend
-                        const orderResponse = await axios.post('/order', {
-                            items: sanitizedCart,
-                            // total: store.state.cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
-                            total: store.state.cart.reduce(
-                                (sum, item) => sum + parseFloat(item.price) * parseInt(item.quantity),
-                                0
-                            ),
-                        });
+                        // const orderResponse = await axios.post('/order', {
+                        //     items: sanitizedCart,
+                        //     // total: store.state.cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
+                        //     total: store.state.cart.reduce(
+                        //         (sum, item) => sum + parseFloat(item.price) * parseInt(item.quantity),
+                        //         0
+                        //     ),
+                        // });
+                        window.location.href = '/order-overview';
 
                         // stripe
-                        const response = await axios.post('/stripe/checkout', {
-                            items: sanitizedCart,
-                        });
-                        // const stripe = await loadStripe(import.meta.env.VITE_STRIPE_KEY); // public key
-                        const stripeKey = import.meta.env.VITE_STRIPE_KEY;
-
-                        if (!stripeKey) {
-                            console.error('Stripe public key is not defined in the environment variables.');
-                            return;
-                        }
-
-                        const stripe = await loadStripe(stripeKey);
-
-                        await stripe.redirectToCheckout({ sessionId: response.data.id });
-
-                        console.log('Order Response:', orderResponse.data);
-
-                        // Optionally clear cart after successful checkout
-                        store.commit('CLEAR_CART');
-                        // const stripe = await loadStripe("");
+                        // const response = await axios.post('/stripe/checkout', {
+                        //     items: sanitizedCart,
+                        // });
+                        // // const stripe = await loadStripe(import.meta.env.VITE_STRIPE_KEY); // public key
+                        // const stripeKey = import.meta.env.VITE_STRIPE_KEY;
+                        //
+                        // if (!stripeKey) {
+                        //     console.error('Stripe public key is not defined in the environment variables.');
+                        //     return;
+                        // }
+                        //
+                        // const stripe = await loadStripe(stripeKey);
+                        //
                         // await stripe.redirectToCheckout({ sessionId: response.data.id });
-                        // Redirect to home page
-                        // window.location.href = `/`;
+                        //
+                        // console.log('Order Response:', orderResponse.data);
+                        //
+                        // // Optionally clear cart after successful checkout
+                        // store.commit('CLEAR_CART');
+                        // // const stripe = await loadStripe("");
+                        // // await stripe.redirectToCheckout({ sessionId: response.data.id });
+                        // // Redirect to home page
+                        // // window.location.href = `/`;
                     }
                 }
             } catch (error) {

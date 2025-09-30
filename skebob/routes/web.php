@@ -88,6 +88,10 @@ Route::get('/cart', function () {
     return Inertia::render('Cart');
 })->name('cart');
 
+Route::get('/order-overview', function () {
+    return Inertia::render('OrderOverview');
+})->name('order-overview');
+
 Route::get('/tutor', function () {
     return Inertia::render('Tutorials');
 })->name('tutor');
