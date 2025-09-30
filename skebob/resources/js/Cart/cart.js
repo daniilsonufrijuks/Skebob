@@ -45,6 +45,9 @@ const store = createStore({
             state.cart = [];
             localStorage.setItem('cart', JSON.stringify(state.cart));
         },
+        SET_CART(state, cartItems) {
+            state.cart = cartItems;
+        },
     },
     getters: {
         cartItems: (state) => state.cart,

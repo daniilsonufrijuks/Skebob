@@ -192,6 +192,7 @@ export default {
                         //         0
                         //     ),
                         // });
+                        sessionStorage.setItem('pendingOrder', JSON.stringify(store.state.cart));
                         window.location.href = '/order-overview';
 
                         // stripe
