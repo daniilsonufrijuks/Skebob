@@ -179,17 +179,14 @@ export default {
             return total;
         });
 
-        // Calculate shipping cost (you can modify this logic)
         const shippingCost = computed(() => {
-            return cartTotal.value > 50 ? 0 : 5.99; // Free shipping over $50
+            return cartTotal.value > 50 ? 0 : 5.99; // free shipping over $50
         });
 
-        // Calculate final total
         const orderTotal = computed(() => {
             return cartTotal.value + shippingCost.value;
         });
 
-        // Shipping address form
         const shippingAddress = ref({
             email: '',
             address: '',
@@ -260,61 +257,49 @@ export default {
                     return;
                 }
 
-                // Prepare items data for Stripe
-                const items = cartItems.value.map(item => ({
-                    id: item.id,
-                    name: item.name,
-                    price: parseFloat(item.price),
-                    quantity: parseInt(item.quantity),
-                    image: item.image || '',
-                    ingredients: item.ingredients || '',
-                    category_id: item.category_id || '',
-                    total_price: parseFloat(item.price) * item.quantity
-                }));
-
+                // prepare items data for Stripe
                 const orderData = {
-                    items: items,
+                    items: cartItems.value.map(item => ({
+                        id: item.id,
+                        name: item.name,
+                        price: parseFloat(item.price),
+                        quantity: parseInt(item.quantity),
+                        image: item.image || '',
+                        ingredients: item.ingredients || '',
+                        category_id: item.category_id || '',
+                        total_price: parseFloat(item.price) * item.quantity
+                    })),
                     shipping_address: shippingAddress.value,
+                    subtotal: cartTotal.value,
+                    shipping_cost: shippingCost.value,
                     total: orderTotal.value
                 };
 
                 console.log('Sending order data to Stripe:', orderData);
-
-                // Store cart in session as backup before proceeding
+                // store cart in session as backup before proceeding
                 sessionStorage.setItem('pendingOrder', JSON.stringify(cartItems.value));
-
-                // Create Stripe session - NO ORDER CREATION IN DATABASE YET
+                // create Stripe session - NO ORDER CREATION IN DATABASE YET
                 const response = await axios.post('/order', orderData);
-
                 if (!response.data.id) {
                     throw new Error('No session ID received from server');
                 }
-
-                // Redirect to Stripe Checkout
+                // redirect to Stripe Checkout
                 const stripeKey = import.meta.env.VITE_STRIPE_KEY;
-
                 if (!stripeKey) {
                     throw new Error('Stripe public key is not defined');
                 }
-
                 const stripe = await loadStripe(stripeKey);
-
                 if (!stripe) {
                     throw new Error('Failed to load Stripe');
                 }
-
                 const { error } = await stripe.redirectToCheckout({
                     sessionId: response.data.id
                 });
-
                 if (error) {
                     throw new Error(error.message);
                 }
-
             } catch (error) {
                 console.error('Error processing order:', error);
-
-                // Handle authentication errors specifically
                 if (error.response && error.response.status === 401) {
                     alert('Your session has expired. Please log in again.');
                     redirectToLogin();
@@ -332,7 +317,6 @@ export default {
         };
 
         const redirectToLogin = () => {
-            // Store the current URL to redirect back after login
             const currentPath = router.currentRoute.value.fullPath;
             router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
         };
