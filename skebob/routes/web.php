@@ -88,6 +88,10 @@ Route::get('/cart', function () {
     return Inertia::render('Cart');
 })->name('cart');
 
+Route::get('/order-overview', function () {
+    return Inertia::render('OrderOverview');
+})->name('order-overview');
+
 Route::get('/tutor', function () {
     return Inertia::render('Tutorials');
 })->name('tutor');
@@ -227,6 +231,11 @@ Route::get('/products/{id}', [ProductsController::class, 'show']);
 
 // Proceed to checkout (with session-based authentication)
 Route::post('/order', [OrderController::class, 'store'])->middleware('auth');
+Route::get('/order-success', [OrderController::class, 'handleSuccess'])->name('order.success');
+Route::get('/order-confirmation', function() {
+    return view('order-confirmation');
+})->name('order.confirmation');
+
 
 
 

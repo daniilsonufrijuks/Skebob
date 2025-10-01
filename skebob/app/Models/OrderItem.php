@@ -16,7 +16,7 @@ class OrderItem extends Model
      */
     protected $fillable = [
         'quantity',
-        'unit_price',
+        'unit-price',
         'subtotal',
         'order_id',
         'product_id',
@@ -29,7 +29,7 @@ class OrderItem extends Model
      */
     protected $casts = [
         'quantity' => 'integer',
-        'unit_price' => 'decimal:2',
+        'unit-price' => 'decimal:2',
         'subtotal' => 'decimal:2',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
