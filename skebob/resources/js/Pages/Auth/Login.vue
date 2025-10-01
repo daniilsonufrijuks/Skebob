@@ -20,6 +20,10 @@ const submit = () => {
     <section class="container forms">
         <Particles/>
 
+        <Link :href="route('home')" class="back-button">
+            Back to Home
+        </Link>
+
         <div class="form login">
             <img class="imglogo" src="/skebob.png"/>
             <div class="form-content">
@@ -235,6 +239,28 @@ a.google span{
     font-weight: 500;
     opacity: 0.6;
     color: #232836;
+}
+
+/* BACK BUTTON */
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #fff;
+    color: #985016;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 2px solid #985016;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.back-button:hover {
+    background-color: #985016;
+    color: #fff;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 400px) {
