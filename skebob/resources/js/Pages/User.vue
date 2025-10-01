@@ -621,4 +621,126 @@ h6 {
     color: #ffc107;
 }
 
+/* CONFIRM DELETION MODAL */
+/* === Modal Backdrop === */
+.modal-backdrop {
+    position: fixed;
+    inset: 0; /* shorthand for top/right/bottom/left = 0 */
+    background: rgba(0, 0, 0, 0.5); /* dark transparent overlay */
+    backdrop-filter: blur(4px); /* soft blur effect */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050; /* above everything else */
+    animation: fadeIn 0.3s ease;
+}
+
+/* === Modal Content === */
+.modal-content {
+    background: #ffffff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s ease;
+}
+
+/* === Modal Header === */
+.modal-header {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+}
+
+/* === Modal Body === */
+.modal-body {
+    margin-bottom: 1.25rem;
+    color: #555;
+}
+
+.modal-body p {
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+}
+
+/* === Modal Footer === */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* === Form Group === */
+.modal-body .form-group {
+    margin-top: 10px;
+}
+
+.modal-body label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.modal-body input[type="password"] {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: border-color 0.2s;
+}
+
+.modal-body input[type="password"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* === Buttons inside modal === */
+.modal-footer .btn {
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+.modal-footer .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.modal-footer .btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.modal-footer .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.modal-footer .btn-danger:hover {
+    background-color: #c82333;
+}
+
+/* === Animations === */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
 </style>
