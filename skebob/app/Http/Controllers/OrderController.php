@@ -169,10 +169,22 @@ class OrderController extends Controller
         ]);
 
         try {
-            // create Stripe session
+            // Store order data in session with a unique key
+            $sessionKey = 'order_' . uniqid();
+            session([$sessionKey => [
+                'user_id' => auth()->id(),
+                'items' => $request->items,
+                'total' => $request->total,
+                'subtotal' => $request->subtotal,
+                'shipping_cost' => $request->shipping_cost,
+                'shipping_address' => $request->shipping_address,
+                'created_at' => now(),
+            ]]);
+
+            // Create Stripe session
             Stripe::setApiKey(config('services.stripe.secret'));
+
             $lineItems = [];
-            // add product items
             foreach ($request->items as $item) {
                 $lineItems[] = [
                     'price_data' => [
@@ -180,13 +192,12 @@ class OrderController extends Controller
                         'product_data' => [
                             'name' => $item['name'],
                         ],
-                        'unit_amount' => (int)($item['price'] * 100), // convert to cents
+                        'unit_amount' => (int)($item['price'] * 100),
                     ],
                     'quantity' => $item['quantity'],
                 ];
             }
 
-            // add shipping as a separate line item
             if ($request->shipping_cost > 0) {
                 $lineItems[] = [
                     'price_data' => [
@@ -194,7 +205,7 @@ class OrderController extends Controller
                         'product_data' => [
                             'name' => 'Shipping Fee',
                         ],
-                        'unit_amount' => (int)($request->shipping_cost * 100), // convert to cents
+                        'unit_amount' => (int)($request->shipping_cost * 100),
                     ],
                     'quantity' => 1,
                 ];
@@ -208,15 +219,12 @@ class OrderController extends Controller
                 'cancel_url' => url('/order-overview'),
                 'customer_email' => $request->shipping_address['email'],
                 'metadata' => [
-                    'user_id' => auth()->id(),
-                    'total_amount' => $request->total,
-                    'subtotal' => $request->subtotal,
-                    'shipping_cost' => $request->shipping_cost,
-                    'items_data' => json_encode($request->items),
-                    'shipping_address' => json_encode($request->shipping_address)
+                    'session_key' => $sessionKey, // Store session key instead of all data
                 ],
             ]);
+
             return response()->json(['id' => $session->id]);
+
         } catch (\Exception $e) {
             \Log::error('Stripe session creation failed: ' . $e->getMessage());
             return response()->json([
@@ -225,7 +233,6 @@ class OrderController extends Controller
         }
     }
 
-    // handle successful payment and create order
     public function handleSuccess(Request $request)
     {
         $sessionId = $request->get('session_id');
@@ -240,12 +247,41 @@ class OrderController extends Controller
             $session = Session::retrieve($sessionId);
 
             if ($session->payment_status === 'paid') {
-                // Create order after successful payment
-                $order = $this->createOrder($session);
+                // Get the session key from metadata
+                $sessionKey = $session->metadata->session_key;
+                $orderData = session($sessionKey);
 
-                return redirect('/order-confirmation')
-                    ->with('success', 'Order placed successfully!')
-                    ->with('order_id', $order->id);
+                if ($orderData) {
+                    // Create the order
+                    $order = Order::create([
+                        'user_id' => $orderData['user_id'],
+                        'status' => 'paid',
+                        'total_price' => $orderData['total'],
+                        'shipping_address' => $this->formatShippingAddress($orderData['shipping_address']),
+                        'ordered_at' => now(),
+                    ]);
+
+                    // Create order items
+                    foreach ($orderData['items'] as $item) {
+                        OrderItem::create([
+                            'order_id' => $order->id,
+                            'product_id' => $item['id'],
+                            'quantity' => $item['quantity'],
+                            'unit-price' => $item['price'],
+                            'subtotal' => $item['price'] * $item['quantity'],
+                        ]);
+                    }
+
+                    // Clear the session data
+                    session()->forget($sessionKey);
+
+                    return redirect('/order-confirmation')
+                        ->with('success', 'Order placed successfully!')
+                        ->with('order_id', $order->id);
+                } else {
+                    \Log::error('Order data not found in session for key: ' . $sessionKey);
+                    return redirect('/order-overview')->with('error', 'Order data not found');
+                }
             }
 
         } catch (\Exception $e) {
@@ -255,6 +291,9 @@ class OrderController extends Controller
         return redirect('/order-overview')->with('error', 'Payment failed');
     }
 
+
+
+//     dont use this function now
     private function createOrder($session)
     {
         $metadata = $session->metadata;
