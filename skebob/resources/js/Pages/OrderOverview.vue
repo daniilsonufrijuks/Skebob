@@ -327,7 +327,13 @@ export default {
         };
 
         const goBackToCart = () => {
-            router.push('/cart');
+            console.log('Router object:', router);
+            if (router) {
+                router.push('/cart');
+            } else {
+                console.error('Router is not available');
+                window.location.href = '/cart';
+            }
         };
 
         return {
