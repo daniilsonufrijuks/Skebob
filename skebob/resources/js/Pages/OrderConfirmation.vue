@@ -29,7 +29,7 @@
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Total Amount:</span>
-                        <span class="detail-value total-amount">${{ order?.total_price?.toFixed(2) || '0.00' }}</span>
+                        <span class="detail-value total-amount">${{ formatCurrency(order?.total_price) }}</span>
                     </div>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                             <p>{{ item.description }}</p>
                             <p>Price: ${{ item.price }}</p>
                             <p>Quantity: {{ item.quantity }}</p>
-                            <p class="item-total">Item Total: ${{ (item.price * item.quantity).toFixed(2) }}</p>
+                            <p class="item-total">Item Total: ${{ formatCurrency(item.price * item.quantity) }}</p>
                         </div>
                     </div>
                 </div>
@@ -133,6 +133,7 @@ import Contact from "../Components/Contact.vue";
 import { useRouter } from "vue-router";
 import { ref, onMounted, computed } from "vue";
 import { useUser } from "../Composables/useUser.js";
+import {useStore} from "vuex";
 
 export default {
     name: 'OrderConfirmation',
@@ -148,10 +149,16 @@ export default {
     setup() {
         const router = useRouter();
         const { user } = useUser();
+        const  store = useStore();
 
         const order = ref(null);
         const orderItems = ref([]);
         const loading = ref(true);
+
+        const formatCurrency = (value) => {
+            const num = parseFloat(value);
+            return isNaN(num) ? '0.00' : num.toFixed(2);
+        };
 
         const orderDate = computed(() => {
             if (order.value?.ordered_at) {
@@ -191,13 +198,15 @@ export default {
                 if (orderId) {
                     try {
                         // Fetch order details from API - use the correct endpoint
-                        const response = await axios.get(`/api/orders/${orderId}`);
+                        const response = await axios.get(`/orders/${orderId}`);
                         console.log('API response:', response.data);
 
                         if (response.data && response.data.order) {
                             order.value = response.data.order;
                             orderItems.value = response.data.items || [];
                             loading.value = false;
+
+                            store.commit('CLEAR_CART');
 
                             // Also store in sessionStorage as backup
                             sessionStorage.setItem('lastOrder', JSON.stringify({
@@ -220,6 +229,7 @@ export default {
                         order.value = orderData.order;
                         orderItems.value = orderData.items || [];
                         loading.value = false;
+                        store.commit('CLEAR_CART');
                         return;
                     } catch (e) {
                         console.error('Error parsing lastOrder from sessionStorage:', e);
@@ -251,6 +261,7 @@ export default {
                 };
 
                 loading.value = false;
+                store.commit('CLEAR_CART');
 
             } catch (error) {
                 console.error('Error fetching order details:', error);
@@ -271,6 +282,7 @@ export default {
         const continueShopping = () => {
             sessionStorage.removeItem('pendingOrder');
             sessionStorage.removeItem('shippingInfo');
+            store.commit('CLEAR_CART');
             window.location.href ='/'
         };
 
@@ -291,6 +303,7 @@ export default {
             total,
             loading,
             continueShopping,
+            formatCurrency
             // viewOrderHistory
         };
     }
