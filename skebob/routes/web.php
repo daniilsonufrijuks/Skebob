@@ -236,6 +236,8 @@ Route::get('/products/{id}', [ProductsController::class, 'show']);
 // Proceed to checkout (with session-based authentication)
 Route::post('/order', [OrderController::class, 'store'])->middleware('auth');
 Route::get('/order-success', [OrderController::class, 'handleSuccess'])->name('order.success');
+
+Route::get('/orders/{id}', [OrderController::class, 'show']);
 //Route::get('/order-confirmation', function() {
 //    return view('order-confirmation');
 //})->name('order.confirmation');

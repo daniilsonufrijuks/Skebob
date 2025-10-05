@@ -64,23 +64,23 @@
             </div>
 
             <!-- Order Summary -->
-            <div class="order-summary">
-                <h3 class="section-title">Order Summary</h3>
-                <div class="summary-details">
-                    <div class="summary-row">
-                        <span>Subtotal:</span>
-                        <span>${{ subtotal.toFixed(2) }}</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>Shipping:</span>
-                        <span>${{ shippingCost.toFixed(2) }}</span>
-                    </div>
-                    <div class="summary-row total-row">
-                        <span><strong>Total:</strong></span>
-                        <span><strong>${{ total.toFixed(2) }}</strong></span>
-                    </div>
-                </div>
-            </div>
+<!--            <div class="order-summary">-->
+<!--                <h3 class="section-title">Order Summary</h3>-->
+<!--                <div class="summary-details">-->
+<!--                    <div class="summary-row">-->
+<!--                        <span>Subtotal:</span>-->
+<!--                        <span>${{ subtotal.toFixed(2) }}</span>-->
+<!--                    </div>-->
+<!--                    <div class="summary-row">-->
+<!--                        <span>Shipping:</span>-->
+<!--                        <span>${{ shippingCost.toFixed(2) }}</span>-->
+<!--                    </div>-->
+<!--                    <div class="summary-row total-row">-->
+<!--                        <span><strong>Total:</strong></span>-->
+<!--                        <span><strong>${{ total.toFixed(2) }}</strong></span>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
 
             <!-- Next Steps -->
             <div class="next-steps-section">
@@ -115,9 +115,9 @@
                 <button @click="continueShopping" class="continue-shopping-button">
                     Continue Shopping
                 </button>
-                <button @click="viewOrderHistory" class="order-history-button">
-                    View Order History
-                </button>
+<!--                <button @click="viewOrderHistory" class="order-history-button">-->
+<!--                    View Order History-->
+<!--                </button>-->
             </div>
         </div>
         <Contact />
@@ -182,45 +182,101 @@ export default {
 
         const fetchOrderDetails = async () => {
             try {
-                // In a real application, you would fetch the order details from your API
-                // For now, we'll use the data from the session or local storage
+                // Try to get order data from URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const orderId = urlParams.get('order_id');
+
+                console.log('Order ID from URL:', orderId);
+
+                if (orderId) {
+                    try {
+                        // Fetch order details from API - use the correct endpoint
+                        const response = await axios.get(`/api/orders/${orderId}`);
+                        console.log('API response:', response.data);
+
+                        if (response.data && response.data.order) {
+                            order.value = response.data.order;
+                            orderItems.value = response.data.items || [];
+                            loading.value = false;
+
+                            // Also store in sessionStorage as backup
+                            sessionStorage.setItem('lastOrder', JSON.stringify({
+                                order: response.data.order,
+                                items: response.data.items
+                            }));
+                            return;
+                        }
+                    } catch (apiError) {
+                        console.error('API fetch failed:', apiError);
+                        // Continue to fallback methods
+                    }
+                }
+
+                // Fallback 1: Check sessionStorage for last order
+                const lastOrder = sessionStorage.getItem('lastOrder');
+                if (lastOrder) {
+                    try {
+                        const orderData = JSON.parse(lastOrder);
+                        order.value = orderData.order;
+                        orderItems.value = orderData.items || [];
+                        loading.value = false;
+                        return;
+                    } catch (e) {
+                        console.error('Error parsing lastOrder from sessionStorage:', e);
+                    }
+                }
+
+                // Fallback 2: Check for pending order data
                 const pendingOrder = sessionStorage.getItem('pendingOrder');
                 const shippingInfo = sessionStorage.getItem('shippingInfo');
+
+                console.log('Pending order from session:', pendingOrder);
+                console.log('Shipping info from session:', shippingInfo);
 
                 if (pendingOrder) {
                     orderItems.value = JSON.parse(pendingOrder);
                 }
 
-                // Simulate API call delay
-                setTimeout(() => {
-                    // Mock order data - in real app, this would come from your backend
-                    order.value = {
-                        id: Math.floor(100000 + Math.random() * 900000), // Random order ID
-                        total_price: total.value,
-                        shipping_address: shippingInfo ? JSON.parse(shippingInfo).address : 'Address will be displayed here',
-                        ordered_at: new Date().toISOString(),
-                        status: 'paid'
-                    };
-                    loading.value = false;
+                // Create order object from available data
+                const calculatedTotal = orderItems.value.reduce((total, item) => {
+                    return total + (parseFloat(item.price) * parseInt(item.quantity));
+                }, 0);
 
-                    // Clear the pending order from session storage
-                    sessionStorage.removeItem('pendingOrder');
-                    sessionStorage.removeItem('shippingInfo');
-                }, 1000);
+                order.value = {
+                    id: orderId || Math.floor(100000 + Math.random() * 900000),
+                    total_price: calculatedTotal,
+                    shipping_address: shippingInfo ? JSON.parse(shippingInfo).address : 'Address information will be displayed here',
+                    ordered_at: new Date().toISOString(),
+                    status: 'paid'
+                };
+
+                loading.value = false;
 
             } catch (error) {
                 console.error('Error fetching order details:', error);
+
+                // Final fallback: create empty order
+                order.value = {
+                    id: Math.floor(100000 + Math.random() * 900000),
+                    total_price: 0,
+                    shipping_address: 'No shipping address available',
+                    ordered_at: new Date().toISOString(),
+                    status: 'paid'
+                };
+                orderItems.value = [];
                 loading.value = false;
             }
         };
 
         const continueShopping = () => {
-            router.push('/');
+            sessionStorage.removeItem('pendingOrder');
+            sessionStorage.removeItem('shippingInfo');
+            window.location.href ='/'
         };
 
-        const viewOrderHistory = () => {
-            router.push('/order-history');
-        };
+        // const viewOrderHistory = () => {
+        //     router.push('/order-history');
+        // };
 
         onMounted(() => {
             fetchOrderDetails();
@@ -235,7 +291,7 @@ export default {
             total,
             loading,
             continueShopping,
-            viewOrderHistory
+            // viewOrderHistory
         };
     }
 }
