@@ -92,13 +92,17 @@ Route::get('/order-overview', function () {
     return Inertia::render('OrderOverview');
 })->name('order-overview');
 
+Route::get('/order-confirmation', function () {
+    return Inertia::render('OrderConfirmation');
+})->name('order-confirmation');
+
 Route::get('/tutor', function () {
     return Inertia::render('Tutorials');
 })->name('tutor');
 
-Route::get('/quiz', function () {
-    return Inertia::render('Quiz');
-})->name('quiz');
+//Route::get('/quiz', function () {
+//    return Inertia::render('Quiz');
+//})->name('quiz');
 
 Route::get('/nuts', function () {
     return Inertia::render('Nuts');
@@ -232,9 +236,11 @@ Route::get('/products/{id}', [ProductsController::class, 'show']);
 // Proceed to checkout (with session-based authentication)
 Route::post('/order', [OrderController::class, 'store'])->middleware('auth');
 Route::get('/order-success', [OrderController::class, 'handleSuccess'])->name('order.success');
-Route::get('/order-confirmation', function() {
-    return view('order-confirmation');
-})->name('order.confirmation');
+
+Route::get('/orders/{id}', [OrderController::class, 'show']);
+//Route::get('/order-confirmation', function() {
+//    return view('order-confirmation');
+//})->name('order.confirmation');
 
 
 

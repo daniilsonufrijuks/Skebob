@@ -275,9 +275,14 @@ class OrderController extends Controller
                     // Clear the session data
                     session()->forget($sessionKey);
 
-                    return redirect('/order-confirmation')
-                        ->with('success', 'Order placed successfully!')
-                        ->with('order_id', $order->id);
+//                    return redirect('/order-confirmation')
+//                        ->with('order_data', [
+//                            'id' => $order->id,
+//                            'total_price' => $order->total_price,
+//                            'shipping_address' => $order->shipping_address,
+//                            'ordered_at' => $order->ordered_at,
+//                        ]);
+                    return redirect('/order-confirmation?order_id=' . $order->id);
                 } else {
                     \Log::error('Order data not found in session for key: ' . $sessionKey);
                     return redirect('/order-overview')->with('error', 'Order data not found');
@@ -326,5 +331,44 @@ class OrderController extends Controller
     private function formatShippingAddress($address)
     {
         return "{$address['address']}, {$address['city']}, {$address['zipCode']}, {$address['country']}";
+    }
+
+    public function show($id)
+    {
+        try {
+            $order = Order::with('orderItems.product')->findOrFail($id);
+
+            if (auth()->check() && $order->user_id !== auth()->id()) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+
+            // Transform the data for the frontend
+            $formattedOrder = [
+                'id' => $order->id,
+                'total_price' => $order->total_price,
+                'shipping_address' => $order->shipping_address,
+                'ordered_at' => $order->ordered_at,
+                'status' => $order->status,
+            ];
+
+            $formattedItems = $order->orderItems->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'name' => $item->product->name ?? 'Product',
+                    'description' => $item->product->description ?? '',
+                    'price' => $item->{'unit-price'},
+                    'quantity' => $item->quantity,
+                    'image' => $item->product->image ?? '/default-image.jpg',
+                ];
+            });
+
+            return response()->json([
+                'order' => $formattedOrder,
+                'items' => $formattedItems
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Order not found'], 404);
+        }
     }
 }

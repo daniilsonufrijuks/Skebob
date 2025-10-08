@@ -36,10 +36,10 @@ const store = createStore({
             localStorage.setItem('cart', JSON.stringify(state.cart));
         },
 
-        // REMOVE_FROM_CART(state, productId) {
-        //     state.cart = state.cart.filter((item) => item.id !== productId);
-        //     localStorage.setItem('cart', JSON.stringify(state.cart));
-        // },
+        REMOVE_FROM_CART(state, productId) {
+            state.cart = state.cart.filter((item) => item.id !== productId);
+            localStorage.setItem('cart', JSON.stringify(state.cart));
+        },
 
         CLEAR_CART(state) {
             state.cart = [];
@@ -48,6 +48,9 @@ const store = createStore({
         SET_CART(state, cartItems) {
             state.cart = cartItems;
         },
+        // REMOVE_FROM_CART(state, productId) {
+        //     state.cart = state.cart.filter(item => item.id !== productId);
+        // },
     },
     getters: {
         cartItems: (state) => state.cart,
