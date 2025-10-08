@@ -1,4 +1,3 @@
-
 <template>
     <section id="productdetails" v-if="product">
         <div class="single-pro-image">
@@ -13,13 +12,19 @@
             <h6>{{ product.category }}</h6>
             <h4>{{ product.name }}</h4>
             <h2>${{ product.price }}</h2>
-<!--            <select>-->
-<!--                <option>Select option</option>-->
-<!--                <option>Box</option>-->
-<!--                <option>Single</option>-->
-<!--            </select>-->
-            <input type="number" v-model="quantity" value="1">
-            <button class="normal" @click="addToCart(this.product)">Add to Cart</button>
+            <!--            <select>-->
+            <!--                <option>Select option</option>-->
+            <!--                <option>Box</option>-->
+            <!--                <option>Single</option>-->
+            <!--            </select>-->
+            <input
+                type="number"
+                v-model.number="quantity"
+                min="1"
+                @input="handleInput"
+                @blur="validateQuantity"
+            >
+            <button class="normal" @click="addToCart(product)">Add to Cart</button>
             <h4>Product Details</h4>
             <span class="gcardt">{{ product.ingredients }}.</span>
         </div>
@@ -34,79 +39,64 @@
     </transition>
 </template>
 
-
 <script>
 import { useStore } from 'vuex';
 import {ref} from "vue";
 
 export default {
-    props: ['product'], // Make sure to pass `product` as a prop
+    props: ['product'],
     setup(props) {
         const store = useStore();
-
-        // Initialize quantity with default value 1
         const quantity = ref(1);
         const showNotification = ref(false);
+        let isUserTyping = ref(false);
+
+        const handleInput = (event) => {
+            const value = event.target.value;
+            if (value === '') {
+                isUserTyping = true;
+                return;
+            }
+            const numValue = parseInt(value);
+            if (isNaN(numValue) || numValue < 1) {
+                quantity.value = 1;
+                isUserTyping = false;
+            } else {
+                quantity.value = numValue;
+                isUserTyping = false;
+            }
+        };
+
+        const validateQuantity = () => {
+            if (quantity.value < 1 || isNaN(quantity.value)) {
+                quantity.value = 1;
+            }
+            isUserTyping = false;
+        };
 
         const addToCart = (product) => {
+            validateQuantity();
             store.commit('ADD_TO_CART', { ...product, quantity: quantity.value });
             console.log("added", product);
             showNotification.value = true;
-            // Hide the notification after 3 seconds
             setTimeout(() => {
                 showNotification.value = false;
             }, 3000);
         };
-        // const addToCart = (product) => {
-        //     if (!product) {
-        //         console.error('Product data is missing!');
-        //         return;
-        //     }
-        //     store.commit('ADD_TO_CART', { ...product, quantity: 1 });
-        //     console.log("added", product);
-        //};
 
-        return { quantity, addToCart, showNotification };
+        return {
+            quantity,
+            addToCart,
+            showNotification,
+            handleInput,
+            validateQuantity
+        };
     },
 };
-// export default {
-//     props: {
-//         product: {
-//             type: Object,
-//             required: true,
-//         },
-//         // cartItems: {
-//         //     type: Array,
-//         //     required: true,
-//         // },
-//     },
-//     // data() {
-//     //     return {
-//     //         quantity: 1,
-//     //         //cartItems: JSON.parse(localStorage.getItem('cartItems')) || [],
-//     //     };
-//     // },
-//     // methods: {
-//     //     addToCart(product) {
-//     //         //console.log(this.cartItems);
-//     //         console.log('Adding product to cart:', product);
-//     //         this.$emit('add-to-cart', {
-//     //             ...this.product,
-//     //             quantity: this.quantity || 1,
-//     //         });
-//     //         console.log("added");
-//     //     },
-//     // },
-//
-// }
-
-
 </script>
-
 
 <style scoped>
 
-/* Sliding notification styles */
 .notification {
     position: fixed;
     bottom: 100px;
@@ -231,10 +221,6 @@ export default {
     }
 }
 
-/* product */
-
-
-/* product */
 @media (max-width: 768px) {
     #productdetails {
         display: flex;
@@ -251,5 +237,4 @@ export default {
     }
 }
 
-/* product */
 </style>
