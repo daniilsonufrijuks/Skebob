@@ -98,8 +98,9 @@
                 </div>
             </div>
         </div>
-        <Visitit />
+<!--        <Visitit />-->
         <OrderHistory />
+        <Visitit />
         <div class="products">
             <ProductCardDB v-for="product in products" :key="product.id" :product="product" />
         </div>
