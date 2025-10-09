@@ -211,36 +211,15 @@ Route::get('/products/snackboxes', [ProductsController::class, 'getSnackboxesPro
 
 Route::get('/products/{id}', [ProductsController::class, 'show']);
 
-
-
-
-
-
-
-
-// Check if user is logged in
-//Route::get('/auth/user', function () {
-//    return response()->json([
-//        'loggedIn' => auth()->check(),
-//        'id' => auth()->id(),
-//    ]);
-//});
-
-
-
-
-
-
-
-
 // Proceed to checkout (with session-based authentication)
 Route::post('/order', [OrderController::class, 'store'])->middleware('auth');
 Route::get('/order-success', [OrderController::class, 'handleSuccess'])->name('order.success');
 
 Route::get('/orders/{id}', [OrderController::class, 'show']);
-//Route::get('/order-confirmation', function() {
-//    return view('order-confirmation');
-//})->name('order.confirmation');
+
+Route::get('/orders/user', [OrderController::class, 'userOrders'])
+    ->middleware('auth');
+
 
 
 
