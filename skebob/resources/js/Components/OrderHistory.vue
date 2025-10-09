@@ -8,28 +8,45 @@ export default {
             error: null,
         };
     },
-    mounted() {
-        this.fetchOrders();
+    async mounted() {
+        await this.fetchOrders();
     },
     methods: {
         async fetchOrders() {
             try {
                 const response = await fetch("/orders/user", {
-                    credentials: "include", // ⬅️ important for Laravel session auth
+                    credentials: "include", // important for Laravel session auth
+                    headers: {
+                        "Accept": "application/json",
+                    },
                 });
-                if (!response.ok) throw new Error("Failed to fetch orders");
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        throw new Error("Please log in to view your orders.");
+                    }
+                    throw new Error("Failed to fetch orders.");
+                }
+
                 const data = await response.json();
                 console.log("Fetched orders:", data);
-                this.orders = data;
-            } catch (error) {
-                console.error("Error loading orders:", error);
-                this.error = "Could not load your orders. Please log in.";
+
+                this.orders = Array.isArray(data) ? data : [];
+            } catch (err) {
+                console.error("Error loading orders:", err);
+                this.error = err.message;
             } finally {
                 this.loading = false;
             }
         },
         formatDate(dateStr) {
-            return new Date(dateStr).toLocaleString();
+            return new Date(dateStr).toLocaleString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+            });
         },
     },
 };
@@ -37,11 +54,11 @@ export default {
 
 <template>
     <div class="order-history">
-        <h3>Your Order History</h3>
+        <h2 class="title">Your Order History</h2>
 
         <div v-if="loading" class="loading">Loading your orders...</div>
 
-        <div v-else-if="error" class="empty">
+        <div v-else-if="error" class="error">
             <p>{{ error }}</p>
         </div>
 
@@ -82,9 +99,15 @@ export default {
     max-width: 900px;
     margin: 2rem auto;
     background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     padding: 1.5rem;
+}
+
+.title {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1rem;
 }
 
 .order-table {
@@ -102,12 +125,17 @@ export default {
 
 .order-table th {
     background-color: #f8f9fa;
+    color: #333;
 }
 
 .loading,
-.empty {
+.empty,
+.error {
     text-align: center;
-    padding: 1rem;
-    color: #666;
+    padding: 1.5rem;
+    color: #555;
+}
+.error p {
+    color: #d9534f;
 }
 </style>

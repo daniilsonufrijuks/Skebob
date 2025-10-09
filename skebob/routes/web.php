@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Order;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -20,7 +22,6 @@ use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 //Route::get('/', function () {
@@ -215,11 +216,9 @@ Route::get('/products/{id}', [ProductsController::class, 'show']);
 Route::post('/order', [OrderController::class, 'store'])->middleware('auth');
 Route::get('/order-success', [OrderController::class, 'handleSuccess'])->name('order.success');
 
-Route::get('/orders/{id}', [OrderController::class, 'show']);
-
 Route::get('/orders/user', [OrderController::class, 'userOrders'])
     ->middleware('auth');
-
+Route::get('/orders/{id}', [OrderController::class, 'show']);
 
 
 
@@ -325,6 +324,13 @@ Route::get('/search', [ProductsController::class, 'search']);
 Route::get('/comments', [CommentController::class, 'index']);
 Route::post('/comments', [CommentController::class, 'store']);
 
+// for checking authenticated user (for displaying order history in the user page)
+Route::get('/check-auth', function () {
+    return response()->json([
+        'user_id' => auth()->id(),
+        'user' => auth()->user(),
+    ]);
+});
 
 
 // for books and documentation
