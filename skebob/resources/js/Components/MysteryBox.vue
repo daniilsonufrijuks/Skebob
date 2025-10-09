@@ -9,7 +9,7 @@ const goToMysteryBox = () => {
         <div class="content">
             <h2>🎁 Mystery Box</h2>
             <p>Get exclusive snacks & drinks inside every box!</p>
-            <button>Shop Now</button>
+            <button @click="goToMysteryBox">Shop Now</button>
         </div>
         <img src="/images/front/mysterybox.png" alt="Mystery Box" class="mystery-img" />
     </section>

@@ -10,7 +10,7 @@
         <div class="product-card">
             <img :src="product.image" style="justify-content: center; align-items: center" class="product-img" alt="Product 4">
             <h5>{{ product.name }}</h5>
-            <p>{{ product.ingredients }}.</p>
+            <p>{{ product.description ?? product.ingredients }}.</p>
             <p><strong>Price:</strong> {{ product.price }}</p>
             <button  @click="goToProductPage(this.product.id)">Buy</button>
         </div>
@@ -113,7 +113,7 @@ export default {
 }
 
 .product-card img {
-    max-width: 100%;
+    max-width: 80%;
     height: fit-content;
     border-radius: 10px;
 
