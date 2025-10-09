@@ -32,7 +32,6 @@ class Product extends Model
         'ingredients',
         'nutritional_info',
         'storage_conditions',
-        'is_mystery_box',
         'admin_id',
         'brand_id',
         'category_id',
@@ -46,7 +45,6 @@ class Product extends Model
     protected $casts = [
         'price' => 'decimal:2',
         'amount_value' => 'decimal:2',
-        'is_mystery_box' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -61,7 +59,6 @@ class Product extends Model
         return [
             'price' => 'decimal:2',
             'amount_value' => 'decimal:2',
-            'is_mystery_box' => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -114,14 +111,6 @@ class Product extends Model
     public function mysteryBoxItems(): HasOneOrMany
     {
         return $this->hasMany(MysteryBoxItem::class);
-    }
-
-    /**
-     * Pārbaudīt, vai prece ir noslēpuma kaste (MysteryBox)
-     */
-    public function isMysteryBox(): bool
-    {
-        return $this->is_mystery_box === true;
     }
 
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\MysteryBox;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -196,6 +197,50 @@ class ProductsController extends Controller
         $products = $query->get(['id', 'name', 'price', 'ingredients', 'image']);
 
         return response()->json($products);
+    }
+
+    public function getMysteryBox(Request $request): \Illuminate\Http\JsonResponse
+    {
+        //global $request;
+        $query = MysteryBox::with([
+            'product:id,name,slug,price,image,category_id'
+        ])
+        ->whereHas('product', function ($q) {
+            $q->where('category_id', 9);
+        });
+
+        // Apply filters based on query parameters
+        // Handle price_min only if not null
+        // Check if price_min is provided
+        // Apply filters only if values are not null or empty
+        if ($request->filled('price_min')) {
+            $query->whereHas('product', function ($q) use ($request) {
+                $q->where('price', '>=', $request->input('price_min'));
+            });
+        }
+
+        if ($request->filled('price_max')) {
+            $query->whereHas('product', function ($q) use ($request) {
+                $q->where('price', '<=', $request->input('price_max'));
+            });
+        }
+
+        // Fetch the filtered results
+        $mysteryBoxes = $query->get()->map(function ($box) {
+            return [
+                'id' => $box->id,
+                'category' => $box->category,
+                'description' => $box->description,
+                'product' => [
+                    'name' => $box->product->name ?? null,
+                    'slug' => $box->product->slug ?? null,
+                    'price' => $box->product->price ?? null,
+                    'image' => $box->product->image ?? null,
+                ],
+            ];
+        });
+
+        return response()->json($mysteryBoxes);
     }
 
 

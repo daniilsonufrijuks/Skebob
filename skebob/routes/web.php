@@ -120,6 +120,10 @@ Route::get('/candy', function () {
     return Inertia::render('Candy');
 })->name('candy');
 
+Route::get('/mystery-box', function () {
+    return Inertia::render('MysteryBox');
+})->name('mystery-box');
+
 Route::get('/snackboxes', function () {
     return Inertia::render('Snackboxes');
 })->name('snackboxes');
@@ -208,6 +212,8 @@ Route::get('/products/biscuits', [ProductsController::class, 'getBiscuitsProduct
 Route::get('/products/fruitsnacks', [ProductsController::class, 'getFruitsnacksProducts']);
 Route::get('/products/candy', [ProductsController::class, 'getCandyProducts']);
 Route::get('/products/snackboxes', [ProductsController::class, 'getSnackboxesProducts']);
+
+Route::get('/products/mystery-boxes', [ProductsController::class, 'getMysteryBox']);
 
 Route::get('/products/{id}', [ProductsController::class, 'show']);
 
