@@ -34,25 +34,26 @@ export default {
         // goToProductPage(productId) {
         //     console.log('t',productId);
         //     window.location.href = `/product?id=${productId}`;
-        goToProductPage(productId) {
+        goToProductPage(item) {
             // Use Inertia to navigate to the product page with the productId as a query param
             // Inertia.visit(`/product`, {
             //     method: 'get',
             //     query: { id: productId }, // Pass productId as a query parameter
             // });
             // Inertia.visit(`/product/${productId}`);
-            if (!productId) {
+            if (!item) {
                 console.error('Product ID is missing!');
                 return;
             }
 
-            if (productId.description && !productId.ingredients) {
-                window.location.href = `/mystery-box-item?id=${productId.id}`;
+            if (item.description) {
+                window.location.href = `/mystery-box-item?id=${item.id}`;
             } else {
-                window.location.href = `/product?id=${productId.id}`;
+                window.location.href = `/product?id=${item.id}`;
             }
-            console.log(productId);
-            console.log(`/product?id=${productId}`);
+            console.log(item);
+
+            console.log(`/product?id=${item}`);
             //Inertia.visit(`/product/${productId}`);
             //Inertia.visit(`/product?id=${productId}`);
             // window.location.href = `/product?id=${productId}`;

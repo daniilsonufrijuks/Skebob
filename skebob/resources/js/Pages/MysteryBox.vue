@@ -29,7 +29,7 @@
                 v-for="box in sortedMysteryBoxes"
                 :key="box.id"
                 :product="{
-                    id: box.id,
+                    id: box.product?.id,
                     name: box.product?.name,
                     slug: box.product?.slug,
                     price: box.product?.price,

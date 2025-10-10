@@ -4,7 +4,7 @@
             <img :src="box.image || ''" width="50%" id="MainImg" alt="">
             <div class="small-image-group">
                 <div class="small-img-col" v-for="i in 4" :key="i">
-                    <img :src="box.image || ''" width="100%" class="small-img" alt="">
+                    <img :src="box.image || '' " width="100%" class="small-img" alt="">
                 </div>
             </div>
         </div>
@@ -69,7 +69,17 @@ export default {
 
         const addToCart = (box) => {
             validateQuantity();
-            store.commit('ADD_TO_CART', { ...box, quantity: quantity.value, type: 'mystery_box' });
+
+            const cartItem = {
+                id: box.id,
+                name: box.name,
+                price: box.price,
+                image: box.image,
+                quantity: quantity.value,
+                type: 'mystery_box'
+            };
+
+            store.commit('ADD_TO_CART', cartItem);
             showNotification.value = true;
             setTimeout(() => {
                 showNotification.value = false;
