@@ -255,6 +255,25 @@ class ProductsController extends Controller
         return response()->json($products);
     }
 
+    public function showMysteryBox($id)
+    {
+        $box = MysteryBox::with([
+            'product:id,name,price,image'
+        ])->find($id);
+
+        if (!$box) {
+            return response()->json(['error' => 'Mystery Box not found'], 404);
+        }
+
+        return response()->json([
+            'id' => $box->id,
+            'name' => $box->product->name ?? 'Mystery Box',
+            'price' => $box->product->price ?? null,
+            'image' => $box->product->image ?? null,
+            'description' => $box->description,
+        ]);
+    }
+
 //     for search bar for suggestions
     public function search(Request $request)
     {

@@ -12,7 +12,7 @@
             <h5>{{ product.name }}</h5>
             <p>{{ product.description ?? product.ingredients }}.</p>
             <p><strong>Price:</strong> {{ product.price }}</p>
-            <button  @click="goToProductPage(this.product.id)">Buy</button>
+            <button  @click="goToProductPage(product)">Buy</button>
         </div>
     </div>
 
@@ -45,11 +45,17 @@ export default {
                 console.error('Product ID is missing!');
                 return;
             }
+
+            if (productId.description && !productId.ingredients) {
+                window.location.href = `/mystery-box-item?id=${productId.id}`;
+            } else {
+                window.location.href = `/product?id=${productId.id}`;
+            }
             console.log(productId);
             console.log(`/product?id=${productId}`);
             //Inertia.visit(`/product/${productId}`);
             //Inertia.visit(`/product?id=${productId}`);
-            window.location.href = `/product?id=${productId}`;
+            // window.location.href = `/product?id=${productId}`;
             //this.$router.push({ path: '/product', query: { id: productId } });
         },
     },
@@ -102,8 +108,8 @@ export default {
     justify-content: center;
     padding: 15px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    flex: 1 1 calc(50% - 10px); /* Каждая карточка занимает 50% ширины с небольшим отступом */
-    margin-bottom: 50px; /* Отступ между карточками */
+    flex: 1 1 calc(50% - 10px);
+    margin-bottom: 50px;
     flex-direction: column; /* Ensures the image and text stack */
 }
 

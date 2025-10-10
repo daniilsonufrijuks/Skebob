@@ -176,6 +176,17 @@ Route::get('/product', function (Request $request) {
     ]);
 })->name('product');
 
+Route::get('/mystery-box-item', function (Request $request) {
+    $boxId = $request->query('id');
+    if (!$boxId) {
+        abort(400, 'Box ID is required');
+    }
+
+    return Inertia::render('MysteryProduct', [
+        'boxId' => $boxId,
+    ]);
+})->name('mystery-box-item');
+
 
 
 
@@ -216,6 +227,7 @@ Route::get('/products/snackboxes', [ProductsController::class, 'getSnackboxesPro
 Route::get('/products/mystery-boxes', [ProductsController::class, 'getMysteryBox']);
 
 Route::get('/products/{id}', [ProductsController::class, 'show']);
+Route::get('/mystery-boxes/{id}', [ProductsController::class, 'showMysteryBox']);
 
 
 
