@@ -27,6 +27,7 @@
             <button class="normal" @click="addToCart(product)">Add to Cart</button>
             <h4>Product Details</h4>
             <span class="gcardt">{{ product.ingredients }}.</span>
+            <span class="gcardt">{{ product.country_origin }}.</span>
         </div>
     </section>
     <p v-else>Loading product details...</p>
@@ -46,6 +47,7 @@ import {ref} from "vue";
 export default {
     props: ['product'],
     setup(props) {
+        console.log('ProductDetails props:', props.product);
         const store = useStore();
         const quantity = ref(1);
         const showNotification = ref(false);
@@ -89,7 +91,7 @@ export default {
             addToCart,
             showNotification,
             handleInput,
-            validateQuantity
+            validateQuantity,
         };
     },
 };

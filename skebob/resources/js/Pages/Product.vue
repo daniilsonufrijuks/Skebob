@@ -53,27 +53,9 @@ export default {
     data() {
         return {
             selectedProduct: null, // Store the selected product data here
-            // routes: {}  // Assuming you have some routing data
         };
     },
     mounted() {
-        // const productId = this.product.id;
-        //const productId = this.product.id; // does not work: app-CT79SxUy.js:94 TypeError: Cannot read properties of undefined (reading 'id')
-        //this.fetchProductDetails(productId);  // Example: fetch the product details for product ID = 1
-        //const route = useRoute();
-        //const productId = route.query.id ; // Get the 'id' from the query params
-        //this.fetchProductDetails(productId); // need to write productId variable, but it does not work??? (for example e can write 1, fetch works nice)
-        //const { productId } = usePage().props.value; // Retrieve productId from server-side props
-        //const { productId = null } = this.$props?.value || {};
-        //console.log("Query Parameters:", this.$route.query);
-        //const productId = this.$route.query.productId;
-        // const route = useRoute();
-        // const productId = route.query.productId;
-        // console.log('Props received:', usePage().props.value);
-        // //const { productId } = usePage().props.value;
-        //const props = usePage().props.value || {};
-        //console.log('Props received from Inertia:', props);
-
         const productId = this.$props.productId || null;
         console.log('Product ID:', productId);
         //const productId = 1;
@@ -103,44 +85,6 @@ export default {
                 });
         }
     }
-    // data() {
-    //     return {
-    //         products: [] // The array of products
-    //     };
-    // },
-    // mounted() {
-    //     this.fetchProducts();
-    // },
-    // methods: {
-    //     fetchProducts() {
-    //         fetch('/products/${this.productId}') // Or the appropriate endpoint
-    //             .then((response) => response.json())
-    //             .then((data) => {
-    //                 this.products = data;
-    //                 console.log('Fetched products:', this.products);  // Log the products array
-    //             })
-    //             .catch((error) => console.error('Error fetching products:', error));
-    //     }
-    // }
-    // mounted() {
-    //     this.fetchProducts();
-    // },
-    // methods: {
-    //     fetchProducts() {
-    //         fetch('/products/{id}') // Or the appropriate endpoint
-    //             .then((response) => response.json())
-    //             .then((data) => {
-    //                 this.products = data;
-    //                 console.log('Fetched products:', this.products);  // Log the products array
-    //             })
-    //             .catch((error) => console.error('Error fetching products:', error));
-    //     }
-    // },
-    // data() {
-    //     return {
-    //         products: [] // The array of products
-    //     };
-    // },
 }
 </script>
 
