@@ -2,168 +2,241 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
     public function dashboard(): \Inertia\Response
     {
-        $orders = Order::with('user')->get(); // Existing
+        // Get orders
+        $orders = Order::select([
+            'id', 'user_id', 'status', 'total_price', 'shipping_address',
+            'ordered_at', 'created_at', 'updated_at'
+        ])->latest()->get();
 
-        $products = Product::select(['id', 'name', 'price', 'description', 'image', 'category'])->get();
+        // Get products
+        $products = Product::select([
+            'id', 'name', 'price', 'amount_value', 'amount_unit', 'country_origin',
+            'image', 'ingredients', 'nutritional_info', 'storage_conditions',
+            'admin_id', 'brand_id', 'category_id', 'created_at', 'updated_at'
+        ])->latest()->get();
 
-        $ordersj = Order::join('users', 'orders.user_id', '=', 'users.id')
-            ->join('goods_orders', 'orders.id', '=', 'goods_orders.order_id')
-            ->select(
-                'orders.id as order_id',
-                'orders.status as order_status',
-                'orders.total',
-                'orders.created_at',
-                'users.name as customer_name',
-                'users.email as customer_email',
-                'goods_orders.name as item_name',
-                'goods_orders.price as item_price',
-                'goods_orders.status as item_status',
-                'goods_orders.category',
-                'goods_orders.total_price'
-            )
+        // Get order items
+        $orderItems = OrderItem::with(['order', 'product'])
+            ->select([
+                'id', 'quantity', 'unit-price', 'subtotal', 'order_id', 'product_id',
+                'created_at', 'updated_at'
+            ])
+            ->latest()
             ->get();
 
         return Inertia::render('Admin', [
             'orders' => $orders,
             'products' => $products,
-            'ordersj' => $ordersj
+            'orderItems' => $orderItems
         ]);
     }
 
-
-
-
-
     public function showOrders(Request $request): \Illuminate\Http\JsonResponse
     {
-//        $orders = Orders::all(); // Fetch all orders
-//        return Inertia::render('AdminOrders', ['orders' => $orders]);
-        //global $request;
-
-        // Fetch the filtered results
-//        $orders = Orders::select(['id', 'user_id', 'items', 'status', 'total', 'created_at'])->get();
-        $orders = Order::with(['orderGoods', 'user:id,name,email']) // add any user fields you need
-        ->select(['id', 'user_id', 'status', 'total', 'ordered_at', 'created_at'])
-            ->get();
+        $orders = Order::select([
+            'id', 'user_id', 'status', 'total_price', 'shipping_address',
+            'ordered_at', 'created_at', 'updated_at'
+        ])->latest()->get();
 
         return response()->json($orders);
     }
 
     public function showProducts(Request $request): \Illuminate\Http\JsonResponse
     {
-        $products = Product::select(['name', 'price', 'description', 'image', 'category'])->get();
+        $products = Product::select([
+            'id', 'name', 'price', 'amount_value', 'amount_unit', 'country_origin',
+            'image', 'ingredients', 'nutritional_info', 'storage_conditions',
+            'created_at', 'updated_at'
+        ])->latest()->get();
+
         return response()->json($products);
+    }
+
+    public function showOrderItems(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $orderItems = OrderItem::with(['order', 'product'])
+            ->select([
+                'id', 'quantity', 'unit-price', 'subtotal', 'order_id', 'product_id',
+                'created_at', 'updated_at'
+            ])
+            ->latest()
+            ->get();
+
+        return response()->json($orderItems);
     }
 
     public function storeProduct(Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'description' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'category' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'amount_value' => 'required|numeric|min:0',
+            'amount_unit' => 'required|in:g,kg,ml,l,gab',
+            'country_origin' => 'nullable|string|max:100',
+            'ingredients' => 'nullable|string',
+            'nutritional_info' => 'nullable|string',
+            'storage_conditions' => 'nullable|string|max:255',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-//        if (!$request->hasFile('image')) {
-//            return redirect()->back()->withErrors(['image' => 'Image is required']);
-//        }
-//
-//        $imagePath = $request->file('image')->store('products', 'public');
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('images/front'), $imageName);
-            $imagePath = 'images/front/' . $imageName; // Store the correct relative path in DB
-        }
-
-//        Products::create([
-//            'name' => $request->name,
-//            'price' => $request->price,
-//            'description' => $request->description,
-//            'image' => $imagePath,
-//            'category' => $request->category,
-//        ]);
         try {
+            // Handle image upload
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('images/front'), $imageName);
+                $imagePath = 'images/front/' . $imageName;
+            }
+
+            // Create product
             Product::create([
                 'name' => $request->name,
+                'slug' => Str::slug($request->name),
                 'price' => $request->price,
-                'description' => $request->description,
+                'amount_value' => $request->amount_value,
+                'amount_unit' => $request->amount_unit,
+                'country_origin' => $request->country_origin,
                 'image' => $imagePath,
-                'category' => $request->category,
-                'admin_id' => auth('admin')->id(),
+                'ingredients' => $request->ingredients,
+                'nutritional_info' => $request->nutritional_info,
+                'storage_conditions' => $request->storage_conditions,
+                'admin_id' => 1, // Default admin ID
+                'brand_id' => 1, // Default brand ID
+                'category_id' => 1, // Default category ID
             ]);
+
+            return redirect()->route('admin.dashboard')->with('success', 'Product added successfully!');
+
         } catch (\Exception $e) {
             \Log::error('Error adding product: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to add product: ' . $e->getMessage());
         }
-
-
-        // Redirect to the products page
-        return redirect()->route('admin.dashboard')->with('success', 'Product added successfully!');
     }
 
-    public function showjoinedOrders(): \Illuminate\Http\JsonResponse
+    public function destroyProduct($id): \Illuminate\Http\RedirectResponse
     {
-//        $orders = Orders::with('user')->get();
-//
-//        return response()->json($orders);
-//        $orders = Orders::join('users', 'orders.user_id', '=', 'users.id')
-//            ->select(
-//                'orders.id',
-//                'orders.items',
-//                'orders.status',
-//                'orders.total',
-//                'orders.created_at',
-//                'users.name as customer_name',
-//                'users.email as customer_email'
-//            )
-//            ->get();
-        $orders = Order::join('users', 'orders.user_id', '=', 'users.id')
-            ->join('goods_orders', 'orders.id', '=', 'goods_orders.order_id')
-            ->select(
-                'orders.id as order_id',
-                'orders.status as order_status',
-                'orders.total',
-                'orders.created_at',
-                'users.name as customer_name',
-                'users.email as customer_email',
-                'goods_orders.name as item_name',
-                'goods_orders.price as item_price',
-                'goods_orders.status as item_status',
-                'goods_orders.category',
-                'goods_orders.total_price'
-            )
-            ->get();
+        try {
+            $product = Product::findOrFail($id);
 
+            // Delete associated image file
+            if ($product->image && file_exists(public_path($product->image))) {
+                unlink(public_path($product->image));
+            }
 
-        return response()->json($orders);
+            $product->delete();
+
+            return redirect()->back()->with('success', 'Product deleted successfully!');
+        } catch (\Exception $e) {
+            \Log::error('Error deleting product: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete product.');
+        }
     }
 
-    public function destroyProduct($id) {
-        Product::findOrFail($id)->delete();
-        return redirect()->back();
-    }
-    public function destroyOrder($id) {
-        Order::findOrFail($id)->delete();
-        return redirect()->back();
-    }
-
-    public function update(Request $request, $id)
+    public function destroyOrder($id): \Illuminate\Http\RedirectResponse
     {
-        $product = Product::findOrFail($id);
-        $product->update($request->only('name', 'price', 'category', 'description'));
+        try {
+            $order = Order::findOrFail($id);
+            $order->delete();
 
-        return redirect()->back();
+            return redirect()->back()->with('success', 'Order deleted successfully!');
+        } catch (\Exception $e) {
+            \Log::error('Error deleting order: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete order.');
+        }
+    }
+
+    public function destroyOrderItem($id): \Illuminate\Http\RedirectResponse
+    {
+        try {
+            $orderItem = OrderItem::findOrFail($id);
+            $orderItem->delete();
+
+            return redirect()->back()->with('success', 'Order item deleted successfully!');
+        } catch (\Exception $e) {
+            \Log::error('Error deleting order item: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete order item.');
+        }
+    }
+
+    public function updateProduct(Request $request, $id): \Illuminate\Http\RedirectResponse
+    {
+        Log::info('Update product request received', ['id' => $id, 'data' => $request->all()]);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'amount_value' => 'required|numeric|min:0',
+            'amount_unit' => 'required|in:g,kg,ml,l,gab',
+            'country_origin' => 'nullable|string|max:100',
+            'ingredients' => 'nullable|string',
+            'nutritional_info' => 'nullable|string',
+            'storage_conditions' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        try {
+            $product = Product::findOrFail($id);
+            Log::info('Product found', ['product' => $product->toArray()]);
+
+            $updateData = [
+                'name' => $request->name,
+                'slug' => Str::slug($request->name),
+                'price' => $request->price,
+                'amount_value' => $request->amount_value,
+                'amount_unit' => $request->amount_unit,
+                'country_origin' => $request->country_origin,
+                'ingredients' => $request->ingredients,
+                'nutritional_info' => $request->nutritional_info,
+                'storage_conditions' => $request->storage_conditions,
+            ];
+
+            Log::info('Update data prepared', $updateData);
+
+            // Handle new image upload
+            if ($request->hasFile('image')) {
+                Log::info('New image uploaded');
+
+                // Delete old image if exists
+                if ($product->image && file_exists(public_path($product->image))) {
+                    Log::info('Deleting old image', ['path' => $product->image]);
+                    unlink(public_path($product->image));
+                }
+
+                $image = $request->file('image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('images/front'), $imageName);
+                $updateData['image'] = 'images/front/' . $imageName;
+
+                Log::info('New image saved', ['path' => $updateData['image']]);
+            }
+
+            // Update the product
+            $updated = $product->update($updateData);
+            Log::info('Product update result', ['updated' => $updated, 'product_after' => $product->fresh()->toArray()]);
+
+            if ($updated) {
+                return redirect()->route('admin.dashboard')->with('success', 'Product updated successfully!');
+            } else {
+                return redirect()->back()->with('error', 'Failed to update product in database.');
+            }
+
+        } catch (\Exception $e) {
+            Log::error('Error updating product: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to update product: ' . $e->getMessage());
+        }
     }
 }
