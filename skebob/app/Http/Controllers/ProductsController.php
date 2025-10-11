@@ -204,8 +204,7 @@ class ProductsController extends Controller
         //global $request;
         $query = MysteryBox::with([
             'product:id,name,slug,price,image,category_id'
-        ])
-        ->whereHas('product', function ($q) {
+        ])->whereHas('product', function ($q) {
             $q->where('category_id', 9);
         });
 
@@ -228,10 +227,10 @@ class ProductsController extends Controller
         // Fetch the filtered results
         $mysteryBoxes = $query->get()->map(function ($box) {
             return [
-                'id' => $box->id,
                 'category' => $box->category,
                 'description' => $box->description,
                 'product' => [
+                    'id' => $box->product->id ?? null,
                     'name' => $box->product->name ?? null,
                     'slug' => $box->product->slug ?? null,
                     'price' => $box->product->price ?? null,
@@ -255,18 +254,18 @@ class ProductsController extends Controller
         return response()->json($products);
     }
 
-    public function showMysteryBox($id)
+    public function showMysteryBox($productId)
     {
         $box = MysteryBox::with([
             'product:id,name,price,image'
-        ])->find($id);
+        ])->where('product_id', $productId)->first();
 
         if (!$box) {
             return response()->json(['error' => 'Mystery Box not found'], 404);
         }
 
         return response()->json([
-            'id' => $box->id,
+            'id' => $box->product->id,
             'name' => $box->product->name ?? 'Mystery Box',
             'price' => $box->product->price ?? null,
             'image' => $box->product->image ?? null,
