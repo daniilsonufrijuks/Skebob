@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\BidController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\ChatController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -209,6 +211,12 @@ Route::post('/logout', function () {
     return response()->json(['message' => 'Logged out successfully']);
 });
 
+// For email verification
+Route::get('/verify/{token}', [RegisteredUserController::class, 'verify'])->name('verify');
+Route::post('/resend', [RegisteredUserController::class, 'resend'])->name('verification.resend');
+Route::get('/email/verify', function () {
+    return Inertia::render('Auth/VerifyNotice');
+})->name('verification.notice');
 
 
 
