@@ -11,6 +11,7 @@
             <img :src="product.image" style="justify-content: center; align-items: center" class="product-img" alt="Product 4">
             <h5>{{ product.name }}</h5>
             <p>{{ product.description ?? product.ingredients }}.</p>
+            <p v-if="product.country_origin"><strong>Origin:</strong> {{ product.country_origin }}</p>
             <p><strong>Price:</strong> {{ product.price }}</p>
             <button  @click="goToProductPage(product)">Buy</button>
         </div>
