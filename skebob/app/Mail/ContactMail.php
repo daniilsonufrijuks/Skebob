@@ -13,46 +13,27 @@ class ContactMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct(public string $name, public string $email, public string $body)
+    public $pending;
+
+    public function __construct($pending)
     {
-
+        $this->pending = $pending;
     }
-
-    /**
-     * Get the message envelope.
-     */
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Contact Mail',
+            subject: 'Email verification',
         );
     }
 
-    /**
-     * Get the message content definition.
-     */
     public function content(): Content
     {
         return new Content(
             view: 'emails.contact',
+            with: [
+                'name' => $this->pending['name'],
+                'token' => $this->pending['token'],
+            ],
         );
     }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        return [];
-    }
-
-//    public function build()
-//    {
-//        return $this->view('emails.contact');
-//    }
 }
