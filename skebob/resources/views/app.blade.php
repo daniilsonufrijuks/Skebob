@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="author" content="daniilsonufrijuks, ralfsmigals, danilavasiljevs, patricijagriniceva">
     <meta name="description" content="Uniq snacks">
-    <meta http-equiv="refresh" content="180">
+    <meta http-equiv="refresh" content="600">
     <meta name="keywords" content="snacks, mystery box, meals">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 

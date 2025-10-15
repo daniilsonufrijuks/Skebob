@@ -136,7 +136,7 @@ class AdminController extends Controller
             }
             $product->delete();
 
-            // Return JSON response for Inertia
+            // JSON response for Inertia
             return response()->json(['success' => 'Product deleted successfully!']);
 
             // Or redirect to dashboard

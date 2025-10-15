@@ -3,180 +3,216 @@
         <button @click="$inertia.visit('/')" class="back-button">Back to user page</button>
         <h1 class="title">Admin Dashboard</h1>
 
+        <!-- Navigation Tabs -->
+        <div class="navigation-tabs">
+            <button
+                @click="activeTab = 'orders'"
+                :class="['tab-button', { active: activeTab === 'orders' }]"
+            >
+                Orders
+            </button>
+            <button
+                @click="activeTab = 'orderItems'"
+                :class="['tab-button', { active: activeTab === 'orderItems' }]"
+            >
+                Order Items
+            </button>
+            <button
+                @click="activeTab = 'products'"
+                :class="['tab-button', { active: activeTab === 'products' }]"
+            >
+                Products
+            </button>
+            <button
+                @click="activeTab = 'addProduct'"
+                :class="['tab-button', { active: activeTab === 'addProduct' }]"
+            >
+                Add Product
+            </button>
+        </div>
+
         <!-- Orders -->
-        <section class="section">
+        <section v-if="activeTab === 'orders'" class="section">
             <h2 class="section-title">Orders</h2>
-            <div class="card-grid">
-                <div class="card" v-for="order in orders" :key="order.id">
-                    <p><strong>ID:</strong> {{ order.id }}</p>
-                    <p><strong>Customer ID:</strong> {{ order.user_id }}</p>
-                    <p><strong>Status:</strong> {{ order.status }}</p>
-                    <p><strong>Total Price:</strong> ${{ order.total_price }}</p>
-                    <p><strong>Shipping Address:</strong> {{ order.shipping_address }}</p>
-                    <p><strong>Ordered At:</strong> {{ formatDate(order.ordered_at) }}</p>
-                    <p><strong>Created:</strong> {{ formatDate(order.created_at) }}</p>
-                    <div class="actions">
-                        <button @click="deleteRecord('order', order.id)" class="delete-btn">Delete</button>
+            <div class="scrollable-container">
+                <div class="card-grid">
+                    <div class="card" v-for="order in orders" :key="order.id">
+                        <p><strong>ID:</strong> {{ order.id }}</p>
+                        <p><strong>Customer ID:</strong> {{ order.user_id }}</p>
+                        <p><strong>Status:</strong> {{ order.status }}</p>
+                        <p><strong>Total Price:</strong> ${{ order.total_price }}</p>
+                        <p><strong>Shipping Address:</strong> {{ order.shipping_address }}</p>
+                        <p><strong>Ordered At:</strong> {{ formatDate(order.ordered_at) }}</p>
+                        <p><strong>Created:</strong> {{ formatDate(order.created_at) }}</p>
+                        <div class="actions">
+                            <button @click="deleteRecord('order', order.id)" class="delete-btn">Delete</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Order Items -->
-        <section class="section">
+        <section v-if="activeTab === 'orderItems'" class="section">
             <h2 class="section-title">Order Items</h2>
-            <div class="card-grid">
-                <div class="card" v-for="orderItem in orderItems" :key="orderItem.id">
-                    <p><strong>ID:</strong> {{ orderItem.id }}</p>
-                    <p><strong>Order ID:</strong> {{ orderItem.order_id }}</p>
-                    <p><strong>Product ID:</strong> {{ orderItem.product_id }}</p>
-                    <p><strong>Quantity:</strong> {{ orderItem.quantity }}</p>
-                    <p><strong>Unit Price:</strong> ${{ orderItem['unit-price'] }}</p>
-                    <p><strong>Subtotal:</strong> ${{ orderItem.subtotal }}</p>
-                    <p><strong>Created:</strong> {{ formatDate(orderItem.created_at) }}</p>
-                    <div class="actions">
-                        <button @click="deleteRecord('orderitem', orderItem.id)" class="delete-btn">Delete</button>
+            <div class="scrollable-container">
+                <div class="card-grid">
+                    <div class="card" v-for="orderItem in orderItems" :key="orderItem.id">
+                        <p><strong>ID:</strong> {{ orderItem.id }}</p>
+                        <p><strong>Order ID:</strong> {{ orderItem.order_id }}</p>
+                        <p><strong>Product ID:</strong> {{ orderItem.product_id }}</p>
+                        <p><strong>Quantity:</strong> {{ orderItem.quantity }}</p>
+                        <p><strong>Unit Price:</strong> ${{ orderItem['unit-price'] }}</p>
+                        <p><strong>Subtotal:</strong> ${{ orderItem.subtotal }}</p>
+                        <p><strong>Created:</strong> {{ formatDate(orderItem.created_at) }}</p>
+                        <div class="actions">
+                            <button @click="deleteRecord('orderitem', orderItem.id)" class="delete-btn">Delete</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Products -->
-        <section class="section">
+        <section v-if="activeTab === 'products'" class="section">
             <h2 class="section-title">Products</h2>
-            <div class="card-grid">
-                <div class="card" v-for="product in products" :key="product.id">
-                    <template v-if="editProduct && editProduct.id === product.id">
-                        <div class="edit-form">
-                            <input v-model="editProduct.name" placeholder="Name" class="form-input" />
-                            <input v-model="editProduct.price" type="number" step="0.01" placeholder="Price" class="form-input" />
-                            <input v-model="editProduct.amount_value" type="number" step="0.01" placeholder="Amount Value" class="form-input" />
-                            <select v-model="editProduct.amount_unit" class="form-input">
-                                <option value="g">g</option>
-                                <option value="kg">kg</option>
-                                <option value="ml">ml</option>
-                                <option value="l">l</option>
-                                <option value="gab">gab</option>
-                            </select>
-                            <input v-model="editProduct.country_origin" placeholder="Country Origin" class="form-input" />
-                            <textarea v-model="editProduct.ingredients" placeholder="Ingredients" class="form-input"></textarea>
-                            <textarea v-model="editProduct.nutritional_info" placeholder="Nutritional Info" class="form-input"></textarea>
-                            <input v-model="editProduct.storage_conditions" placeholder="Storage Conditions" class="form-input" />
+            <div class="scrollable-container">
+                <div class="card-grid">
+                    <div class="card" v-for="product in products" :key="product.id">
+                        <template v-if="editProduct && editProduct.id === product.id">
+                            <div class="edit-form">
+                                <input v-model="editProduct.name" placeholder="Name" class="form-input" />
+                                <input v-model="editProduct.price" type="number" step="0.01" placeholder="Price" class="form-input" />
+                                <input v-model="editProduct.amount_value" type="number" step="0.01" placeholder="Amount Value" class="form-input" />
+                                <select v-model="editProduct.amount_unit" class="form-input">
+                                    <option value="g">g</option>
+                                    <option value="kg">kg</option>
+                                    <option value="ml">ml</option>
+                                    <option value="l">l</option>
+                                    <option value="gab">gab</option>
+                                </select>
+                                <input v-model="editProduct.country_origin" placeholder="Country Origin" class="form-input" />
+                                <textarea v-model="editProduct.ingredients" placeholder="Ingredients" class="form-input"></textarea>
+                                <textarea v-model="editProduct.nutritional_info" placeholder="Nutritional Info" class="form-input"></textarea>
+                                <input v-model="editProduct.storage_conditions" placeholder="Storage Conditions" class="form-input" />
 
-                            <!-- Current Image Preview -->
-                            <div v-if="product.image && !editImageFile" class="current-image">
-                                <p><strong>Current Image:</strong></p>
-                                <img :src="'/' + product.image" alt="Current Product Image" />
-                                <p class="image-path">{{ product.image }}</p>
-                            </div>
+                                <!-- Current Image Preview -->
+                                <div v-if="product.image && !editImageFile" class="current-image">
+                                    <p><strong>Current Image:</strong></p>
+                                    <img :src="'/' + product.image" alt="Current Product Image" />
+                                    <p class="image-path">{{ product.image }}</p>
+                                </div>
 
-                            <!-- New Image Preview -->
-                            <div v-if="editImageFile" class="new-image">
-                                <p><strong>New Image:</strong></p>
-                                <img :src="editImagePreview" alt="New Product Image" />
-                                <p class="image-name">{{ editImageFile.name }}</p>
-                            </div>
+                                <!-- New Image Preview -->
+                                <div v-if="editImageFile" class="new-image">
+                                    <p><strong>New Image:</strong></p>
+                                    <img :src="editImagePreview" alt="New Product Image" />
+                                    <p class="image-name">{{ editImageFile.name }}</p>
+                                </div>
 
-                            <!-- File Upload -->
-                            <div class="file-upload">
-                                <label>Update Image (optional):</label>
-                                <input type="file" @change="handleEditImageUpload" accept="image/*" />
-                                <small>Leave empty to keep current image</small>
-                            </div>
+                                <!-- File Upload -->
+                                <div class="file-upload">
+                                    <label>Update Image (optional):</label>
+                                    <input type="file" @change="handleEditImageUpload" accept="image/*" />
+                                    <small>Leave empty to keep current image</small>
+                                </div>
 
-                            <div class="edit-actions">
-                                <button @click="updateProduct" class="save-btn">Save Changes</button>
-                                <button @click="cancelEdit" class="cancel-btn">Cancel</button>
+                                <div class="edit-actions">
+                                    <button @click="updateProduct" class="save-btn">Save Changes</button>
+                                    <button @click="cancelEdit" class="cancel-btn">Cancel</button>
+                                </div>
                             </div>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <p><strong>Name:</strong> {{ product.name }}</p>
-                        <p><strong>Price:</strong> ${{ product.price }}</p>
-                        <p><strong>Amount:</strong> {{ product.amount_value }} {{ product.amount_unit }}</p>
-                        <p><strong>Country Origin:</strong> {{ product.country_origin || 'N/A' }}</p>
-                        <p><strong>Ingredients:</strong> {{ product.ingredients || 'N/A' }}</p>
-                        <p><strong>Nutritional Info:</strong> {{ product.nutritional_info || 'N/A' }}</p>
-                        <p><strong>Storage:</strong> {{ product.storage_conditions || 'N/A' }}</p>
-                        <div v-if="product.image" class="product-image">
-                            <img :src="'/' + product.image" alt="Product Image" />
-                        </div>
-                        <div class="actions">
-                            <button @click="startEdit(product)" class="edit-btn">Edit</button>
-                            <button @click="deleteRecord('product', product.id)" class="delete-btn">Delete</button>
-                        </div>
-                    </template>
+                        </template>
+                        <template v-else>
+                            <p><strong>Name:</strong> {{ product.name }}</p>
+                            <p><strong>Price:</strong> ${{ product.price }}</p>
+                            <p><strong>Amount:</strong> {{ product.amount_value }} {{ product.amount_unit }}</p>
+                            <p><strong>Country Origin:</strong> {{ product.country_origin || 'N/A' }}</p>
+                            <p><strong>Ingredients:</strong> {{ product.ingredients || 'N/A' }}</p>
+                            <p><strong>Nutritional Info:</strong> {{ product.nutritional_info || 'N/A' }}</p>
+                            <p><strong>Storage:</strong> {{ product.storage_conditions || 'N/A' }}</p>
+                            <div v-if="product.image" class="product-image">
+                                <img :src="'/' + product.image" alt="Product Image" />
+                            </div>
+                            <div class="actions">
+                                <button @click="startEdit(product)" class="edit-btn">Edit</button>
+                                <button @click="deleteRecord('product', product.id)" class="delete-btn">Delete</button>
+                            </div>
+                        </template>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Add Product -->
-        <section class="section">
+        <section v-if="activeTab === 'addProduct'" class="section">
             <h2 class="section-title">Add Product</h2>
-            <form @submit.prevent="addProduct" class="form">
-                <div class="form-group">
-                    <label>Product Name *</label>
-                    <input v-model="newProduct.name" type="text" placeholder="Product Name" required />
-                </div>
+            <div class="scrollable-container">
+                <form @submit.prevent="addProduct" class="form">
+                    <div class="form-group">
+                        <label>Product Name *</label>
+                        <input v-model="newProduct.name" type="text" placeholder="Product Name" required />
+                    </div>
 
-                <div class="form-group">
-                    <label>Price *</label>
-                    <input v-model="newProduct.price" type="number" step="0.01" placeholder="Price" required />
-                </div>
+                    <div class="form-group">
+                        <label>Price *</label>
+                        <input v-model="newProduct.price" type="number" step="0.01" placeholder="Price" required />
+                    </div>
 
-                <div class="form-group">
-                    <label>Amount Value *</label>
-                    <input v-model="newProduct.amount_value" type="number" step="0.01" placeholder="Amount Value" required />
-                </div>
+                    <div class="form-group">
+                        <label>Amount Value *</label>
+                        <input v-model="newProduct.amount_value" type="number" step="0.01" placeholder="Amount Value" required />
+                    </div>
 
-                <div class="form-group">
-                    <label>Amount Unit *</label>
-                    <select v-model="newProduct.amount_unit" required>
-                        <option value="">Select Unit</option>
-                        <option value="g">g</option>
-                        <option value="kg">kg</option>
-                        <option value="ml">ml</option>
-                        <option value="l">l</option>
-                        <option value="gab">gab</option>
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label>Amount Unit *</label>
+                        <select v-model="newProduct.amount_unit" required>
+                            <option value="">Select Unit</option>
+                            <option value="g">g</option>
+                            <option value="kg">kg</option>
+                            <option value="ml">ml</option>
+                            <option value="l">l</option>
+                            <option value="gab">gab</option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label>Country Origin</label>
-                    <input v-model="newProduct.country_origin" type="text" placeholder="Country Origin" />
-                </div>
+                    <div class="form-group">
+                        <label>Country Origin</label>
+                        <input v-model="newProduct.country_origin" type="text" placeholder="Country Origin" />
+                    </div>
 
-                <div class="form-group">
-                    <label>Ingredients</label>
-                    <textarea v-model="newProduct.ingredients" placeholder="Ingredients"></textarea>
-                </div>
+                    <div class="form-group">
+                        <label>Ingredients</label>
+                        <textarea v-model="newProduct.ingredients" placeholder="Ingredients"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label>Nutritional Info</label>
-                    <textarea v-model="newProduct.nutritional_info" placeholder="Nutritional Info"></textarea>
-                </div>
+                    <div class="form-group">
+                        <label>Nutritional Info</label>
+                        <textarea v-model="newProduct.nutritional_info" placeholder="Nutritional Info"></textarea>
+                    </div>
 
-                <div class="form-group">
-                    <label>Storage Conditions</label>
-                    <input v-model="newProduct.storage_conditions" type="text" placeholder="Storage Conditions" />
-                </div>
+                    <div class="form-group">
+                        <label>Storage Conditions</label>
+                        <input v-model="newProduct.storage_conditions" type="text" placeholder="Storage Conditions" />
+                    </div>
 
-                <div class="form-group">
-                    <label>Product Image *</label>
-                    <input type="file" @change="handleFileUpload" accept="image/*" required />
-                    <small>Supported formats: JPEG, PNG, JPG, GIF (Max: 2MB)</small>
-                </div>
+                    <div class="form-group">
+                        <label>Product Image *</label>
+                        <input type="file" @change="handleFileUpload" accept="image/*" required />
+                        <small>Supported formats: JPEG, PNG, JPG, GIF (Max: 2MB)</small>
+                    </div>
 
-                <div v-if="imageFile" class="image-preview">
-                    <p><strong>Image Preview:</strong></p>
-                    <img :src="imagePreview" alt="Product Image Preview" />
-                    <p class="image-name">{{ imageFile.name }}</p>
-                </div>
+                    <div v-if="imageFile" class="image-preview">
+                        <p><strong>Image Preview:</strong></p>
+                        <img :src="imagePreview" alt="Product Image Preview" />
+                        <p class="image-name">{{ imageFile.name }}</p>
+                    </div>
 
-                <button type="submit" class="submit-btn" :disabled="isAdding">
-                    {{ isAdding ? 'Adding Product...' : 'Add Product' }}
-                </button>
-            </form>
+                    <button type="submit" class="submit-btn" :disabled="isAdding">
+                        {{ isAdding ? 'Adding Product...' : 'Add Product' }}
+                    </button>
+                </form>
+            </div>
         </section>
 
         <!-- Notification -->
@@ -204,6 +240,7 @@ export default {
     },
     data() {
         return {
+            activeTab: 'orders',
             newProduct: {
                 name: '',
                 price: '',
@@ -229,7 +266,7 @@ export default {
     },
     methods: {
         startEdit(product) {
-            // Create a clean copy without the image path string
+            // create a clean copy without the image path string
             this.editProduct = {
                 id: product.id,
                 name: product.name,
@@ -256,7 +293,7 @@ export default {
 
             const formData = new FormData();
 
-            // Only append the fields that should be updated
+            // only append the fields that should be updated
             const productData = {
                 name: this.editProduct.name,
                 price: this.editProduct.price,
@@ -269,14 +306,14 @@ export default {
                 _method: 'PUT'
             };
 
-            // Append all data to FormData
+            // append all data to FormData
             Object.keys(productData).forEach(key => {
                 if (productData[key] !== null && productData[key] !== undefined) {
                     formData.append(key, productData[key]);
                 }
             });
 
-            // Only append image if a new one was selected
+            // only append image if a new one was selected
             if (this.editImageFile) {
                 formData.append('image', this.editImageFile);
             }
@@ -307,7 +344,7 @@ export default {
         },
 
         async addProduct() {
-            // Validate required fields
+            // validate required fields
             if (!this.newProduct.name || !this.newProduct.price || !this.newProduct.amount_value || !this.newProduct.amount_unit || !this.imageFile) {
                 this.showNotification('Please fill all required fields and select an image', 'error');
                 return;
@@ -317,19 +354,19 @@ export default {
 
             const formData = new FormData();
 
-            // Append all product data
+            // append all product data
             Object.keys(this.newProduct).forEach((key) => {
                 if (this.newProduct[key] !== null && this.newProduct[key] !== undefined && this.newProduct[key] !== '') {
                     formData.append(key, this.newProduct[key]);
                 }
             });
 
-            // Append image file
+            // append image file
             if (this.imageFile) {
                 formData.append('image', this.imageFile);
             }
 
-            // Set default values for required foreign keys
+            // set default values for required foreign keys
             formData.append('brand_id', '1');
             formData.append('category_id', '1');
             formData.append('admin_id', '1');
@@ -345,6 +382,8 @@ export default {
                         this.showNotification('Product added successfully!', 'success');
                         this.resetForm();
                         this.isAdding = false;
+                        // switch to products tab to see the new product
+                        this.activeTab = 'products';
                     },
                     onError: (errors) => {
                         console.error('Add product errors:', errors);
@@ -383,7 +422,7 @@ export default {
             if (file) {
                 this.editImageFile = file;
 
-                // Create preview
+                // create preview
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     this.editImagePreview = e.target.result;
@@ -403,7 +442,7 @@ export default {
                     preserveScroll: true,
                     onSuccess: () => {
                         this.showNotification(`${type} deleted successfully!`, 'success');
-                        // The page data will be refreshed automatically by Inertia
+                        // the page data will be refreshed automatically by Inertia
                     },
                     onError: (err) => {
                         this.showNotification(`Error deleting ${type}: ${err}`, 'error');
@@ -425,7 +464,7 @@ export default {
             };
             this.imageFile = null;
             this.imagePreview = null;
-            // Reset file input
+            // reset file input
             const fileInput = document.querySelector('input[type="file"]');
             if (fileInput) fileInput.value = '';
         },
@@ -464,8 +503,37 @@ export default {
     margin-bottom: 30px;
 }
 
+.navigation-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.tab-button {
+    padding: 12px 24px;
+    border: 2px solid #420d65;
+    background-color: white;
+    color: #420d65;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+    background-color: #f0e6f7;
+}
+
+.tab-button.active {
+    background-color: #420d65;
+    color: white;
+}
+
 .section {
-    margin: 40px 0;
+    margin: 20px 0;
     padding: 20px;
     border: 1px solid #e0e0e0;
     border-radius: 10px;
@@ -477,6 +545,15 @@ export default {
     color: #333;
     border-bottom: 2px solid #420d65;
     padding-bottom: 10px;
+}
+
+.scrollable-container {
+    max-height: 70vh;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: white;
+    padding: 15px;
 }
 
 .card-grid {
@@ -561,6 +638,7 @@ export default {
     flex-direction: column;
     gap: 20px;
     max-width: 500px;
+    margin: 0 auto;
 }
 
 .form-group {
@@ -731,5 +809,38 @@ input[type="file"] {
         max-width: 100px;
         max-height: 100px;
     }
+
+    .navigation-tabs {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tab-button {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .scrollable-container {
+        max-height: 60vh;
+    }
+}
+
+/* Custom scrollbar for scrollable container */
+.scrollable-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollable-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
 }
 </style>
