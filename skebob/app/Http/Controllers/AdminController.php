@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderItem;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -15,20 +16,17 @@ class AdminController extends Controller
 {
     public function dashboard(): \Inertia\Response
     {
-        // Get orders
         $orders = Order::select([
             'id', 'user_id', 'status', 'total_price', 'shipping_address',
             'ordered_at', 'created_at', 'updated_at'
         ])->latest()->get();
 
-        // Get products
         $products = Product::select([
             'id', 'name', 'price', 'amount_value', 'amount_unit', 'country_origin',
             'image', 'ingredients', 'nutritional_info', 'storage_conditions',
             'admin_id', 'brand_id', 'category_id', 'created_at', 'updated_at'
         ])->latest()->get();
 
-        // Get order items
         $orderItems = OrderItem::with(['order', 'product'])
             ->select([
                 'id', 'quantity', 'unit-price', 'subtotal', 'order_id', 'product_id',
@@ -37,10 +35,15 @@ class AdminController extends Controller
             ->latest()
             ->get();
 
+        $users = User::select([
+            'id', 'name', 'email', 'has_subscription', 'created_at', 'updated_at'
+        ])->latest()->get();
+
         return Inertia::render('Admin', [
             'orders' => $orders,
             'products' => $products,
-            'orderItems' => $orderItems
+            'orderItems' => $orderItems,
+            'users' => $users,
         ]);
     }
 
@@ -78,6 +81,15 @@ class AdminController extends Controller
         return response()->json($orderItems);
     }
 
+    public function showUsers(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $users = User::select([
+            'id', 'name', 'email', 'has_subscription', 'created_at', 'updated_at'
+        ])->latest()->get();
+
+        return response()->json($users);
+    }
+
     public function storeProduct(Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
@@ -93,7 +105,6 @@ class AdminController extends Controller
         ]);
 
         try {
-            // Handle image upload
             $imagePath = null;
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
@@ -102,7 +113,6 @@ class AdminController extends Controller
                 $imagePath = 'images/front/' . $imageName;
             }
 
-            // Create product
             Product::create([
                 'name' => $request->name,
                 'slug' => Str::slug($request->name),
@@ -136,11 +146,7 @@ class AdminController extends Controller
             }
             $product->delete();
 
-            // JSON response for Inertia
             return response()->json(['success' => 'Product deleted successfully!']);
-
-            // Or redirect to dashboard
-            // return redirect()->route('admin.dashboard')->with('success', 'Product deleted successfully!');
 
         } catch (\Exception $e) {
             \Log::error('Error deleting product: ' . $e->getMessage());
@@ -154,10 +160,8 @@ class AdminController extends Controller
             $order = Order::findOrFail($id);
             $order->delete();
             return response()->json(['success' => 'Order deleted successfully!']);
-//            return redirect()->back()->with('success', 'Order deleted successfully!');
         } catch (\Exception $e) {
             \Log::error('Error deleting order: ' . $e->getMessage());
-//            return redirect()->back()->with('error', 'Failed to delete order.');
             return response()->json(['error' => 'Failed to delete order.'], 500);
         }
     }
@@ -168,11 +172,27 @@ class AdminController extends Controller
             $orderItem = OrderItem::findOrFail($id);
             $orderItem->delete();
             return response()->json(['success' => 'Order item deleted successfully!']);
-//            return redirect()->back()->with('success', 'Order item deleted successfully!');
         } catch (\Exception $e) {
             \Log::error('Error deleting order item: ' . $e->getMessage());
-//            return redirect()->back()->with('error', 'Failed to delete order item.');
             return response()->json(['error' => 'Failed to delete order item.'], 500);
+        }
+    }
+
+    public function destroyUser($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+
+            // Optional: check if user has orders before deleting
+            if ($user->orders()->exists()) {
+                return response()->json(['error' => 'Cannot delete user with existing orders.'], 400);
+            }
+
+            $user->delete();
+            return response()->json(['success' => 'User deleted successfully!']);
+        } catch (\Exception $e) {
+            \Log::error('Error deleting user: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to delete user.'], 500);
         }
     }
 

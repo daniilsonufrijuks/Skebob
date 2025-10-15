@@ -18,6 +18,12 @@
                 Order Items
             </button>
             <button
+                @click="activeTab = 'users'"
+                :class="['tab-button', { active: activeTab === 'users' }]"
+            >
+                Users
+            </button>
+            <button
                 @click="activeTab = 'products'"
                 :class="['tab-button', { active: activeTab === 'products' }]"
             >
@@ -67,6 +73,30 @@
                         <p><strong>Created:</strong> {{ formatDate(orderItem.created_at) }}</p>
                         <div class="actions">
                             <button @click="deleteRecord('orderitem', orderItem.id)" class="delete-btn">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Users -->
+        <section v-if="activeTab === 'users'" class="section">
+            <h2 class="section-title">Users</h2>
+            <div class="scrollable-container">
+                <div class="card-grid">
+                    <div class="card" v-for="user in users" :key="user.id">
+                        <p><strong>ID:</strong> {{ user.id }}</p>
+                        <p><strong>Name:</strong> {{ user.name }}</p>
+                        <p><strong>Email:</strong> {{ user.email }}</p>
+                        <p><strong>Subscription:</strong>
+                            <span :class="['subscription-badge', user.has_subscription ? 'active' : 'inactive']">
+                        {{ user.has_subscription ? 'Active' : 'Inactive' }}
+                    </span>
+                        </p>
+                        <p><strong>Created:</strong> {{ formatDate(user.created_at) }}</p>
+                        <p><strong>Updated:</strong> {{ formatDate(user.updated_at) }}</p>
+                        <div class="actions">
+                            <button @click="deleteRecord('user', user.id)" class="delete-btn">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -234,6 +264,10 @@ export default {
             default: () => []
         },
         orderItems: {
+            type: Array,
+            default: () => []
+        },
+        users: {
             type: Array,
             default: () => []
         }
@@ -791,6 +825,23 @@ input[type="file"] {
     padding: 8px;
 }
 
+.subscription-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.subscription-badge.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.subscription-badge.inactive {
+    background-color: #757575;
+    color: white;
+}
+
 @media (max-width: 768px) {
     .card-grid {
         grid-template-columns: 1fr;
@@ -825,7 +876,6 @@ input[type="file"] {
     }
 }
 
-/* Custom scrollbar for scrollable container */
 .scrollable-container::-webkit-scrollbar {
     width: 8px;
 }
