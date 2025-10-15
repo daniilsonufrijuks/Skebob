@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Order;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -237,42 +239,21 @@ Route::get('/products/mystery-boxes', [ProductsController::class, 'getMysteryBox
 Route::get('/products/{id}', [ProductsController::class, 'show']);
 Route::get('/mystery-boxes/{id}', [ProductsController::class, 'showMysteryBox']);
 
-
-
-
-
-
-
-
-// Check if user is logged in
-//Route::get('/auth/user', function () {
-//    return response()->json([
-//        'loggedIn' => auth()->check(),
-//        'id' => auth()->id(),
-//    ]);
-//});
-
-
-
-
-
-
-
-
 // Proceed to checkout (with session-based authentication)
 Route::post('/order', [OrderController::class, 'store'])->middleware('auth');
 Route::get('/order-success', [OrderController::class, 'handleSuccess'])->name('order.success');
 
-Route::get('/orders/{id}', [OrderController::class, 'show']);
-//Route::get('/order-confirmation', function() {
-//    return view('order-confirmation');
-//})->name('order.confirmation');
+Route::get('/orders/user', [OrderController::class, 'userOrders'])
+    ->middleware('auth');
 
+Route::get('/orders/{id}', [OrderController::class, 'show'])
+    ->middleware('auth');
 
-
-
-
-
+Route::middleware('auth')->get('/orders/{id}/details', function ($id) {
+    return Inertia::render('OrderDetails', [
+        'orderId' => $id,
+    ]);
+})->name('orders.details');
 
 
 // to get user page about user
@@ -280,15 +261,7 @@ Route::get('/user', [UserController::class, 'userProfile'])->name('user');
 
 // Profile update routes (using the existing ProfileController)
 Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-
 Route::delete('/profile-delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-
-
-
-
-
-
 
 
 // admin page and get/post
@@ -303,53 +276,8 @@ Route::delete('/admin/orders/{id}', [AdminController::class, 'destroyOrder']);
 Route::put('/admin/products/{id}', [AdminController::class, 'update']);
 
 
-
-
-
-
-
-
-// ai
-//Route::post('/chatai', [ChatController::class, 'chat'])->name('chatai');
+// AI
 Route::post('chatai', [ChatController::class, 'chat'])->name('chatai');
-
-
-
-
-
-
-
-
-
-// show auction items and send auction item id to inspect exactly one spicific product form auction list
-//Route::get('/auction/items', [AuctionController::class, 'getitems']);
-//
-//// to send item id form auction to auctionitem when need to open description...
-//Route::get('/auctionitem', function (Request $request) {
-//
-//    $productId = $request->query('id'); // Extract 'id' from query parameters
-//    if (!$productId) {
-//        abort(400, 'Product ID is required');
-//    }
-//    return Inertia::render('AuctionItem', [
-//        'productId' => $productId, // Pass it to the Vue page
-//    ]);
-//})->name('auctionitem');
-//
-//// to get spicific item info from table auction by id
-//Route::get('/auctionitems/{id}', [AuctionController::class, 'show']);
-//// to add new item opens new page for adding
-//Route::get('/auction/add', [AuctionController::class, 'create']);
-//// to create new auction item
-//Route::post('/auction/store', [AuctionController::class, 'store'])->middleware('auth');
-//// for auction to place bids on auction items
-//Route::post('/place-bid/{item}', [BidController::class, 'placeBid'])->middleware('auth');
-//// delete auction items after end date
-//Route::delete('/delete-expired-auctions', [AuctionController::class, 'destroy']);
-
-
-
-
 
 
 // for stripe after pressing proceed btn in cart
@@ -357,148 +285,21 @@ Route::post('chatai', [ChatController::class, 'chat'])->name('chatai');
 Route::post('/stripe/checkout', [StripeController::class, 'create'])->name('stripe.checkout');
 
 
-
 // to find products using search bar
 //Route::get('/search', [ProductsController::class, 'search'])->name('products.search');
 Route::get('/search', [ProductsController::class, 'search']);
-
-
-
-
-
 
 
 // for comments
 Route::get('/comments', [CommentController::class, 'index']);
 Route::post('/comments', [CommentController::class, 'store']);
 
-
-
-// for books and documentation
-//Route::get('/books', [BookController::class, 'index']);
-
-
-//Route::post('/chatai', function (\Illuminate\Http\Request $request) {
-//    $message = $request->input('message');
-//
-//    // Example using OpenAI's GPT
-//    $client = new Client(['api_key' => env('OPENAI_API_KEY')]);
-//
-//    $response = $client->chat()->create([
-//        'model' => 'gpt-4',
-//        'messages' => [
-//            ['role' => 'system', 'content' => 'You are an expert in PC components.'],
-//            ['role' => 'user', 'content' => $message],
-//        ],
-//    ]);
-//
-//    return response()->json([
-//        'reply' => $response['choices'][0]['message']['content'],
-//    ]);
-//});
-
-
-
-//
-//use GuzzleHttp\Client as GuzzleClient;
-//
-//Route::post('/chatai', function (\Illuminate\Http\Request $request) {
-//    $message = $request->input('message');
-//
-//    try {
-//        // Set up the necessary configuration for HttpTransporter
-//        $config = [
-//            'baseUri' => 'https://api.openai.com',  // API base URL
-//            'headers' => [
-//                'Authorization' => 'Bearer ' . env('OPENAI_API_KEY'),
-//                'Content-Type' => 'application/json',
-//            ],
-//            'queryParams' => [],  // Optional query parameters
-//            'streamHandler' => null,  // Set to null if not using streaming
-//        ];
-//
-//        // Initialize HttpTransporter with the config
-//        $transporter = new HttpTransporter(
-//            $config['baseUri'],
-//            $config['headers'],
-//            $config['queryParams'],
-//            $config['streamHandler']
-//        );
-//
-//        // Create the OpenAI Client with the transporter
-//        $client = new Client($transporter);
-//
-//        // Call the OpenAI chat method with the message
-//        $response = $client->chat()->create([
-//            'model' => 'gpt-4',
-//            'messages' => [
-//                ['role' => 'system', 'content' => 'You are an expert in PC components.'],
-//                ['role' => 'user', 'content' => $message],
-//            ],
-//        ]);
-//
-//        return response()->json([
-//            'reply' => $response['choices'][0]['message']['content'],
-//        ]);
-//    } catch (\Exception $e) {
-//        \Log::error('OpenAI API Error:', ['error' => $e->getMessage()]);
-//        return response()->json(['error' => 'Sorry, something went wrong. Please try again later.'], 500);
-//    }
-//});
-//
-
-
-//Route::post('/chatai', function (\Illuminate\Http\Request $request) {
-//    $message = $request->input('message');
-//
-//    // Example using OpenAI's GPT
-//    try {
-//        $client = new \OpenAI\Client(['api_key' => env('OPENAI_API_KEY')]);
-//
-//        $response = $client->chat()->create([
-//            'model' => 'gpt-4',
-//            'messages' => [
-//                ['role' => 'system', 'content' => 'You are an expert in PC components.'],
-//                ['role' => 'user', 'content' => $message],
-//            ],
-//        ]);
-//
-//        Log::info('OpenAI Response:', ['response' => $response]);
-//
-//        return response()->json([
-//            'reply' => $response['choices'][0]['message']['content'],
-//        ]);
-//    } catch (\Exception $e) {
-//        Log::error('OpenAI API Error:', ['error' => $e->getMessage()]);
-//        return response()->json(['error' => 'Sorry, something went wrong. Please try again later.'], 500);
-//    }
-//});
-
-//Route::post('/chatai', [OpenAIController::class, 'generate']);
-
-//Route::get('/home', [PageController::class, 'home'])->name('home');
-//Route::get('/about', [PageController::class, 'about'])->name('about');
-//Route::get('/contacts', [PageController::class, 'contacts'])->name('contacts');
-//Route::get('/market', [PageController::class, 'market'])->name('market');
-//Route::post('/login', [PageController::class, 'login'])->name('login');
-//Route::post('/registration', [PageController::class, 'registration'])->name('registration');
-
-//Route::get('/login', [AuthenticatedSessionController::class, 'create'])
-//    ->name('login');
-//Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-//
-//Route::middleware('auth')->get('/dashboard', function () {
-//    return view('dashboard');
-//});
-
-//Route::get('/dashboard', function () {
-//    return Inertia::render('Dashboard');
-//})->middleware(['auth', 'verified'])->name('dashboard');
-//
-//Route::middleware('auth')->group(function () {
-//    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-//});
+// for checking authenticated user (for displaying order history in the user page)
+Route::get('/check-auth', function () {
+    return response()->json([
+        'user_id' => auth()->id(),
+        'user' => auth()->user(),
+    ]);
+});
 
 require __DIR__.'/auth.php';

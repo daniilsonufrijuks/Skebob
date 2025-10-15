@@ -29,7 +29,7 @@ class ProductsController extends Controller
         }
 
         // Fetch the filtered results
-        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image']);
+        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image', 'country_origin']);
 
         return response()->json($products);
     }
@@ -52,7 +52,7 @@ class ProductsController extends Controller
         }
 
         // Fetch the filtered results
-        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image']);
+        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image', 'country_origin']);
 
         return response()->json($products);
     }
@@ -75,7 +75,7 @@ class ProductsController extends Controller
         }
 
         // Fetch the filtered results
-        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image']);
+        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image', 'country_origin']);
 
         return response()->json($products);
     }
@@ -99,7 +99,7 @@ class ProductsController extends Controller
         }
 
         // Fetch the filtered results
-        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image']);
+        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image', 'country_origin']);
 
         return response()->json($products);
     }
@@ -123,7 +123,7 @@ class ProductsController extends Controller
         }
 
         // Fetch the filtered results
-        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image']);
+        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image', 'country_origin']);
 
         return response()->json($products);
     }
@@ -146,7 +146,7 @@ class ProductsController extends Controller
         }
 
         // Fetch the filtered results
-        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image']);
+        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image', 'country_origin']);
 
         return response()->json($products);
     }
@@ -171,7 +171,7 @@ class ProductsController extends Controller
         }
 
         // Fetch the filtered results
-        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image']);
+        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image', 'country_origin']);
 
         return response()->json($products);
     }
@@ -194,7 +194,7 @@ class ProductsController extends Controller
         }
 
         // Fetch the filtered results
-        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image']);
+        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image', 'country_origin']);
 
         return response()->json($products);
     }
@@ -245,7 +245,7 @@ class ProductsController extends Controller
 
     public function show($id): \Illuminate\Http\JsonResponse
     {
-        $products = Product::find($id, ['id', 'name', 'price', 'ingredients', 'image', 'category_id']);
+        $products = Product::find($id, ['id', 'name', 'price', 'country_origin', 'ingredients', 'image', 'category_id']);
 
         if (!$products) {
             return response()->json(['error' => 'Product not found'], 404);
@@ -270,6 +270,7 @@ class ProductsController extends Controller
             'price' => $box->product->price ?? null,
             'image' => $box->product->image ?? null,
             'description' => $box->description,
+            'country_origin' => $box->product->country_origin,
         ]);
     }
 
@@ -280,6 +281,7 @@ class ProductsController extends Controller
 
         $products = Product::where('name', 'LIKE', "%{$query}%")
             ->orWhere('ingredients', 'LIKE', "%{$query}%")
+            ->orWhere(' country_origin', 'LIKE', "%{$query}%")
             ->get();
 
 //        return view('products.search-results', compact('products', 'query'));

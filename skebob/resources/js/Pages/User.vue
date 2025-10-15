@@ -98,6 +98,8 @@
                 </div>
             </div>
         </div>
+<!--        <Visitit />-->
+        <OrderHistory />
         <Visitit />
         <div class="products">
             <ProductCardDB v-for="product in products" :key="product.id" :product="product" />
@@ -109,6 +111,7 @@
 </template>
 
 <script>
+import OrderHistory from "../Components/OrderHistory.vue";
 import Visitit from '../Components/Visitit.vue';
 import Slider from '../Components/Slider.vue';
 import Productsintro from "../Components/Productsintro.vue";
@@ -134,7 +137,8 @@ export default {
         Search,
         Testimonial,
         AboutUsText,
-        Footer
+        Footer,
+        OrderHistory,
     },
     props: {
         routes: Object,
