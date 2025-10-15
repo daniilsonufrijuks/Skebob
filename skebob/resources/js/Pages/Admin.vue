@@ -400,8 +400,10 @@ export default {
         deleteRecord(type, id) {
             if (confirm(`Are you sure you want to delete this ${type}?`)) {
                 this.$inertia.delete(`/admin/${type}s/${id}`, {
+                    preserveScroll: true,
                     onSuccess: () => {
                         this.showNotification(`${type} deleted successfully!`, 'success');
+                        // The page data will be refreshed automatically by Inertia
                     },
                     onError: (err) => {
                         this.showNotification(`Error deleting ${type}: ${err}`, 'error');

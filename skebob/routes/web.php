@@ -264,6 +264,7 @@ Route::get('/admin/products', [AdminController::class, 'showProducts'])->name('a
 Route::post('/admin/products', [AdminController::class, 'storeProduct'])->name('admin.products.add');
 Route::delete('/admin/products/{id}', [AdminController::class, 'destroyProduct']);
 Route::delete('/admin/orders/{id}', [AdminController::class, 'destroyOrder']);
+Route::delete('/admin/orderitems/{id}', [AdminController::class, 'destroyOrderItem']);
 Route::put('/admin/products/{id}', [AdminController::class, 'updateProduct']);
 
 

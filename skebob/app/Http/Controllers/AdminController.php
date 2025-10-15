@@ -127,48 +127,52 @@ class AdminController extends Controller
         }
     }
 
-    public function destroyProduct($id): \Illuminate\Http\RedirectResponse
+    public function destroyProduct($id)
     {
         try {
             $product = Product::findOrFail($id);
-
-            // Delete associated image file
             if ($product->image && file_exists(public_path($product->image))) {
                 unlink(public_path($product->image));
             }
-
             $product->delete();
 
-            return redirect()->back()->with('success', 'Product deleted successfully!');
+            // Return JSON response for Inertia
+            return response()->json(['success' => 'Product deleted successfully!']);
+
+            // Or redirect to dashboard
+            // return redirect()->route('admin.dashboard')->with('success', 'Product deleted successfully!');
+
         } catch (\Exception $e) {
             \Log::error('Error deleting product: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Failed to delete product.');
+            return response()->json(['error' => 'Failed to delete product.'], 500);
         }
     }
 
-    public function destroyOrder($id): \Illuminate\Http\RedirectResponse
+    public function destroyOrder($id)
     {
         try {
             $order = Order::findOrFail($id);
             $order->delete();
-
-            return redirect()->back()->with('success', 'Order deleted successfully!');
+            return response()->json(['success' => 'Order deleted successfully!']);
+//            return redirect()->back()->with('success', 'Order deleted successfully!');
         } catch (\Exception $e) {
             \Log::error('Error deleting order: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Failed to delete order.');
+//            return redirect()->back()->with('error', 'Failed to delete order.');
+            return response()->json(['error' => 'Failed to delete order.'], 500);
         }
     }
 
-    public function destroyOrderItem($id): \Illuminate\Http\RedirectResponse
+    public function destroyOrderItem($id)
     {
         try {
             $orderItem = OrderItem::findOrFail($id);
             $orderItem->delete();
-
-            return redirect()->back()->with('success', 'Order item deleted successfully!');
+            return response()->json(['success' => 'Order item deleted successfully!']);
+//            return redirect()->back()->with('success', 'Order item deleted successfully!');
         } catch (\Exception $e) {
             \Log::error('Error deleting order item: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Failed to delete order item.');
+//            return redirect()->back()->with('error', 'Failed to delete order item.');
+            return response()->json(['error' => 'Failed to delete order item.'], 500);
         }
     }
 
