@@ -5,7 +5,7 @@
     <title>Email Verification</title>
 </head>
 <body>
-<p>Hello {{ $name }},</p>
+<h1>Hello {{ $name }},</h1>
 
 <p>Thank you for registering! Please confirm your email address by clicking the link below:</p>
 
