@@ -279,10 +279,23 @@ class ProductsController extends Controller
     {
         $query = $request->input('query');
 
-        $products = Product::where('name', 'LIKE', "%{$query}%")
-            ->orWhere('ingredients', 'LIKE', "%{$query}%")
-            ->orWhere(' country_origin', 'LIKE', "%{$query}%")
+        if (!$query) {
+            return response()->json([]);
+        }
+
+        $products = Product::where(function ($q) use ($query) {
+            $q->where('name', 'LIKE', "%{$query}%")
+                ->orWhere('ingredients', 'LIKE', "%{$query}%")
+                ->orWhere('country_origin', 'LIKE', "%{$query}%");
+        })
+            ->select('id', 'name')
+            ->take(5)
             ->get();
+
+//        $products = Product::where('name', 'LIKE', "%{$query}%")
+//            ->orWhere('ingredients', 'LIKE', "%{$query}%")
+//            ->orWhere(' country_origin', 'LIKE', "%{$query}%")
+//            ->get();
 
 //        return view('products.search-results', compact('products', 'query'));
 //        return Inertia::render('SearchResults', [
