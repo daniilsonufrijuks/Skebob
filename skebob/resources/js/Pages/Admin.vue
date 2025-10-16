@@ -30,6 +30,12 @@
                 Products
             </button>
             <button
+                @click="activeTab = 'brands'"
+                :class="['tab-button', { active: activeTab === 'brands' }]"
+            >
+                Brands
+            </button>
+            <button
                 @click="activeTab = 'addProduct'"
                 :class="['tab-button', { active: activeTab === 'addProduct' }]"
             >
@@ -154,6 +160,7 @@
                             </div>
                         </template>
                         <template v-else>
+                            <p><strong>ID:</strong> {{ product.id }}</p>
                             <p><strong>Name:</strong> {{ product.name }}</p>
                             <p><strong>Price:</strong> ${{ product.price }}</p>
                             <p><strong>Amount:</strong> {{ product.amount_value }} {{ product.amount_unit }}</p>
@@ -169,6 +176,39 @@
                                 <button @click="deleteRecord('product', product.id)" class="delete-btn">Delete</button>
                             </div>
                         </template>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Brands -->
+        <section v-if="activeTab === 'brands'" class="section">
+            <h2 class="section-title">Brands</h2>
+
+            <!-- Add Brand Form -->
+            <div class="add-brand-form">
+                <h3>Add New Brand</h3>
+                <form @submit.prevent="addBrand" class="form">
+                    <div class="form-group">
+                        <label>Brand Name *</label>
+                        <input v-model="newBrand.name" type="text" placeholder="Brand Name" required />
+                    </div>
+                    <button type="submit" class="submit-btn" :disabled="isAddingBrand">
+                        {{ isAddingBrand ? 'Adding Brand...' : 'Add Brand' }}
+                    </button>
+                </form>
+            </div>
+
+            <div class="scrollable-container">
+                <div class="card-grid">
+                    <div class="card" v-for="brand in brands" :key="brand.id">
+                        <p><strong>ID:</strong> {{ brand.id }}</p>
+                        <p><strong>Name:</strong> {{ brand.name }}</p>
+                        <p><strong>Created:</strong> {{ formatDate(brand.created_at) }}</p>
+                        <p><strong>Updated:</strong> {{ formatDate(brand.updated_at) }}</p>
+                        <div class="actions">
+                            <button @click="deleteRecord('brand', brand.id)" class="delete-btn">Delete</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -270,6 +310,10 @@ export default {
         users: {
             type: Array,
             default: () => []
+        },
+        brands: {
+            type: Array,
+            default: () => []
         }
     },
     data() {
@@ -285,12 +329,16 @@ export default {
                 nutritional_info: '',
                 storage_conditions: ''
             },
+            newBrand: {
+                name: ''
+            },
             imageFile: null,
             imagePreview: null,
             editProduct: null,
             editImageFile: null,
             editImagePreview: null,
             isAdding: false,
+            isAddingBrand: false,
             notification: {
                 show: false,
                 message: '',
@@ -429,6 +477,36 @@ export default {
                 console.error('Error adding product:', error);
                 this.showNotification('Error adding product: ' + error.message, 'error');
                 this.isAdding = false;
+            }
+        },
+
+        async addBrand() {
+            if (!this.newBrand.name) {
+                this.showNotification('Please enter a brand name', 'error');
+                return;
+            }
+
+            this.isAddingBrand = true;
+
+            try {
+                await this.$inertia.post('/admin/brands', {
+                    name: this.newBrand.name
+                }, {
+                    onSuccess: () => {
+                        this.showNotification('Brand added successfully!', 'success');
+                        this.newBrand.name = '';
+                        this.isAddingBrand = false;
+                    },
+                    onError: (errors) => {
+                        console.error('Add brand errors:', errors);
+                        this.showNotification('Failed to add brand: ' + JSON.stringify(errors), 'error');
+                        this.isAddingBrand = false;
+                    }
+                });
+            } catch (error) {
+                console.error('Error adding brand:', error);
+                this.showNotification('Error adding brand: ' + error.message, 'error');
+                this.isAddingBrand = false;
             }
         },
 
@@ -842,6 +920,44 @@ input[type="file"] {
     color: white;
 }
 
+.scrollable-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollable-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+.add-brand-form {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.add-brand-form h3 {
+    margin-bottom: 15px;
+    color: #333;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.add-brand-form .form {
+    max-width: 400px;
+    margin: 0;
+}
+
 @media (max-width: 768px) {
     .card-grid {
         grid-template-columns: 1fr;
@@ -876,21 +992,4 @@ input[type="file"] {
     }
 }
 
-.scrollable-container::-webkit-scrollbar {
-    width: 8px;
-}
-
-.scrollable-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-}
-
-.scrollable-container::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 4px;
-}
-
-.scrollable-container::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
-}
 </style>

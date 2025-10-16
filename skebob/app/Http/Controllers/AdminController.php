@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderItem;
 use App\Models\User;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -19,24 +20,26 @@ class AdminController extends Controller
         $orders = Order::select([
             'id', 'user_id', 'status', 'total_price', 'shipping_address',
             'ordered_at', 'created_at', 'updated_at'
-        ])->latest()->get();
+            ])->latest()->get();
 
         $products = Product::select([
             'id', 'name', 'price', 'amount_value', 'amount_unit', 'country_origin',
             'image', 'ingredients', 'nutritional_info', 'storage_conditions',
             'admin_id', 'brand_id', 'category_id', 'created_at', 'updated_at'
-        ])->latest()->get();
+            ])->latest()->get();
 
         $orderItems = OrderItem::with(['order', 'product'])
             ->select([
                 'id', 'quantity', 'unit-price', 'subtotal', 'order_id', 'product_id',
                 'created_at', 'updated_at'
-            ])
-            ->latest()
-            ->get();
+            ])->latest()->get();
 
         $users = User::select([
             'id', 'name', 'email', 'has_subscription', 'created_at', 'updated_at'
+            ])->latest()->get();
+
+        $brands = Brand::select([
+            'id', 'name', 'created_at', 'updated_at'
         ])->latest()->get();
 
         return Inertia::render('Admin', [
@@ -44,6 +47,7 @@ class AdminController extends Controller
             'products' => $products,
             'orderItems' => $orderItems,
             'users' => $users,
+            'brands' => $brands,
         ]);
     }
 
@@ -88,6 +92,36 @@ class AdminController extends Controller
         ])->latest()->get();
 
         return response()->json($users);
+    }
+
+    public function showBrands(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $brands = Brand::select([
+            'id', 'name', 'created_at', 'updated_at'
+        ])->latest()->get();
+
+        return response()->json($brands);
+    }
+
+    public function storeBrand(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:brands,name',
+        ]);
+
+        try {
+            Brand::create([
+                'name' => $request->name,
+                'slug' => Str::slug($request->name),
+                'admin_id' => 1,
+            ]);
+
+            return redirect()->route('admin.dashboard')->with('success', 'Brand added successfully!');
+
+        } catch (\Exception $e) {
+            \Log::error('Error adding brand: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to add brand: ' . $e->getMessage());
+        }
     }
 
     public function storeProduct(Request $request): \Illuminate\Http\RedirectResponse
@@ -183,7 +217,7 @@ class AdminController extends Controller
         try {
             $user = User::findOrFail($id);
 
-            // Optional: check if user has orders before deleting
+            // check if user has orders before deleting
             if ($user->orders()->exists()) {
                 return response()->json(['error' => 'Cannot delete user with existing orders.'], 400);
             }
@@ -193,6 +227,24 @@ class AdminController extends Controller
         } catch (\Exception $e) {
             \Log::error('Error deleting user: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to delete user.'], 500);
+        }
+    }
+
+    public function destroyBrand($id)
+    {
+        try {
+            $brand = Brand::findOrFail($id);
+
+            // check if brand has products before deleting
+            if ($brand->products()->exists()) {
+                return response()->json(['error' => 'Cannot delete brand with existing products.'], 400);
+            }
+
+            $brand->delete();
+            return response()->json(['success' => 'Brand deleted successfully!']);
+        } catch (\Exception $e) {
+            \Log::error('Error deleting brand: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to delete brand.'], 500);
         }
     }
 
@@ -248,7 +300,6 @@ class AdminController extends Controller
                 Log::info('New image saved', ['path' => $updateData['image']]);
             }
 
-            // Update the product
             $updated = $product->update($updateData);
             Log::info('Product update result', ['updated' => $updated, 'product_after' => $product->fresh()->toArray()]);
 
