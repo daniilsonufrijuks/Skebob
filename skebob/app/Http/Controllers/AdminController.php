@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\OrderItem;
 use App\Models\User;
 use App\Models\Brand;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -42,12 +43,17 @@ class AdminController extends Controller
             'id', 'name', 'created_at', 'updated_at'
         ])->latest()->get();
 
+        $categories = Category::select([
+            'id', 'name', 'created_at', 'updated_at'
+        ])->latest()->get();
+
         return Inertia::render('Admin', [
             'orders' => $orders,
             'products' => $products,
             'orderItems' => $orderItems,
             'users' => $users,
             'brands' => $brands,
+            'categories' => $categories,
         ]);
     }
 
@@ -103,6 +109,15 @@ class AdminController extends Controller
         return response()->json($brands);
     }
 
+    public function showCategories(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $categories = Category::select([
+            'id', 'name', 'created_at', 'updated_at'
+        ])->latest()->get();
+
+        return response()->json($categories);
+    }
+
     public function storeBrand(Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
@@ -124,6 +139,24 @@ class AdminController extends Controller
         }
     }
 
+    public function storeCategory(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name',
+        ]);
+        try {
+            Category::create([
+                'name' => $request->name,
+                'slug' => Str::slug($request->name),
+                'admin_id' => 1,
+            ]);
+            return redirect()->route('admin.dashboard')->with('success', 'Category added successfully!');
+        } catch (\Exception $e) {
+            \Log::error('Error adding category: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to add category: ' . $e->getMessage());
+        }
+    }
+
     public function storeProduct(Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
@@ -137,7 +170,6 @@ class AdminController extends Controller
             'storage_conditions' => 'nullable|string|max:255',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
         try {
             $imagePath = null;
             if ($request->hasFile('image')) {
@@ -146,7 +178,6 @@ class AdminController extends Controller
                 $image->move(public_path('images/front'), $imageName);
                 $imagePath = 'images/front/' . $imageName;
             }
-
             Product::create([
                 'name' => $request->name,
                 'slug' => Str::slug($request->name),
@@ -162,9 +193,7 @@ class AdminController extends Controller
                 'brand_id' => 1, // Default brand ID
                 'category_id' => 1, // Default category ID
             ]);
-
             return redirect()->route('admin.dashboard')->with('success', 'Product added successfully!');
-
         } catch (\Exception $e) {
             \Log::error('Error adding product: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to add product: ' . $e->getMessage());
@@ -216,12 +245,10 @@ class AdminController extends Controller
     {
         try {
             $user = User::findOrFail($id);
-
             // check if user has orders before deleting
             if ($user->orders()->exists()) {
                 return response()->json(['error' => 'Cannot delete user with existing orders.'], 400);
             }
-
             $user->delete();
             return response()->json(['success' => 'User deleted successfully!']);
         } catch (\Exception $e) {
@@ -234,17 +261,31 @@ class AdminController extends Controller
     {
         try {
             $brand = Brand::findOrFail($id);
-
             // check if brand has products before deleting
             if ($brand->products()->exists()) {
                 return response()->json(['error' => 'Cannot delete brand with existing products.'], 400);
             }
-
             $brand->delete();
             return response()->json(['success' => 'Brand deleted successfully!']);
         } catch (\Exception $e) {
             \Log::error('Error deleting brand: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to delete brand.'], 500);
+        }
+    }
+
+    public function destroyCategory($id)
+    {
+        try {
+            $category = Category::findOrFail($id);
+            // check if category has products before deleting
+            if ($category->products()->exists()) {
+                return response()->json(['error' => 'Cannot delete category with existing products.'], 400);
+            }
+            $category->delete();
+            return response()->json(['success' => 'Category deleted successfully!']);
+        } catch (\Exception $e) {
+            \Log::error('Error deleting category: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to delete category.'], 500);
         }
     }
 

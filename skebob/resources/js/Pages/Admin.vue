@@ -36,6 +36,12 @@
                 Brands
             </button>
             <button
+                @click="activeTab = 'categories'"
+                :class="['tab-button', { active: activeTab === 'categories' }]"
+            >
+                Categories
+            </button>
+            <button
                 @click="activeTab = 'addProduct'"
                 :class="['tab-button', { active: activeTab === 'addProduct' }]"
             >
@@ -184,7 +190,6 @@
         <!-- Brands -->
         <section v-if="activeTab === 'brands'" class="section">
             <h2 class="section-title">Brands</h2>
-
             <!-- Add Brand Form -->
             <div class="add-brand-form">
                 <h3>Add New Brand</h3>
@@ -208,6 +213,38 @@
                         <p><strong>Updated:</strong> {{ formatDate(brand.updated_at) }}</p>
                         <div class="actions">
                             <button @click="deleteRecord('brand', brand.id)" class="delete-btn">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories -->
+        <section v-if="activeTab === 'categories'" class="section">
+            <h2 class="section-title">Categories</h2>
+            <!-- Add Category Form -->
+            <div class="add-category-form">
+                <h3>Add New Category</h3>
+                <form @submit.prevent="addCategory" class="form">
+                    <div class="form-group">
+                        <label>Category Name *</label>
+                        <input v-model="newCategory.name" type="text" placeholder="Category Name" required />
+                    </div>
+                    <button type="submit" class="submit-btn" :disabled="isAddingCategory">
+                        {{ isAddingCategory ? 'Adding Category...' : 'Add Category' }}
+                    </button>
+                </form>
+            </div>
+
+            <div class="scrollable-container">
+                <div class="card-grid">
+                    <div class="card" v-for="category in categories" :key="category.id">
+                        <p><strong>ID:</strong> {{ category.id }}</p>
+                        <p><strong>Name:</strong> {{ category.name }}</p>
+                        <p><strong>Created:</strong> {{ formatDate(category.created_at) }}</p>
+                        <p><strong>Updated:</strong> {{ formatDate(category.updated_at) }}</p>
+                        <div class="actions">
+                            <button @click="deleteRecord('category', category.id)" class="delete-btn">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -314,6 +351,10 @@ export default {
         brands: {
             type: Array,
             default: () => []
+        },
+        categories: {
+            type: Array,
+            default: () => []
         }
     },
     data() {
@@ -332,6 +373,9 @@ export default {
             newBrand: {
                 name: ''
             },
+            newCategory: {
+                name: ''
+            },
             imageFile: null,
             imagePreview: null,
             editProduct: null,
@@ -339,6 +383,7 @@ export default {
             editImagePreview: null,
             isAdding: false,
             isAddingBrand: false,
+            isAddingCategory: false,
             notification: {
                 show: false,
                 message: '',
@@ -431,33 +476,26 @@ export default {
                 this.showNotification('Please fill all required fields and select an image', 'error');
                 return;
             }
-
             this.isAdding = true;
-
             const formData = new FormData();
-
             // append all product data
             Object.keys(this.newProduct).forEach((key) => {
                 if (this.newProduct[key] !== null && this.newProduct[key] !== undefined && this.newProduct[key] !== '') {
                     formData.append(key, this.newProduct[key]);
                 }
             });
-
             // append image file
             if (this.imageFile) {
                 formData.append('image', this.imageFile);
             }
-
             // set default values for required foreign keys
             formData.append('brand_id', '1');
             formData.append('category_id', '1');
             formData.append('admin_id', '1');
-
             console.log('Adding new product with data:');
             for (let [key, value] of formData.entries()) {
                 console.log(key, value);
             }
-
             try {
                 await this.$inertia.post('/admin/products', formData, {
                     onSuccess: () => {
@@ -485,28 +523,57 @@ export default {
                 this.showNotification('Please enter a brand name', 'error');
                 return;
             }
-
             this.isAddingBrand = true;
-
             try {
                 await this.$inertia.post('/admin/brands', {
                     name: this.newBrand.name
                 }, {
                     onSuccess: () => {
-                        this.showNotification('Brand added successfully!', 'success');
+                        this.showNotification('Category added successfully!', 'success');
+                    },
+                    onError: (errors) => {
+                        console.error('Add category errors:', errors);
+                        this.showNotification('Failed to add category: ' + JSON.stringify(errors), 'error');
+                    },
+                    onFinish: () => {
                         this.newBrand.name = '';
                         this.isAddingBrand = false;
                     },
+                });
+            } catch (error) {
+                console.error('Error adding category:', error);
+                this.showNotification('Error adding category: ' + error.message, 'error');
+                this.isAddingCategory = false;
+            }
+        },
+
+        async addCategory() {
+            if (!this.newCategory.name) {
+                this.showNotification('Please enter a category name', 'error');
+                return;
+            }
+
+            this.isAddingCategory = true;
+
+            try {
+                await this.$inertia.post('/admin/categories', {
+                    name: this.newCategory.name
+                }, {
+                    onSuccess: () => {
+                        this.showNotification('Category added successfully!', 'success');
+                        this.newCategory.name = '';
+                        this.isAddingCategory = false;
+                    },
                     onError: (errors) => {
-                        console.error('Add brand errors:', errors);
-                        this.showNotification('Failed to add brand: ' + JSON.stringify(errors), 'error');
-                        this.isAddingBrand = false;
+                        console.error('Add category errors:', errors);
+                        this.showNotification('Failed to add category: ' + JSON.stringify(errors), 'error');
+                        this.isAddingCategory = false;
                     }
                 });
             } catch (error) {
-                console.error('Error adding brand:', error);
-                this.showNotification('Error adding brand: ' + error.message, 'error');
-                this.isAddingBrand = false;
+                console.error('Error adding category:', error);
+                this.showNotification('Error adding category: ' + error.message, 'error');
+                this.isAddingCategory = false;
             }
         },
 
@@ -550,14 +617,31 @@ export default {
 
         deleteRecord(type, id) {
             if (confirm(`Are you sure you want to delete this ${type}?`)) {
-                this.$inertia.delete(`/admin/${type}s/${id}`, {
+                // define plural forms mapping
+                const pluralForms = {
+                    'order': 'orders',
+                    'orderitem': 'orderitems',
+                    'product': 'products',
+                    'user': 'users',
+                    'brand': 'brands',
+                    'category': 'categories'
+                };
+
+                // get the correct plural form, fallback - adding 's' as default
+                const pluralType = pluralForms[type] || `${type}s`;
+                this.$inertia.delete(`/admin/${pluralType}/${id}`, {
                     preserveScroll: true,
                     onSuccess: () => {
                         this.showNotification(`${type} deleted successfully!`, 'success');
-                        // the page data will be refreshed automatically by Inertia
                     },
                     onError: (err) => {
-                        this.showNotification(`Error deleting ${type}: ${err}`, 'error');
+                        let errorMessage = `Error deleting ${type}`;
+                        if (err && typeof err === 'object') {
+                            errorMessage = err.error || errorMessage;
+                        } else if (err) {
+                            errorMessage = err;
+                        }
+                        this.showNotification(errorMessage, 'error');
                     },
                 });
             }
@@ -596,7 +680,8 @@ export default {
             if (!dateString) return 'N/A';
             const date = new Date(dateString);
             return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-        }
+        },
+
     }
 };
 </script>
@@ -954,6 +1039,26 @@ input[type="file"] {
 }
 
 .add-brand-form .form {
+    max-width: 400px;
+    margin: 0;
+}
+
+.add-category-form {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.add-category-form h3 {
+    margin-bottom: 15px;
+    color: #333;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.add-category-form .form {
     max-width: 400px;
     margin: 0;
 }

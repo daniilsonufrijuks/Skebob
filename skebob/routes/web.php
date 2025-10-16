@@ -263,15 +263,18 @@ Route::get('/admin/ordersj', [AdminController::class, 'showjoinedOrders'])->name
 Route::get('/admin/products', [AdminController::class, 'showProducts'])->name('admin.products');
 Route::get('/admin/users', [AdminController::class, 'showUsers'])->name('admin.users');
 Route::get('/admin/brands', [AdminController::class, 'showBrands'])->name('admin.brands');
+Route::get('/admin/categories', [AdminController::class, 'showCategories'])->name('admin.categories');
 
 Route::post('/admin/products', [AdminController::class, 'storeProduct'])->name('admin.products.add');
 Route::post('/admin/brands', [AdminController::class, 'storeBrand'])->name('admin.brands.add');
+Route::post('/admin/categories', [AdminController::class, 'storeCategory'])->name('admin.categories.add');
 
 Route::delete('/admin/products/{id}', [AdminController::class, 'destroyProduct']);
 Route::delete('/admin/orders/{id}', [AdminController::class, 'destroyOrder']);
 Route::delete('/admin/orderitems/{id}', [AdminController::class, 'destroyOrderItem']);
 Route::delete('/admin/users/{id}', [AdminController::class, 'destroyUser']);
 Route::delete('/admin/brands/{id}', [AdminController::class, 'destroyBrand']);
+Route::delete('/admin/categories/{id}', [AdminController::class, 'destroyCategory']);
 
 Route::put('/admin/products/{id}', [AdminController::class, 'updateProduct']);
 
