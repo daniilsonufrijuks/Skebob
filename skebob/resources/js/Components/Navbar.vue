@@ -3,10 +3,12 @@ import { ref } from 'vue';
 import { useUser } from '../Composables/useUser';
 import axios from 'axios';
 import { useRouter } from 'vue-router';  // For navigation after logout
+import { useI18n } from 'vue-i18n';
 
 const { isLoggedIn, user } = useUser(); // Use your custom composable to check login status
 const isMenuActive = ref(false);
 const router = useRouter();  // For redirecting after logout
+const cartCount = ref(0);
 
 //console.log('User Data:', user.value);
 // Toggle navigation menu state
@@ -35,7 +37,20 @@ const goToUserPage = () => {
     window.location.href = "/user";
 };
 
+// FOR LANGUAGE CHANGE
+const currentLang = ref('en');
+const { locale } = useI18n();
 
+const switchLanguage = () => {
+    // Save to localStorage for persistence
+    locale.value = currentLang.value;
+    localStorage.setItem('lang', currentLang.value);
+    // You’ll use this value to show translations later
+};
+// On mount, load saved language
+if (localStorage.getItem('lang')) {
+    currentLang.value = localStorage.getItem('lang');
+}
 </script>
 
 
@@ -48,12 +63,19 @@ const goToUserPage = () => {
             </div>
         </a>
         <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/market">Market</a></li>
-            <li><a href="/gifts">Gifts</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/contacts">Contacts</a></li>
-            <li><a href="/tutor">Blog</a></li>
+<!--            <li><a href="/">Home</a></li>-->
+<!--            <li><a href="/market">Market</a></li>-->
+<!--            <li><a href="/gifts">Gifts</a></li>-->
+<!--            <li><a href="/about">About</a></li>-->
+<!--            <li><a href="/contacts">Contacts</a></li>-->
+<!--            <li><a href="/tutor">Blog</a></li>-->
+
+            <li><a href="/">{{ $t('home') }}</a></li>
+            <li><a href="/market">{{ $t('market') }}</a></li>
+            <li><a href="/gifts">{{ $t('gifts') }}</a></li>
+            <li><a href="/about">{{ $t('about') }}</a></li>
+            <li><a href="/contacts">{{ $t('contacts') }}</a></li>
+            <li><a href="/tutor">{{ $t('blog') }}</a></li>
             <li v-if="isLoggedIn">
                 <!-- User is logged in: show user avatar -->
                 <i class="fa fa-user icon user-icon"
@@ -66,14 +88,24 @@ const goToUserPage = () => {
                 </i>
             </li>
             <li v-else>
-                <a href="/login">Login</a>
-                <a href="/registration">Sign up</a>
+<!--                <a href="/login">Login</a>-->
+<!--                <a href="/registration">Sign up</a>-->
+                <a href="/login">{{ $t('login') }}</a>
+                <a href="/registration">{{ $t('signup') }}</a>
             </li>
             <li>
                 <a href="/cart" style="position: relative;">
                     <i class="fa fa-shopping-cart icon" style="color: white;"></i>
                     <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
                 </a>
+            </li>
+
+            <!-- FOR LANGUAGE CHANGE-->
+            <li>
+                <select v-model="currentLang" @change="switchLanguage" style="margin-left: 10px;">
+                    <option value="en">EN</option>
+                    <option value="lv">LV</option>
+                </select>
             </li>
         </ul>
         <!-- Hamburger Menu -->
@@ -86,12 +118,19 @@ const goToUserPage = () => {
     <!-- Menubar for Mobile -->
     <div class="menubar" :class="{ active: isMenuActive }">
         <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/market">Market</a></li>
-            <li><a href="/gifts">Gifts</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/contacts">Contacts</a></li>
-            <li><a href="/tutor">Blog</a></li>
+<!--            <li><a href="/">Home</a></li>-->
+<!--            <li><a href="/market">Market</a></li>-->
+<!--            <li><a href="/gifts">Gifts</a></li>-->
+<!--            <li><a href="/about">About</a></li>-->
+<!--            <li><a href="/contacts">Contacts</a></li>-->
+<!--            <li><a href="/tutor">Blog</a></li>-->
+
+            <li><a href="/">{{ $t('home') }}</a></li>
+            <li><a href="/market">{{ $t('market') }}</a></li>
+            <li><a href="/gifts">{{ $t('gifts') }}</a></li>
+            <li><a href="/about">{{ $t('about') }}</a></li>
+            <li><a href="/contacts">{{ $t('contacts') }}</a></li>
+            <li><a href="/tutor">{{ $t('blog') }}</a></li>
             <li v-if="isLoggedIn">
                 <!-- User is logged in: show user avatar -->
                 <i class="fa fa-user icon menubar-user-icon"
@@ -104,8 +143,10 @@ const goToUserPage = () => {
                 </i>
             </li>
             <li v-else>
-                <a href="/login">Login</a>
-                <a href="/registration">Sign up</a>
+<!--                <a href="/login">Login</a>-->
+<!--                <a href="/registration">Sign up</a>-->
+                <a href="/login">{{ $t('login') }}</a>
+                <a href="/registration">{{ $t('signup') }}</a>
             </li>
             <li>
                 <a href="/cart" style="position: relative; background: none;">

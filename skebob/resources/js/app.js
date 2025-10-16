@@ -9,7 +9,7 @@ import { ZiggyVue } from 'ziggy-js';
 import DefaultLayout from "@/Layouts/DefaultLayout.vue";
 import 'font-awesome/css/font-awesome.css';
 import store from "@/Cart/cart.js";
-
+import i18n from '../js/i18n.js';
 
 // const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -31,6 +31,7 @@ createInertiaApp({
             .use(ZiggyVue)
             //.use(router)
             .use(store)
+            .use(i18n)
             .mount(el);
     },
     progress: {
@@ -38,4 +39,5 @@ createInertiaApp({
     },
 }).then(() => {
     console.log('Inertia.js app is set up with Vue Router.');
+    console.log('Inertia.js app with i18n is ready 🎉');
 });
