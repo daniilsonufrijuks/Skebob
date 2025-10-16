@@ -1,21 +1,24 @@
 <template>
     <div class="chat-container">
-        <h2>Chat with SKEBOB AI</h2>
+<!--        <h2>Chat with SKEBOB AI</h2>-->
+        <h2>{{ $t('chatWithSkebobAI') }}</h2>
         <div class="chat-box" ref="chatBox">
             <div v-for="(message, index) in chatMessages" :key="index" :class="['chat-message', message.sender]">
                 <p>{{ message.text }}</p>
             </div>
-            <p v-if="isLoading" class="loading-message">AI is typing...</p>
+            <p v-if="isLoading" class="loading-message">{{ $t('AIisTyping') }}</p>
+<!--            <p v-if="isLoading" class="loading-message">AI is typing...</p>-->
         </div>
         <form @submit.prevent="sendMessage" class="chat-input">
             <input
                 type="text"
+                :placeholder="$t('AskAIplaceholder')"
                 v-model="userInput"
-                placeholder="Ask about yum yums or stuff..."
                 required
                 aria-label="Chat input"
             />
-            <button type="submit" :disabled="isLoading" aria-label="Send message">Send</button>
+<!--            <button type="submit" :disabled="isLoading" aria-label="Send message">Send</button>-->
+            <button type="submit" :disabled="isLoading" aria-label="Send message">{{ $t('AIsend') }}</button>
         </form>
     </div>
 </template>
@@ -26,11 +29,19 @@ export default {
     data() {
         return {
             userInput: "",
-            chatMessages: [
-                { sender: "ai", text: "Hello! Ask me anything about snacks. That's all I can do :D" },
-            ],
+            chatMessages: [],
+            // chatMessages: [
+            //     { sender: "ai", text: "Hello! Ask me anything about snacks. That's all I can do :D" },
+            // ],
             isLoading: false,
         };
+    },
+    created() {
+        // Initialize translated message once the component is created
+        this.chatMessages.push({
+            sender: "ai",
+            text: this.$t('AIprompt'),
+        });
     },
     methods: {
         async sendMessage() {

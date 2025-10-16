@@ -133,19 +133,25 @@
 
                         <div v-else class="placeholder-content">
                             <Globe class="placeholder-icon" />
-                            <h3 class="placeholder-title">Explore the World</h3>
+<!--                            <h3 class="placeholder-title">Explore The World!</h3>-->
+                            <h3 class="placeholder-title">{{ $t('ExploreTheWorld') }}</h3>
                             <p class="placeholder-text">
-                                Click on any country marker on the map to discover their unique snacks and treats!
+                                {{ $t('ClickOnAnyCountryMarker') }}
                             </p>
+<!--                            <p class="placeholder-text">-->
+<!--                                Click on any country marker on the map to discover their unique snacks and treats!-->
+<!--                            </p>-->
 
                             <div class="stats-grid">
                                 <div class="stat-item">
                                     <div class="stat-number">{{ countries.length }}</div>
-                                    <div class="stat-label">Countries</div>
+                                    <div class="stat-label">{{ $t('countries') }}</div>
+<!--                                    <div class="stat-label">Countries</div>-->
                                 </div>
                                 <div class="stat-item">
                                     <div class="stat-number">{{ totalSnacks }}</div>
-                                    <div class="stat-label">Snacks</div>
+                                    <div class="stat-label">{{ $t('snacks') }}</div>
+<!--                                    <div class="stat-label">Snacks</div>-->
                                 </div>
                             </div>
                         </div>
