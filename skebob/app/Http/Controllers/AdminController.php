@@ -21,13 +21,14 @@ class AdminController extends Controller
         $orders = Order::select([
             'id', 'user_id', 'status', 'total_price', 'shipping_address',
             'ordered_at', 'created_at', 'updated_at'
-            ])->latest()->get();
+        ])->latest()->get();
 
-        $products = Product::select([
+        $products = Product::with(['brand', 'category'])
+        ->select([
             'id', 'name', 'price', 'amount_value', 'amount_unit', 'country_origin',
             'image', 'ingredients', 'nutritional_info', 'storage_conditions',
             'admin_id', 'brand_id', 'category_id', 'created_at', 'updated_at'
-            ])->latest()->get();
+        ])->latest()->get();
 
         $orderItems = OrderItem::with(['order', 'product'])
             ->select([
@@ -37,7 +38,7 @@ class AdminController extends Controller
 
         $users = User::select([
             'id', 'name', 'email', 'has_subscription', 'created_at', 'updated_at'
-            ])->latest()->get();
+        ])->latest()->get();
 
         $brands = Brand::select([
             'id', 'name', 'created_at', 'updated_at'
@@ -164,12 +165,15 @@ class AdminController extends Controller
             'price' => 'required|numeric|min:0',
             'amount_value' => 'required|numeric|min:0',
             'amount_unit' => 'required|in:g,kg,ml,l,gab',
+            'brand_id' => 'required|exists:brands,id',
+            'category_id' => 'required|exists:categories,id',
             'country_origin' => 'nullable|string|max:100',
             'ingredients' => 'nullable|string',
             'nutritional_info' => 'nullable|string',
             'storage_conditions' => 'nullable|string|max:255',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
         try {
             $imagePath = null;
             if ($request->hasFile('image')) {
@@ -178,22 +182,25 @@ class AdminController extends Controller
                 $image->move(public_path('images/front'), $imageName);
                 $imagePath = 'images/front/' . $imageName;
             }
+
             Product::create([
                 'name' => $request->name,
                 'slug' => Str::slug($request->name),
                 'price' => $request->price,
                 'amount_value' => $request->amount_value,
                 'amount_unit' => $request->amount_unit,
+                'brand_id' => $request->brand_id,
+                'category_id' => $request->category_id,
                 'country_origin' => $request->country_origin,
                 'image' => $imagePath,
                 'ingredients' => $request->ingredients,
                 'nutritional_info' => $request->nutritional_info,
                 'storage_conditions' => $request->storage_conditions,
-                'admin_id' => 1, // Default admin ID
-                'brand_id' => 1, // Default brand ID
-                'category_id' => 1, // Default category ID
+                'admin_id' => 1, // default admin ID
             ]);
+
             return redirect()->route('admin.dashboard')->with('success', 'Product added successfully!');
+
         } catch (\Exception $e) {
             \Log::error('Error adding product: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to add product: ' . $e->getMessage());
@@ -292,64 +299,58 @@ class AdminController extends Controller
     public function updateProduct(Request $request, $id): \Illuminate\Http\RedirectResponse
     {
         Log::info('Update product request received', ['id' => $id, 'data' => $request->all()]);
-
         $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'amount_value' => 'required|numeric|min:0',
             'amount_unit' => 'required|in:g,kg,ml,l,gab',
+            'brand_id' => 'required|exists:brands,id',
+            'category_id' => 'required|exists:categories,id',
             'country_origin' => 'nullable|string|max:100',
             'ingredients' => 'nullable|string',
             'nutritional_info' => 'nullable|string',
             'storage_conditions' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
         try {
             $product = Product::findOrFail($id);
             Log::info('Product found', ['product' => $product->toArray()]);
-
             $updateData = [
                 'name' => $request->name,
                 'slug' => Str::slug($request->name),
                 'price' => $request->price,
                 'amount_value' => $request->amount_value,
                 'amount_unit' => $request->amount_unit,
+                'brand_id' => $request->brand_id, // Add this
+                'category_id' => $request->category_id, // Add this
                 'country_origin' => $request->country_origin,
                 'ingredients' => $request->ingredients,
                 'nutritional_info' => $request->nutritional_info,
                 'storage_conditions' => $request->storage_conditions,
             ];
-
             Log::info('Update data prepared', $updateData);
-
-            // Handle new image upload
+            // new image upload
             if ($request->hasFile('image')) {
                 Log::info('New image uploaded');
-
-                // Delete old image if exists
+                // delete old image if exists
                 if ($product->image && file_exists(public_path($product->image))) {
                     Log::info('Deleting old image', ['path' => $product->image]);
                     unlink(public_path($product->image));
                 }
-
                 $image = $request->file('image');
                 $imageName = time() . '_' . $image->getClientOriginalName();
                 $image->move(public_path('images/front'), $imageName);
                 $updateData['image'] = 'images/front/' . $imageName;
-
                 Log::info('New image saved', ['path' => $updateData['image']]);
             }
-
+            // update the product
             $updated = $product->update($updateData);
             Log::info('Product update result', ['updated' => $updated, 'product_after' => $product->fresh()->toArray()]);
-
             if ($updated) {
                 return redirect()->route('admin.dashboard')->with('success', 'Product updated successfully!');
             } else {
                 return redirect()->back()->with('error', 'Failed to update product in database.');
             }
-
         } catch (\Exception $e) {
             Log::error('Error updating product: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to update product: ' . $e->getMessage());

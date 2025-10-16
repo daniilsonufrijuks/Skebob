@@ -133,6 +133,23 @@
                                     <option value="l">l</option>
                                     <option value="gab">gab</option>
                                 </select>
+
+                                <!-- Brand Selection -->
+                                <select v-model="editProduct.brand_id" class="form-input">
+                                    <option value="">Select Brand</option>
+                                    <option v-for="brand in brands" :key="brand.id" :value="brand.id">
+                                        {{ brand.name }}
+                                    </option>
+                                </select>
+
+                                <!-- Category Selection -->
+                                <select v-model="editProduct.category_id" class="form-input">
+                                    <option value="">Select Category</option>
+                                    <option v-for="category in categories" :key="category.id" :value="category.id">
+                                        {{ category.name }}
+                                    </option>
+                                </select>
+
                                 <input v-model="editProduct.country_origin" placeholder="Country Origin" class="form-input" />
                                 <textarea v-model="editProduct.ingredients" placeholder="Ingredients" class="form-input"></textarea>
                                 <textarea v-model="editProduct.nutritional_info" placeholder="Nutritional Info" class="form-input"></textarea>
@@ -170,6 +187,19 @@
                             <p><strong>Name:</strong> {{ product.name }}</p>
                             <p><strong>Price:</strong> ${{ product.price }}</p>
                             <p><strong>Amount:</strong> {{ product.amount_value }} {{ product.amount_unit }}</p>
+
+                            <!-- Add Brand Name -->
+                            <p><strong>Brand: </strong>
+                                <span v-if="product.brand">{{ product.brand.name }}</span>
+                                <span v-else class="text-muted">N/A</span>
+                            </p>
+
+                            <!-- Add Category Name -->
+                            <p><strong>Category: </strong>
+                                <span v-if="product.category">{{ product.category.name }}</span>
+                                <span v-else class="text-muted">N/A</span>
+                            </p>
+
                             <p><strong>Country Origin:</strong> {{ product.country_origin || 'N/A' }}</p>
                             <p><strong>Ingredients:</strong> {{ product.ingredients || 'N/A' }}</p>
                             <p><strong>Nutritional Info:</strong> {{ product.nutritional_info || 'N/A' }}</p>
@@ -283,6 +313,28 @@
                         </select>
                     </div>
 
+                    <!-- Brand Selection -->
+                    <div class="form-group">
+                        <label>Brand *</label>
+                        <select v-model="newProduct.brand_id" required>
+                            <option value="">Select Brand</option>
+                            <option v-for="brand in brands" :key="brand.id" :value="brand.id">
+                                {{ brand.name }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Category Selection -->
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select v-model="newProduct.category_id" required>
+                            <option value="">Select Category</option>
+                            <option v-for="category in categories" :key="category.id" :value="category.id">
+                                {{ category.name }}
+                            </option>
+                        </select>
+                    </div>
+
                     <div class="form-group">
                         <label>Country Origin</label>
                         <input v-model="newProduct.country_origin" type="text" placeholder="Country Origin" />
@@ -365,6 +417,8 @@ export default {
                 price: '',
                 amount_value: '',
                 amount_unit: '',
+                brand_id: '',
+                category_id: '',
                 country_origin: '',
                 ingredients: '',
                 nutritional_info: '',
@@ -393,13 +447,15 @@ export default {
     },
     methods: {
         startEdit(product) {
-            // create a clean copy without the image path string
+            // Create a clean copy without the image path string
             this.editProduct = {
                 id: product.id,
                 name: product.name,
                 price: product.price,
                 amount_value: product.amount_value,
                 amount_unit: product.amount_unit,
+                brand_id: product.brand_id, // Add this
+                category_id: product.category_id, // Add this
                 country_origin: product.country_origin,
                 ingredients: product.ingredients,
                 nutritional_info: product.nutritional_info,
@@ -417,15 +473,15 @@ export default {
 
         async updateProduct() {
             if (!this.editProduct) return;
-
             const formData = new FormData();
-
             // only append the fields that should be updated
             const productData = {
                 name: this.editProduct.name,
                 price: this.editProduct.price,
                 amount_value: this.editProduct.amount_value,
                 amount_unit: this.editProduct.amount_unit,
+                brand_id: this.editProduct.brand_id,
+                category_id: this.editProduct.category_id,
                 country_origin: this.editProduct.country_origin,
                 ingredients: this.editProduct.ingredients,
                 nutritional_info: this.editProduct.nutritional_info,
@@ -471,38 +527,47 @@ export default {
         },
 
         async addProduct() {
-            // validate required fields
-            if (!this.newProduct.name || !this.newProduct.price || !this.newProduct.amount_value || !this.newProduct.amount_unit || !this.imageFile) {
+            // Validate required fields
+            if (!this.newProduct.name || !this.newProduct.price || !this.newProduct.amount_value ||
+                !this.newProduct.amount_unit || !this.newProduct.brand_id || !this.newProduct.category_id ||
+                !this.imageFile) {
                 this.showNotification('Please fill all required fields and select an image', 'error');
                 return;
             }
+
             this.isAdding = true;
+
             const formData = new FormData();
-            // append all product data
+
+            // Append all product data
             Object.keys(this.newProduct).forEach((key) => {
                 if (this.newProduct[key] !== null && this.newProduct[key] !== undefined && this.newProduct[key] !== '') {
                     formData.append(key, this.newProduct[key]);
                 }
             });
-            // append image file
+
+            // Append image file
             if (this.imageFile) {
                 formData.append('image', this.imageFile);
             }
-            // set default values for required foreign keys
-            formData.append('brand_id', '1');
-            formData.append('category_id', '1');
-            formData.append('admin_id', '1');
+
+            // Remove the hardcoded foreign keys since we're getting them from the form
+            // formData.append('brand_id', '1'); // Remove this line
+            // formData.append('category_id', '1'); // Remove this line
+            formData.append('admin_id', '1'); // Keep admin_id if it's still needed
+
             console.log('Adding new product with data:');
             for (let [key, value] of formData.entries()) {
                 console.log(key, value);
             }
+
             try {
                 await this.$inertia.post('/admin/products', formData, {
                     onSuccess: () => {
                         this.showNotification('Product added successfully!', 'success');
                         this.resetForm();
                         this.isAdding = false;
-                        // switch to products tab to see the new product
+                        // Switch to products tab to see the new product
                         this.activeTab = 'products';
                     },
                     onError: (errors) => {
@@ -653,6 +718,8 @@ export default {
                 price: '',
                 amount_value: '',
                 amount_unit: '',
+                brand_id: '',
+                category_id: '',
                 country_origin: '',
                 ingredients: '',
                 nutritional_info: '',
@@ -660,7 +727,7 @@ export default {
             };
             this.imageFile = null;
             this.imagePreview = null;
-            // reset file input
+            // Reset file input
             const fileInput = document.querySelector('input[type="file"]');
             if (fileInput) fileInput.value = '';
         },
@@ -1061,6 +1128,11 @@ input[type="file"] {
 .add-category-form .form {
     max-width: 400px;
     margin: 0;
+}
+
+.text-muted {
+    color: #6c757d;
+    font-style: italic;
 }
 
 @media (max-width: 768px) {
