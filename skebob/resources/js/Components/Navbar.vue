@@ -1,9 +1,9 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { useUser } from '../Composables/useUser';
 import axios from 'axios';
 import { useRouter } from 'vue-router';  // For navigation after logout
-import { useI18n } from 'vue-i18n';
+import { useI18n } from 'vue-i18n';      // For translating stuff
 
 const { isLoggedIn, user } = useUser(); // Use your custom composable to check login status
 const isMenuActive = ref(false);
@@ -38,9 +38,14 @@ const goToUserPage = () => {
 };
 
 // FOR LANGUAGE CHANGE
-const currentLang = ref('en');
+// const currentLang = ref('en');
 const { locale } = useI18n();
+const currentLang = ref(localStorage.getItem('lang') || 'en');
 
+// Sync Vue i18n locale with stored value on mount
+locale.value = currentLang.value;
+
+// Change language when dropdown changes
 const switchLanguage = () => {
     // Save to localStorage for persistence
     locale.value = currentLang.value;
@@ -51,6 +56,13 @@ const switchLanguage = () => {
 if (localStorage.getItem('lang')) {
     currentLang.value = localStorage.getItem('lang');
 }
+
+// Keep locale reactive if something changes externally
+watchEffect(() => {
+    if (locale.value !== currentLang.value) {
+        currentLang.value = locale.value;
+    }
+});
 </script>
 
 

@@ -9,7 +9,7 @@ import { ZiggyVue } from 'ziggy-js';
 import DefaultLayout from "@/Layouts/DefaultLayout.vue";
 import 'font-awesome/css/font-awesome.css';
 import store from "@/Cart/cart.js";
-import i18n from '../js/i18n.js';
+import i18n from './i18n.js';
 
 // const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -26,13 +26,21 @@ createInertiaApp({
             return page;
         }),
     setup({el, App, props, plugin}) {
-        return createApp({render: () => h(App, props)})
+        const vueApp = createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
-            //.use(router)
             .use(store)
-            .use(i18n)
-            .mount(el);
+            .use(i18n); // ✅ Register i18n globally
+
+        vueApp.mount(el);
+        return vueApp;
+        // return createApp({render: () => h(App, props)})
+        //     .use(plugin)
+        //     .use(ZiggyVue)
+        //     //.use(router)
+        //     .use(store)
+        //     .use(i18n)
+        //     .mount(el);
     },
     progress: {
         color: '#4B5563',
