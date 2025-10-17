@@ -2,10 +2,14 @@
     <section class="categories-section">
         <div class="categories-container">
             <div class="categories-header">
-                <h2 class="categories-title">Shop by Category</h2>
+                <h2 class="categories-title">{{ $t('CategoriesTitle') }}</h2>
                 <p class="categories-subtitle">
-                    Explore our wide variety of international snacks and treats from around the world
+                    {{ $t('CategoriesSubtitle') }}
                 </p>
+<!--                <h2 class="categories-title">Shop by Category</h2>-->
+<!--                <p class="categories-subtitle">-->
+<!--                    Explore our wide variety of international snacks and treats from around the world-->
+<!--                </p>-->
             </div>
 
             <div class="categories-grid">
@@ -36,7 +40,7 @@
                             <svg class="button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5L2 21m5.5-8v0"></path>
                             </svg>
-                            SHOP NOW
+                            {{ $t('CategoriesSHOPNOW') }}
                         </button>
                     </div>
 
@@ -59,9 +63,13 @@
             <div class="featured-banner">
                 <div class="banner-content">
                     <div class="banner-text">
-                        <h3 class="banner-title">Can't decide? Try our Mystery Boxes!</h3>
-                        <p class="banner-subtitle">Let us surprise you with a curated selection from multiple categories</p>
+                        <h3 class="banner-title">{{ $t('BannerTitle') }}</h3>
+                        <p class="banner-subtitle">{{ $t('BannerSubtitle') }}</p>
                     </div>
+<!--                    <div class="banner-text">-->
+<!--                        <h3 class="banner-title">Can't decide? Try our Mystery Boxes!</h3>-->
+<!--                        <p class="banner-subtitle">Let us surprise you with a curated selection from multiple categories</p>-->
+<!--                    </div>-->
                     <button
                         @click="handleMysteryBoxClick"
                         class="banner-button"
@@ -69,7 +77,7 @@
                         <svg class="banner-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                         </svg>
-                        Explore Mystery Boxes
+                        {{ $t('ExploreMysteryBoxes') }}
                     </button>
                 </div>
             </div>

@@ -88,6 +88,41 @@ const messages = {
         WorkingSaturday: 'Saturday: 10:00 AM - 4:00 PM',
         WorkingSunday: 'Sunday: Closed',
         InteractiveMap: '📍 Interactive Map',
+        CategoriesTitle: 'Shop By Category',
+        CategoriesSubtitle: 'Explore our wide variety of international ' +
+            'snacks and treats from around the world',
+        CategoriesSHOPNOW: 'SHOP NOW',
+        BannerTitle: 'Try our Mystery Boxes!',
+        BannerSubtitle: 'Let us surprise you with a curated selection from multiple categories',
+        ExploreMysteryBoxes: 'Explore Mystery Boxes',
+        AboutWelcome: 'Welcome to Skebob Market!',
+        AboutWelcomeMessage: 'Welcome to Skebob Market – your one-stop destination ' +
+            'for unique and delicious snacks! Thank you for choosing us. We\'re excited ' +
+            'to be part of your snacking journey and bring you flavors that surprise, ' +
+            'delight, and inspire every bite.',
+        AboutMissionMessage: 'Explore our carefully curated selection and ' +
+            'discover why Skebob Market is more than just snacks – it\'s an experience!',
+        StartExploring: 'Start Exploring',
+        AboutUniqueSnacks: 'Unique Snacks',
+        AboutHappyCustomers: 'Happy Customers',
+        support: 'Support',
+        WhatMakesUsSpecial: 'What Makes Us Special',
+        AboutValueTitle1: 'Premium Quality',
+        AboutValueDescription1: 'Every snack is carefully selected for ' +
+            'exceptional taste and quality standards.',
+        AboutValueTitle2: 'Global Sourcing',
+        AboutValueDescription2: 'We travel the world to bring you ' +
+            'authentic flavors from every corner of the globe.',
+        AboutValueTitle3: 'Customer Love',
+        AboutValueDescription3: 'Your satisfaction is our priority. ' +
+            'We\'re here to make every bite memorable.',
+        AboutValueTitle4: 'Trusted Brand',
+        AboutValueDescription4: 'Join thousands who trust Skebob ' +
+            'for their snacking adventures and discoveries.',
+        CompanyTitle: 'Powered by Innovation',
+        CompanyDescription: 'Skebob Market is proudly developed and maintained',
+        BrandName: 'Braincell DEV GROUP',
+        BrandTagline: 'Crafting Digital Experiences',
         // ...add more keys
     },
     lv: {
@@ -177,6 +212,41 @@ const messages = {
         WorkingSaturday: 'Sestdien: 10:00 - 16:00',
         WorkingSunday: 'Svētdien: slēgts',
         InteractiveMap: '📍 Interaktīvā karte',
+        CategoriesTitle: 'Iepērcies pēc kategorijas',
+        CategoriesSubtitle: 'Iepazīsties ar mūsu plašo starptautisko ' +
+            'uzkodu un gardumu klāstu no visas pasaules!',
+        CategoriesSHOPNOW: 'IEPIKTIES TAGAD',
+        BannerTitle: 'Nevari izlemt? Izmēģini mūsu Noslēpumu kastes!',
+        BannerSubtitle: 'Ļaujiet mums jūs pārsteigt ar rūpīgi atlasītu izlasi no vairākām kategorijām',
+        ExploreMysteryBoxes: 'Izpētiet noslēmumu kastes',
+        AboutWelcome: 'Laipni lūgti Skebob tirgū!',
+        AboutWelcomeMessage: 'Laipni lūdzam Skebob marketā — jūsu unikālajā ' +
+            'un gardajā uzkodu veikalā! Paldies, ka izvēlējāties mūs. ' +
+            'Mēs priecājamies būt daļa no jūsu uzkodu ceļojuma un piedāvāt garšas, ' +
+            'kas pārsteidz, iepriecina un iedvesmo ar katru kumosu.',
+        AboutMissionMessage: 'Iepazīsties ar mūsu rūpīgi atlasīto piedāvājumu un ' +
+            'atklājiet, kāpēc Skebob Market ir vairāk nekā tikai uzkodas – tā ir pieredze!',
+        StartExploring: 'Sākt izpētīt',
+        AboutUniqueSnacks: 'Unikālie gardumi',
+        AboutHappyCustomers: 'Apmierināti klienti',
+        support: 'Atbalsts',
+        WhatMakesUsSpecial: 'Kas mūs padara īpašus',
+        AboutValueTitle1: 'Premium kvalitāte',
+        AboutValueDescription1: 'Katra uzkoda tiek rūpīgi atlasīta, ' +
+            'lai nodrošinātu izcilu garšu un kvalitātes standartus.',
+        AboutValueTitle2: 'Globālā piegāde',
+        AboutValueDescription2: 'Mēs ceļojam pa pasauli, lai sniegtu ' +
+            'jums autentiskas garšas no visiem zemeslodes nostūriem.',
+        AboutValueTitle3: 'Klientu mīlestība',
+        AboutValueDescription3: 'Jūsu apmierinātība ir mūsu prioritāte. ' +
+            'Mēs esam šeit, lai padarītu katru kumosu neaizmirstamu.',
+        AboutValueTitle4: 'Uzticams zīmols',
+        AboutValueDescription4: 'Pievienojies tūkstošiem cilvēku, kas ' +
+            'uzticas Skebob savos uzkodu piedzīvojumos un atklājumos.',
+        CompanyTitle: 'Darbojas ar inovācijām',
+        CompanyDescription: 'Skebob tirgus tiek lepni attīstīts un uzturēts',
+        BrandName: 'Braincell IZSTRĀDĀTĀJU GRUPA',
+        BrandTagline: 'Digitālās pieredzes veidošana',
         // ...add more keys
     }
 };

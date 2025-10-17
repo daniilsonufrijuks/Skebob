@@ -28,8 +28,19 @@ class ProductsController extends Controller
             $query->where('price', '<=', $request->input('price_max'));
         }
 
-        // Fetch the filtered results
-        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image', 'country_origin']);
+        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image', 'country_origin'])
+            ->map(function ($product) {
+                $product->name = __("products." . $product->name);
+                return $product;
+            });
+//        // Fetch the filtered results
+//        $products = $query->get(['id', 'name', 'price', 'ingredients', 'image', 'country_origin']);
+//
+//        // 🔹 Translate each product name using Laravel's __() helper
+//        $products->transform(function ($product) {
+//            $product->name = __("products." . $product->name);
+//            return $product;
+//        });
 
         return response()->json($products);
     }
@@ -54,6 +65,12 @@ class ProductsController extends Controller
         // Fetch the filtered results
         $products = $query->get(['id', 'name', 'price', 'ingredients', 'image', 'country_origin']);
 
+        // 🔹 Translate each product name using Laravel's __() helper
+        $products->transform(function ($product) {
+            $product->name = __("products." . $product->name);
+            return $product;
+        });
+
         return response()->json($products);
     }
 
@@ -76,6 +93,12 @@ class ProductsController extends Controller
 
         // Fetch the filtered results
         $products = $query->get(['id', 'name', 'price', 'ingredients', 'image', 'country_origin']);
+
+        // 🔹 Translate each product name using Laravel's __() helper
+        $products->transform(function ($product) {
+            $product->name = __("products." . $product->name);
+            return $product;
+        });
 
         return response()->json($products);
     }
@@ -101,6 +124,12 @@ class ProductsController extends Controller
         // Fetch the filtered results
         $products = $query->get(['id', 'name', 'price', 'ingredients', 'image', 'country_origin']);
 
+        // 🔹 Translate each product name using Laravel's __() helper
+        $products->transform(function ($product) {
+            $product->name = __("products." . $product->name);
+            return $product;
+        });
+
         return response()->json($products);
     }
 
@@ -125,6 +154,12 @@ class ProductsController extends Controller
         // Fetch the filtered results
         $products = $query->get(['id', 'name', 'price', 'ingredients', 'image', 'country_origin']);
 
+        // 🔹 Translate each product name using Laravel's __() helper
+        $products->transform(function ($product) {
+            $product->name = __("products." . $product->name);
+            return $product;
+        });
+
         return response()->json($products);
     }
 
@@ -147,6 +182,12 @@ class ProductsController extends Controller
 
         // Fetch the filtered results
         $products = $query->get(['id', 'name', 'price', 'ingredients', 'image', 'country_origin']);
+
+        // 🔹 Translate each product name using Laravel's __() helper
+        $products->transform(function ($product) {
+            $product->name = __("products." . $product->name);
+            return $product;
+        });
 
         return response()->json($products);
     }
@@ -173,6 +214,12 @@ class ProductsController extends Controller
         // Fetch the filtered results
         $products = $query->get(['id', 'name', 'price', 'ingredients', 'image', 'country_origin']);
 
+        // 🔹 Translate each product name using Laravel's __() helper
+        $products->transform(function ($product) {
+            $product->name = __("products." . $product->name);
+            return $product;
+        });
+
         return response()->json($products);
     }
 
@@ -195,6 +242,12 @@ class ProductsController extends Controller
 
         // Fetch the filtered results
         $products = $query->get(['id', 'name', 'price', 'ingredients', 'image', 'country_origin']);
+
+        // 🔹 Translate each product name using Laravel's __() helper
+        $products->transform(function ($product) {
+            $product->name = __("products." . $product->name);
+            return $product;
+        });
 
         return response()->json($products);
     }
