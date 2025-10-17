@@ -4,25 +4,31 @@
     <div class="main-container">
         <div v-if="!isAuthenticated" class="auth-required">
             <div class="auth-message">
-                <h3>Authentication Required</h3>
-                <p>Please log in to proceed with your order.</p>
+                <h3>{{ $t('AuthenticationRequired') }}</h3>
+                <p>{{ $t('PleaseLogIn') }}.</p>
+<!--                <h3>Authentication Required</h3>-->
+<!--                <p>Please log in to proceed with your order.</p>-->
+
                 <div class="auth-actions">
                     <button @click="redirectToLogin" class="login-button">
-                        Log In
+                        {{ $t('login') }}
                     </button>
                     <button @click="redirectToRegister" class="register-button">
-                        Create Account
+                        {{ $t('CreateAccount') }}
                     </button>
                 </div>
             </div>
         </div>
 
         <div v-else class="order-container">
-            <h2 class="order-title">Order Overview</h2>
+            <h2 class="order-title">{{ $t('OrderOverview') }}</h2>
+<!--            <h2 class="order-title">Order Overview</h2>-->
 
             <!-- Products Overview Section -->
             <div class="products-section">
-                <h3>Products in Your Order</h3>
+                <h3>{{ $t('ProductsInYourOrder') }}</h3>
+<!--                <h3>Products in Your Order</h3>-->
+
                 <div v-if="cartItems.length > 0">
                     <div class="order-item" v-for="item in cartItems" :key="item.id">
                         <img :src="item.image" alt="Product Image" class="order-item-img" />
@@ -31,72 +37,81 @@
                             <p>{{ item.description }}</p>
                             <p>Price: ${{ item.price }}</p>
                             <p>Quantity: {{ item.quantity }}</p>
-                            <p class="item-total">Item Total: ${{ (item.price * item.quantity).toFixed(2) }}</p>
+                            <p class="item-total">{{ $t('ItemTotal') }}: ${{ (item.price * item.quantity).toFixed(2) }}</p>
+<!--                            <p class="item-total">Item Total: ${{ (item.price * item.quantity).toFixed(2) }}</p>-->
                         </div>
                     </div>
                 </div>
-                <p v-else class="empty-message">No items in your order.</p>
+                <p v-else class="empty-message">{{ $t('NoItemsInYourOrder') }}.</p>
+<!--                <p v-else class="empty-message">No items in your order.</p>-->
             </div>
 
             <!-- Shipping Address Section -->
             <div class="shipping-section">
-                <h3>Shipping Information</h3>
+                <h3>{{ $t('ShippingInformation') }}</h3>
+<!--                <h3>Shipping Information</h3>-->
+
                 <form @submit.prevent="validateAndProceed" class="shipping-form">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="email">Email Address *</label>
+                            <label for="email">{{ $t('EmailAddress') }} *</label>
+<!--                            <label for="email">Email Address *</label>-->
                             <input
                                 type="email"
                                 id="email"
                                 v-model="shippingAddress.email"
                                 required
-                                placeholder="Enter your email"
+                                :placeholder="$t('EnterYourEmail')"
                             >
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="address">Street Address *</label>
+                        <label for="address">{{ $t('StreetAddress') }} *</label>
+<!--                        <label for="address">Street Address *</label>-->
                         <input
                             type="text"
                             id="address"
                             v-model="shippingAddress.address"
                             required
-                            placeholder="Enter your street address"
+                            :placeholder="$t('EnterYourStreetAddress')"
                         >
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="city">City *</label>
+                            <label for="city">{{ $t('City') }} *</label>
+<!--                            <label for="city">City *</label>-->
                             <input
                                 type="text"
                                 id="city"
                                 v-model="shippingAddress.city"
                                 required
-                                placeholder="Enter your city"
+                                :placeholder="$t('EnterYourCity')"
                             >
                         </div>
                         <div class="form-group">
-                            <label for="zipCode">ZIP Code *</label>
+                            <label for="zipCode">{{ $t('ZipCode') }} *</label>
+<!--                            <label for="zipCode">ZIP Code *</label>-->
                             <input
                                 type="text"
                                 id="zipCode"
                                 v-model="shippingAddress.zipCode"
                                 required
-                                placeholder="Enter ZIP code"
+                                :placeholder="$t('EnterZipCode')"
                             >
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="country">Country *</label>
+                        <label for="country">{{ $t('Country') }} *</label>
+<!--                        <label for="country">Country *</label>-->
                         <input
                             type="text"
                             id="country"
                             v-model="shippingAddress.country"
                             required
-                            placeholder="Enter your country"
+                            :placeholder="$t('EnterYourCountry')"
                         >
                     </div>
                 </form>
@@ -104,18 +119,23 @@
 
             <!-- Order Summary Section -->
             <div class="order-summary">
-                <h3>Order Summary</h3>
+                <h3>{{ $t('OrderSummary') }}</h3>
+<!--                <h3>Order Summary</h3>-->
+
                 <div class="summary-details">
                     <div class="summary-row">
-                        <span>Subtotal:</span>
+                        <span>{{ $t('subtotal') }}:</span>
+<!--                        <span>Subtotal:</span>-->
                         <span>${{ cartTotal.toFixed(2) }}</span>
                     </div>
                     <div class="summary-row">
-                        <span>Shipping:</span>
+                        <span>{{ $t('Shipping') }}:</span>
+<!--                        <span>Shipping:</span>-->
                         <span>${{ shippingCost.toFixed(2) }}</span>
                     </div>
                     <div class="summary-row total-row">
-                        <span><strong>Total:</strong></span>
+                        <span><strong>{{ $t('total') }}:</strong></span>
+<!--                        <span><strong>Total:</strong></span>-->
                         <span><strong>${{ orderTotal.toFixed(2) }}</strong></span>
                     </div>
                 </div>
@@ -124,10 +144,10 @@
             <!-- Action Buttons -->
             <div class="order-actions">
                 <button @click="goBackToCart" class="back-button">
-                    ← Back to Cart
+                    ← {{ $t('BackToCart') }}
                 </button>
                 <button @click="validateAndProceed" class="checkout-button" :disabled="processing">
-                    {{ processing ? 'Processing...' : 'Proceed to Payment' }}
+                    {{ processing ? $t('Processing') : $t('ProceedToPayment') }}
                 </button>
             </div>
         </div>

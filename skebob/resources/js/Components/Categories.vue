@@ -25,17 +25,20 @@
                     <div class="card-image-container">
                         <img
                             :src="category.image"
-                            :alt="category.name"
+                            :alt="$t(`category.${category.key}.name`)"
                             class="card-image"
                         />
                         <div class="image-overlay"></div>
                     </div>
 
                     <div class="card-content">
-                        <p class="category-name">{{ category.name }}</p>
+                        <p class="category-name">{{ $t(`category.${category.key}.name`) }}</p>
+<!--                        <p class="category-name">{{ category.name }}</p>-->
+
                         <button
                             @click.stop="handleShopNowClick(category)"
                             class="shop-button"
+                            :aria-label="$t('CategoriesSHOPNOW')"
                         >
                             <svg class="button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5L2 21m5.5-8v0"></path>
@@ -48,11 +51,13 @@
                     <div class="hover-overlay">
                         <div class="hover-content">
                             <h3 class="hover-title">{{ category.name }}</h3>
-                            <p class="hover-description">{{ category.description }}</p>
+                            <p class="hover-description">{{ $t(`category.${category.key}.description`) }}</p>
+<!--                            <p class="hover-description">{{ category.description }}</p>-->
+
                             <div class="hover-stats">
-                                <span class="stat-item">{{ category.itemCount }}+ items</span>
+                                <span class="stat-item">{{ category.itemCount }}+ {{ $t('items') }}</span>
                                 <span class="stat-divider">•</span>
-                                <span class="stat-item">{{ category.brands }}+ brands</span>
+                                <span class="stat-item">{{ category.brands }}+ {{ $t('brands') }}</span>
                             </div>
                         </div>
                     </div>
@@ -87,12 +92,16 @@
 
 <script setup>
 import { ref } from 'vue';
+// import { useRouter } from 'vue-router';
+//
+// const router = useRouter();
 
 const categories = ref([
     {
         id: 1,
-        name: "CHIPS",
-        description: "Crispy and crunchy chips from around the world with unique flavors",
+        key: 'chips',
+        // name: "CHIPS",
+        // description: "Crispy and crunchy chips from around the world with unique flavors",
         image: "https://images.unsplash.com/photo-1633536705882-d331e8d1858c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwb3RhdG8lMjBjaGlwcyUyMHNuYWNrcyUyMGNvbG9yZnVsfGVufDF8fHx8MTc1Nzc3MDcyNHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
         route: "/chips",
         itemCount: 150,
@@ -100,8 +109,9 @@ const categories = ref([
     },
     {
         id: 2,
-        name: "CHOCOLATES",
-        description: "Premium chocolates and cocoa treats from artisan chocolatiers worldwide",
+        key: 'chocolates',
+        // name: "CHOCOLATES",
+        // description: "Premium chocolates and cocoa treats from artisan chocolatiers worldwide",
         image: "https://images.unsplash.com/photo-1702743692629-b11e94c63b0a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaG9jb2xhdGUlMjBiYXJzJTIwY2FuZHklMjBzd2VldHxlbnwxfHx8fDE3NTc3NzA3Mjd8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
         route: "/chocolates",
         itemCount: 120,
@@ -109,8 +119,9 @@ const categories = ref([
     },
     {
         id: 3,
-        name: "DRINKS",
-        description: "Refreshing beverages and unique drinks you won't find anywhere else",
+        key: 'drinks',
+        // name: "DRINKS",
+        // description: "Refreshing beverages and unique drinks you won't find anywhere else",
         image: "https://images.unsplash.com/photo-1634825881542-9bd54ca437ea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbmVyZ3klMjBkcmlua3MlMjBiZXZlcmFnZXMlMjBjb2xvcmZ1bHxlbnwxfHx8fDE3NTc3NzA3Mjl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
         route: "/drinks",
         itemCount: 80,
@@ -118,8 +129,9 @@ const categories = ref([
     },
     {
         id: 4,
-        name: "NUTS",
-        description: "Premium nuts and trail mixes packed with nutrition and flavor",
+        key: 'nuts',
+        // name: "NUTS",
+        // description: "Premium nuts and trail mixes packed with nutrition and flavor",
         image: "https://images.unsplash.com/photo-1671981200629-014c03829abb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtaXhlZCUyMG51dHMlMjBzbmFja3MlMjBoZWFsdGh5fGVufDF8fHx8MTc1Nzc3MDczMnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
         route: "/nuts",
         itemCount: 90,
@@ -127,8 +139,9 @@ const categories = ref([
     },
     {
         id: 5,
-        name: "BISCUITS",
-        description: "Delicious biscuits and cookies with traditional and modern flavors",
+        key: 'biscuits',
+        // name: "BISCUITS",
+        // description: "Delicious biscuits and cookies with traditional and modern flavors",
         image: "https://images.unsplash.com/photo-1657021717831-73211ff92daf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiaXNjdWl0cyUyMGNvb2tpZXMlMjBzbmFja3N8ZW58MXx8fHwxNzU3NzcwNzM0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
         route: "/biscuits",
         itemCount: 110,
@@ -136,8 +149,9 @@ const categories = ref([
     },
     {
         id: 6,
-        name: "FRUIT SNACKS",
-        description: "Natural and artificial fruit snacks bursting with sweet flavors",
+        key: 'fruitsnacks',
+        // name: "FRUIT SNACKS",
+        // description: "Natural and artificial fruit snacks bursting with sweet flavors",
         image: "https://images.unsplash.com/photo-1599738675654-125cf46f3b69?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmcnVpdCUyMHNuYWNrcyUyMGd1bW15JTIwY29sb3JmdWx8ZW58MXx8fHwxNzU3NzcwNzM3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
         route: "/fruitsnacks",
         itemCount: 75,
@@ -145,8 +159,9 @@ const categories = ref([
     },
     {
         id: 7,
-        name: "CANDY",
-        description: "Sweet candies and confections from every corner of the globe",
+        key: 'candy',
+        // name: "CANDY",
+        // description: "Sweet candies and confections from every corner of the globe",
         image: "https://images.unsplash.com/photo-1476401113995-b136bdfce591?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb2xvcmZ1bCUyMGNhbmR5JTIwc3dlZXRzJTIwZ3VtbXl8ZW58MXx8fHwxNzU3NzcwNzM5fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
         route: "/candy",
         itemCount: 130,
@@ -154,8 +169,9 @@ const categories = ref([
     },
     {
         id: 8,
-        name: "SNACK BOXES",
-        description: "Curated snack boxes featuring the best selections from multiple categories",
+        key: 'snackboxes',
+        // name: "SNACK BOXES",
+        // description: "Curated snack boxes featuring the best selections from multiple categories",
         image: "https://images.unsplash.com/photo-1736788268738-79afa3312430?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzbmFjayUyMGJveCUyMHN1YnNjcmlwdGlvbiUyMHZhcmlldHl8ZW58MXx8fHwxNzU3NzcwNzQzfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
         route: "/snackboxes",
         itemCount: 45,
@@ -163,11 +179,20 @@ const categories = ref([
     }
 ]);
 
+// const handleCategoryClick = (category) => {
+//     router.push(category.route);
+// };
+//
+// const handleShopNowClick = (category) => {
+//     router.push(category.route);
+// };
+
 const handleCategoryClick = (category) => {
     console.log('Category clicked:', category.name);
     // Navigate to category page
     window.location.href = category.route;
 };
+
 
 const handleShopNowClick = (category) => {
     console.log('Shop now clicked for:', category.name);
