@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContactRequest;
 use App\Mail\ContactMail;
+use App\Mail\UserContact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -36,7 +37,10 @@ class ContactController extends Controller
 
     public function __invoke(ContactRequest $request)
     {
-        Mail::to('monolithabout@gmail.com')->send(new ContactMail($request->name, $request->email, $request->body));
+        \Log::info('CONTACT FORM SUBMITTED', $request->all());
+        Mail::to('skebob-shop@outlook.com')->send(new UserContact($request->name, $request->email, $request->body));
+        \Log::info('MAIL SENT FROM CONTACT FORM');
         return redirect()->back();
+
     }
 }
