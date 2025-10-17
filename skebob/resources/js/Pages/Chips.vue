@@ -9,19 +9,21 @@
             <input
                 v-model.number="filters.price_min"
                 type="number"
-                placeholder="Min Price"
+                :placeholder="$t('MinPrice')"
                 @input="fetchProducts"
             />
             <input
                 v-model.number="filters.price_max"
                 type="number"
-                placeholder="Max Price"
+                :placeholder="$t('MaxPrice')"
                 @input="fetchProducts"
             />
             <!-- Sorting Dropdown -->
             <select v-model="sortOrder" @change="sortProducts">
-                <option value="asc">Lowest Price First</option>
-                <option value="desc">Highest Price First</option>
+                <option value="asc">{{ $t('LowestPriceFirst') }}</option>
+                <option value="desc">{{ $t('HighestPriceFirst') }}</option>
+<!--                <option value="asc">Lowest Price First</option>-->
+<!--                <option value="desc">Highest Price First</option>-->
             </select>
         </div>
         <div class="products">

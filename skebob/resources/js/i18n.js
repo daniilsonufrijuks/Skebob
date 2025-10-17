@@ -181,6 +181,10 @@ const messages = {
         DontHaveAnAccount: 'Don\'t have an account',
         RepeatPassword: 'Repeat Password',
         AlreadyHaveAnAccount: 'Already Have An Account',
+        LowestPriceFirst: 'Lowest Price First',
+        HighestPriceFirst: 'Highest Price First',
+        MinPrice: 'Min Price',
+        MaxPrice: 'Max Price',
         // ...add more keys
     },
     lv: {
@@ -364,6 +368,10 @@ const messages = {
         DontHaveAnAccount: 'Jums nav konta',
         RepeatPassword: 'Atkārtojiet paroli',
         AlreadyHaveAnAccount: 'Jau ir konts',
+        LowestPriceFirst: 'Vislētākais vispirms',
+        HighestPriceFirst: 'Visdārgākais vispirms',
+        MinPrice: 'Minimālā cena',
+        MaxPrice: 'Maksimālā cena',
         // ...add more keys
     }
 };
