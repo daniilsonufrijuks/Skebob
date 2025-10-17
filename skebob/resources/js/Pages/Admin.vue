@@ -191,13 +191,13 @@
                             <!-- Add Brand Name -->
                             <p><strong>Brand: </strong>
                                 <span v-if="product.brand">{{ product.brand.name }}</span>
-                                <span v-else class="text-muted">N/A</span>
+                                <span v-else>N/A</span>
                             </p>
 
                             <!-- Add Category Name -->
                             <p><strong>Category: </strong>
                                 <span v-if="product.category">{{ product.category.name }}</span>
-                                <span v-else class="text-muted">N/A</span>
+                                <span v-else>N/A</span>
                             </p>
 
                             <p><strong>Country Origin:</strong> {{ product.country_origin || 'N/A' }}</p>
@@ -1128,11 +1128,6 @@ input[type="file"] {
 .add-category-form .form {
     max-width: 400px;
     margin: 0;
-}
-
-.text-muted {
-    color: #6c757d;
-    font-style: italic;
 }
 
 @media (max-width: 768px) {
