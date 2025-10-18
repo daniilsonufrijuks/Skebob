@@ -91,20 +91,40 @@ export default {
                 price_max: this.filters.price_max ?? 100000,
             }).toString();
 
-            fetch(`/products/chips?${params}`)
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then((data) => {
-                    console.log("Fetched products:", data);
-                    this.products = data;
-                })
-                .catch((error) => {
-                    console.error("Error fetching products:", error);
-                });
+            fetch(`/products/chips?${params}`, {
+                headers: {
+                    'X-Locale': localStorage.getItem('lang') || 'en',
+                    'Accept': 'application/json',
+                },
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log("Fetched products:", data);
+                this.products = data;
+            })
+            .catch((error) => {
+                console.error("Error fetching products:", error);
+            });
+
+            // fetch(`/products/chips?${params}`)
+            //     .then((response) => {
+            //         if (!response.ok) {
+            //             throw new Error(`HTTP error! Status: ${response.status}`);
+            //         }
+            //         return response.json();
+            //     })
+            //     .then((data) => {
+            //         console.log("Fetched products:", data);
+            //         this.products = data;
+            //     })
+            //     .catch((error) => {
+            //         console.error("Error fetching products:", error);
+            //     });
         },
     },
 };

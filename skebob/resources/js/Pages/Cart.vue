@@ -4,7 +4,9 @@
     <Search />
     <div class="main-container">
         <div class="cart-container">
-            <h2>Your Shopping Cart</h2>
+            <h2>{{ $t('YourShoppingCart') }}</h2>
+<!--            <h2>Your Shopping Cart</h2>-->
+
             <div v-if="cartItems.length > 0">
                 <div class="cart-item" v-for="item in cartItems" :key="item.id">
                     <img :src="item.image" alt="Product Image" class="cart-item-img" />
@@ -13,17 +15,22 @@
                         <p>{{ item.description }}</p>
                         <p>Price: ${{ item.price }}</p>
                         <p>Quantity: {{ item.quantity }}</p>
-                        <button @click="removeFromCart(item.id)" class="remove-btn">Remove Item</button>
+                        <button @click="removeFromCart(item.id)" class="remove-btn">{{ $t('RemoveItem') }}</button>
+<!--                        <button @click="removeFromCart(item.id)" class="remove-btn">Remove Item</button>-->
                     </div>
                 </div>
                 <div class="clear-cart">
-                    <button @click="clearCart" class="clear-btn">Clear Entire Cart</button>
+                    <button @click="clearCart" class="clear-btn">{{ $t('ClearEntireCart') }}</button>
+<!--                    <button @click="clearCart" class="clear-btn">Clear Entire Cart</button>-->
                 </div>
             </div>
-            <p v-else style="text-align: center;">Your cart is empty.</p>
+            <p v-else style="text-align: center;">{{ $t('YourCartIsEmpty') }}.</p>
+<!--            <p v-else style="text-align: center;">Your cart is empty.</p>-->
+
             <div class="cart-total" v-if="cartItems.length > 0">
                 <span>Total: ${{ cartTotal.toFixed(2) }}</span>
-                <button @click="proceedToCheckout" class="checkout-btn">Proceed to Checkout</button>
+                <button @click="proceedToCheckout" class="checkout-btn">{{ $t('ProceedToCheckout') }}</button>
+<!--                <button @click="proceedToCheckout" class="checkout-btn">Proceed to Checkout</button>-->
             </div>
         </div>
         <Contact />

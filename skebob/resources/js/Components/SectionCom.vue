@@ -1,33 +1,70 @@
 <template>
     <div id="app" class="container">
         <div class="comment-section">
-            <h2>Comments</h2>
+            <h2>{{ $t('commentsTitle') }}</h2>
+<!--            <h2>Comments</h2>-->
+
             <!-- Comment form -->
             <div v-if="user" class="comment-form">
-                <textarea v-model="newComment" placeholder="Write a comment..." :disabled="isSubmitting"></textarea>
-                <button @click="submitComment" class="btn" :disabled="isSubmitting || !newComment.trim()">
-                    {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+                <textarea
+                    v-model="newComment"
+                    :placeholder="$t('commentsWritePlaceholder')"
+                    :disabled="isSubmitting">
+                </textarea>
+<!--                <textarea -->
+<!--                    v-model="newComment" -->
+<!--                    placeholder="Write a comment..." -->
+<!--                    :disabled="isSubmitting">-->
+<!--                </textarea>-->
+
+                <button
+                    @click="submitComment"
+                    class="btn"
+                    :disabled="isSubmitting || !newComment.trim()"
+                >
+                    {{ isSubmitting ? $t('commentsSubmitting') : $t('commentsSubmit') }}
                 </button>
+<!--                <button -->
+<!--                    @click="submitComment" -->
+<!--                    class="btn" -->
+<!--                    :disabled="isSubmitting || !newComment.trim()"-->
+<!--                >-->
+<!--                    {{ isSubmitting ? 'Submitting...' : 'Submit' }}-->
+<!--                </button>-->
+
             </div>
             <div v-else class="auth-prompt">
-                <p>Please log in to leave a comment.</p>
+                <p>{{ $t('loginPrompt') }}</p>
+<!--                <p>Please log in to leave a comment.</p>-->
             </div>
 
             <!-- Error message -->
             <div v-if="error" class="error-message">
                 <span class="error-icon">⚠️</span>
                 <div>
-                    <strong>Error:</strong> {{ error }}
-                    <button @click="fetchComments" class="btn retry-btn">Retry</button>
+                    <strong>{{ $t('CommentsError') }}</strong> {{ error }}
+                    <button @click="fetchComments" class="btn retry-btn">
+                        {{ $t('CommentsRetry') }}
+                    </button>
                 </div>
+<!--                <div>-->
+<!--                    <strong>Error:</strong> {{ error }}-->
+<!--                    <button @click="fetchComments" class="btn retry-btn">Retry</button>-->
+<!--                </div>-->
             </div>
 
             <!-- Comments list -->
-            <div v-if="isLoading" class="loading">Loading comments...</div>
+            <div v-if="isLoading" class="loading">{{ $t('LoadingComments') }}</div>
+<!--            <div v-if="isLoading" class="loading">Loading comments...</div>-->
+
             <div v-else>
                 <div v-if="comments.length === 0" class="loading">
-                    No comments yet. Be the first to comment!
+                    {{ $t('NoCommentsYet') }}
                 </div>
+<!--                <div v-if="comments.length === 0" class="loading">-->
+<!--                    No comments yet. Be the first to comment!-->
+<!--                </div>-->
+
                 <div v-else>
                     <div v-for="comment in comments" :key="comment.id" class="comment">
                         <div class="comment-header">

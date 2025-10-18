@@ -4,12 +4,18 @@
             <!-- Header -->
             <div class="blog-header">
                 <h2 class="blog-title">
-                    Snack Stories & Video Reviews
+                    {{ $t('BlogTitle') }}
                 </h2>
                 <p class="blog-description">
-                    Dive into the fascinating world of snacks with our expert insights, taste tests,
-                    and behind-the-scenes stories from the Skebob team.
+                    {{ $t('BlogDescription') }}
                 </p>
+<!--                <h2 class="blog-title">-->
+<!--                    Snack Stories & Video Reviews-->
+<!--                </h2>-->
+<!--                <p class="blog-description">-->
+<!--                    Dive into the fascinating world of snacks with our expert insights, taste tests,-->
+<!--                    and behind-the-scenes stories from the Skebob team.-->
+<!--                </p>-->
             </div>
 
             <!-- Content Type Tabs -->
@@ -19,19 +25,19 @@
                         @click="activeTab = 'all'"
                         :class="['tab-button', { 'tab-active': activeTab === 'all' }]"
                     >
-                        All Content
+                        {{ $t('BlogAllContent') }}
                     </button>
                     <button
                         @click="activeTab = 'articles'"
                         :class="['tab-button', { 'tab-active': activeTab === 'articles' }]"
                     >
-                        Articles
+                        {{ $t('BlogArticles') }}
                     </button>
                     <button
                         @click="activeTab = 'videos'"
                         :class="['tab-button', { 'tab-active': activeTab === 'videos' }]"
                     >
-                        Videos
+                        {{ $t('BlogVideos') }}
                     </button>
                 </div>
             </div>
@@ -52,7 +58,7 @@
                     <div class="featured-content">
                         <div class="featured-meta">
               <span class="featured-badge">
-                Featured Video
+                {{ $t('FeaturedVideo') }}
               </span>
                             <span class="duration">{{ videos[0].duration }}</span>
                         </div>
@@ -113,7 +119,7 @@
                   {{ formatDate(post.date) }}
                 </span>
                                 <button class="read-more-btn">
-                                    Read More
+                                    {{ $t('ReadMore') }}
                                     <svg class="arrow-icon" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                                     </svg>
@@ -163,7 +169,7 @@
             <!-- Load More Button -->
             <div class="load-more-container">
                 <button class="load-more-btn">
-                    Load More Content
+                    {{ $t('LoadMoreContent') }}
                 </button>
             </div>
         </div>

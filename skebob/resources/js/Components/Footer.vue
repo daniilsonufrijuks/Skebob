@@ -8,13 +8,14 @@
             <div class="wave" id="wave4"></div>
         </div>
         <ul class="menu">
-            <li class="menu__item"><a class="menu__link" href="/">Home</a></li>
-            <li class="menu__item"><a class="menu__link" href="/about">About</a></li>
-            <li class="menu__item"><a class="menu__link" href="https://github.com/daniilsonufrijuks/Skebob">Sources</a></li>
-            <li class="menu__item"><a class="menu__link" href="#">Team</a></li>
-            <li class="menu__item"><a class="menu__link" href="/contact">Contact</a></li>
+            <li class="menu__item"><a class="menu__link" href="/">{{ $t('home') }}</a></li>
+            <li class="menu__item"><a class="menu__link" href="/about">{{ $t('about') }}</a></li>
+            <li class="menu__item"><a class="menu__link" href="https://github.com/daniilsonufrijuks/Skebob">{{ $t('sources') }}</a></li>
+            <li class="menu__item"><a class="menu__link" href="#">{{ $t('team') }}</a></li>
+            <li class="menu__item"><a class="menu__link" href="/contact">{{ $t('contact') }}</a></li>
             <li class="menu__item"><a class="menu__link" href="/faq">FAQ</a></li>
         </ul>
+
         <p>&copy;2025 SKEBOB | MADE BY ONE BRAINCELL Inc. | All Rights Reserved</p>
     </footer>
     <!-- Footer -->

@@ -2,9 +2,12 @@
     <section class="testimonials-section">
         <div class="testimonials-container">
             <div class="testimonials-header">
-                <h2 class="testimonials-title">What Our Customers Say</h2>
+                <h2 class="testimonials-title">{{ $t('TestimonialsTitle') }}</h2>
+<!--                <p class="testimonials-subtitle">-->
+<!--                    Join thousands of satisfied snack lovers who have discovered their new favorites with Skebob.-->
+<!--                </p>-->
                 <p class="testimonials-subtitle">
-                    Join thousands of satisfied snack lovers who have discovered their new favorites with Skebob.
+                    {{ $t('TestimonialsSubtitle') }}
                 </p>
             </div>
 
@@ -17,12 +20,16 @@
 
                         <div class="welcome-message">
                             <p class="welcome-text">
-                                Dear valued customer,<br/><br/>
-                                We are thrilled to welcome you to Skebob – your ultimate destination for unique and flavorful snacks!
-                                Whether you're craving something sweet, savory, or adventurous, our carefully curated collection is
-                                designed to satisfy every taste bud. From rare international treats to exclusive Skibob specialties,
-                                we make snacking an experience you'll love.
+                                {{ $t('DearCustomer') }}<br/><br/>
+                                {{ $t('WelcomeText') }}
                             </p>
+<!--                            <p class="welcome-text">-->
+<!--                                Dear valued customer,<br/><br/>-->
+<!--                                We are thrilled to welcome you to Skebob – your ultimate destination for unique and flavorful snacks!-->
+<!--                                Whether you're craving something sweet, savory, or adventurous, our carefully curated collection is-->
+<!--                                designed to satisfy every taste bud. From rare international treats to exclusive Skibob specialties,-->
+<!--                                we make snacking an experience you'll love.-->
+<!--                            </p>-->
                         </div>
 
                         <div class="star-rating">
@@ -32,8 +39,10 @@
                         </div>
 
                         <div class="testimonial-author">
-                            <p class="author-name">Skebob Snack Group</p>
-                            <p class="author-role">Official Welcome Message</p>
+                            <p class="author-name">{{ $t('SkebobSnackGroup') }}</p>
+                            <p class="author-role">{{ $t('OfficialWelcomeMessage') }}</p>
+<!--                            <p class="author-name">Skebob Snack Group</p>-->
+<!--                            <p class="author-role">Official Welcome Message</p>-->
                         </div>
                     </div>
                 </div>

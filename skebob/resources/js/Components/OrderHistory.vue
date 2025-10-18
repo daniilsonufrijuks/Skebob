@@ -57,11 +57,13 @@ const clearFilter = () => {
 
 <template>
     <div class="order-history">
-        <h2 class="title">Your Order History</h2>
+        <h2 class="title">{{ $t('YourOrderHistory') }}</h2>
+<!--        <h2 class="title">Your Order History</h2>-->
 
         <!-- 🗓️ Date Filter -->
         <div class="filter-bar">
-            <label for="dateFilter">Filter by Date:</label>
+            <label for="dateFilter">{{ $t('FilterByDate') }}:</label>
+<!--            <label for="dateFilter">Filter by Date:</label>-->
             <input
                 id="dateFilter"
                 type="date"
@@ -69,14 +71,16 @@ const clearFilter = () => {
                 class="date-input"
             />
             <button v-if="selectedDate" @click="clearFilter" class="clear-btn">
-                Clear
+                {{ $t('Clear') }}
             </button>
         </div>
 
-        <div v-if="loading" class="loading">Loading your orders...</div>
+<!--        <div v-if="loading" class="loading">Loading your orders...</div>-->
+        <div v-if="loading" class="loading">{{ $t('LoadingYourOrders') }}...</div>
         <div v-else-if="error" class="error"><p>{{ error }}</p></div>
         <div v-else-if="filteredOrders.length === 0" class="empty">
-            <p>No orders found{{ selectedDate ? " for that date." : "." }}</p>
+<!--            <p>No orders found{{ selectedDate ? " for that date." : "." }}</p>-->
+            <p>{{ selectedDate ? $t('NoOrdersFoundForDate') : $t('NoOrdersFound') }}</p>
         </div>
 
         <div v-else>
@@ -84,12 +88,19 @@ const clearFilter = () => {
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Order ID</th>
-                    <th>Date</th>
-                    <th>Total ($)</th>
-                    <th>Status</th>
-                    <th>Shipping Address</th>
-                    <th>Action</th>
+                    <th>{{ $t('OrderID') }}</th>
+                    <th>{{ $t('date') }}</th>
+                    <th>{{ $t('total') }} ($)</th>
+                    <th>{{ $t('status') }}</th>
+                    <th>{{ $t('shippingAddress') }}</th>
+                    <th>{{ $t('action') }}</th>
+
+<!--                    <th>Order ID</th>-->
+<!--                    <th>Date</th>-->
+<!--                    <th>Total ($)</th>-->
+<!--                    <th>Status</th>-->
+<!--                    <th>Shipping Address</th>-->
+<!--                    <th>Action</th>-->
                 </tr>
                 </thead>
                 <tbody>
@@ -105,7 +116,7 @@ const clearFilter = () => {
                             :href="`/orders/${order.id}/details`"
                             class="view-btn"
                         >
-                            View Details
+                            {{ $t('ViewDetails') }}
                         </Link>
                     </td>
                 </tr>

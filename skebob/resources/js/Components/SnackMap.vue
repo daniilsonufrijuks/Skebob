@@ -5,11 +5,15 @@
             <div class="header-section">
                 <div class="header-title">
                     <Globe class="globe-icon" />
-                    <h2 class="main-title">Interactive Snack Map</h2>
+                    <h2 class="main-title">{{ $t('snackMap') }}</h2>
+<!--                    <h2 class="main-title">Interactive Snack Map</h2>-->
                 </div>
                 <p class="header-description">
-                    Explore the world of international snacks! Click on any country to discover unique treats and flavors from around the globe.
+                    {{ $t('mapDescription') }}
                 </p>
+<!--                <p class="header-description">-->
+<!--                    Explore the world of international snacks! Click on any country to discover unique treats and flavors from around the globe.-->
+<!--                </p>-->
             </div>
 
             <div class="main-grid">
@@ -25,8 +29,10 @@
 
                         <!-- Title -->
                         <div class="map-title">
-                            <h3 class="map-heading">World Snack Origins</h3>
-                            <p class="map-subtitle">Click on any country marker to explore their signature snacks</p>
+                            <h3 class="map-heading">{{ $t('MapHeading') }}</h3>
+                            <p class="map-subtitle">{{ $t('MapSubtitle') }}</p>
+<!--                            <h3 class="map-heading">World Snack Origins</h3>-->
+<!--                            <p class="map-subtitle">Click on any country marker to explore their signature snacks</p>-->
                         </div>
 
                         <!-- Country Markers -->
@@ -127,19 +133,25 @@
 
                         <div v-else class="placeholder-content">
                             <Globe class="placeholder-icon" />
-                            <h3 class="placeholder-title">Explore the World</h3>
+<!--                            <h3 class="placeholder-title">Explore The World!</h3>-->
+                            <h3 class="placeholder-title">{{ $t('ExploreTheWorld') }}</h3>
                             <p class="placeholder-text">
-                                Click on any country marker on the map to discover their unique snacks and treats!
+                                {{ $t('ClickOnAnyCountryMarker') }}
                             </p>
+<!--                            <p class="placeholder-text">-->
+<!--                                Click on any country marker on the map to discover their unique snacks and treats!-->
+<!--                            </p>-->
 
                             <div class="stats-grid">
                                 <div class="stat-item">
                                     <div class="stat-number">{{ countries.length }}</div>
-                                    <div class="stat-label">Countries</div>
+                                    <div class="stat-label">{{ $t('countries') }}</div>
+<!--                                    <div class="stat-label">Countries</div>-->
                                 </div>
                                 <div class="stat-item">
                                     <div class="stat-number">{{ totalSnacks }}</div>
-                                    <div class="stat-label">Snacks</div>
+                                    <div class="stat-label">{{ $t('snacks') }}</div>
+<!--                                    <div class="stat-label">Snacks</div>-->
                                 </div>
                             </div>
                         </div>
@@ -151,19 +163,23 @@
             <div class="statistics-section">
                 <div class="stat-card">
                     <div class="stat-value">{{ countries.length }}</div>
-                    <div class="stat-description">Countries Explored</div>
+                    <div class="stat-description">{{ $t('CountriesExplored') }}</div>
+<!--                    <div class="stat-description">Countries Explored</div>-->
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">{{ totalSnacks }}</div>
-                    <div class="stat-description">Unique Snacks</div>
+                    <div class="stat-description">{{ $t('UniqueSnacks') }}</div>
+<!--                    <div class="stat-description">Unique Snacks</div>-->
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">5</div>
-                    <div class="stat-description">Continents</div>
+                    <div class="stat-description">{{ $t('Continents') }}</div>
+<!--                    <div class="stat-description">Continents</div>-->
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">∞</div>
-                    <div class="stat-description">Flavor Adventures</div>
+                    <div class="stat-description">{{ $t('FlavorAdventures') }}</div>
+<!--                    <div class="stat-description">Flavor Adventures</div>-->
                 </div>
             </div>
         </div>

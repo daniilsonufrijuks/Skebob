@@ -2,62 +2,73 @@
     <section class="contact-section">
         <div class="contact-container">
             <div class="contact-header">
-                <h2 class="contact-title">Get in Touch</h2>
+<!--                <h2 class="contact-title">Get in Touch</h2>-->
+                <h2 class="contact-title">{{ $t('ContactTitle') }}</h2>
                 <p class="contact-subtitle">
-                    Have questions about our snacks or need help with your order? We'd love to hear from you!
+                    {{ $t('ContactSubtitle1') }}<br>
+                    {{ $t('ContactSubtitle2') }}
                 </p>
+<!--                <p class="contact-subtitle">-->
+<!--                    Have questions about our snacks or need help with your order? We'd love to hear from you!-->
+<!--                </p>-->
             </div>
 
             <div class="contact-grid">
+
+
                 <!-- Contact Form -->
                 <div class="contact-form-card">
                     <div class="form-header">
-                        <h3 class="form-title">Send Us a Message</h3>
+                        <h3 class="form-title">{{ $t('FormTitleContact') }}</h3>
+<!--                        <h3 class="form-title">Send Us a Message</h3>-->
                     </div>
                     <div class="form-content">
                         <form @submit.prevent="submit" class="contact-form">
                             <div class="form-row">
                                 <div class="form-field">
-                                    <label for="name" class="field-label">Name *</label>
+                                    <label for="name" class="field-label">{{ $t('FormName') }} *</label>
                                     <input
                                         id="name"
                                         v-model="form.name"
                                         required
                                         name="name"
-                                        placeholder="Name"
+                                        :placeholder="$t('FormName')"
                                         class="form-input"
                                     />
                                 </div>
                                 <div class="form-field">
-                                    <label for="email" class="field-label">Email *</label>
+                                    <label for="email" class="field-label">{{ $t('FormEmail') }} *</label>
                                     <input
                                         id="email"
                                         v-model="form.email"
                                         type="email"
                                         name="email"
                                         required
-                                        placeholder="Email"
+                                        :placeholder="$t('FormEmail')"
                                         class="form-input"
                                     />
                                 </div>
                             </div>
 
                             <div class="form-field">
-                                <label for="message" class="field-label">Message *</label>
+                                <label for="message" class="field-label">{{ $t('FormMessage') }} *</label>
                                 <textarea
                                     id="message"
                                     v-model="form.body"
                                     required
                                     rows="6"
                                     name="message"
-                                    placeholder="Message"
+                                    :placeholder="$t('FormMessage')"
                                     class="form-textarea"
                                 ></textarea>
                             </div>
 
                             <button type="submit" class="submit-button">
-                                Send Message
+                                {{ $t('SendMessage') }}
                             </button>
+<!--                            <button type="submit" class="submit-button">-->
+<!--                                Send Message-->
+<!--                            </button>-->
                         </form>
                     </div>
                 </div>
@@ -67,7 +78,8 @@
                     <!-- Contact Information -->
                     <div class="contact-info-card">
                         <div class="info-header">
-                            <h3 class="info-title">Contact Information</h3>
+                            <h3 class="info-title">{{ $t('ContactInformation') }}</h3>
+<!--                            <h3 class="info-title">Contact Information</h3>-->
                         </div>
                         <div class="info-content">
                             <div class="info-item">
@@ -76,12 +88,18 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 </svg>
                                 <div class="info-text">
-                                    <h4 class="info-label">Address</h4>
+                                    <h4 class="info-label">{{ $t('address') }}</h4>
                                     <p class="info-value">
-                                        123 Snack Street<br />
-                                        Flavor District, FD 12345<br />
-                                        United States
+                                        {{ $t('addressStreet') }}<br />
+                                        {{ $t('addressDistrict') }}<br />
+                                        {{ $t('addressCountry') }}
                                     </p>
+<!--                                    <h4 class="info-label">Address</h4>-->
+<!--                                    <p class="info-value">-->
+<!--                                        123 Snack Street<br />-->
+<!--                                        Flavor District, FD 12345<br />-->
+<!--                                        United States-->
+<!--                                    </p>-->
                                 </div>
                             </div>
 
@@ -90,7 +108,8 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                                 </svg>
                                 <div class="info-text">
-                                    <h4 class="info-label">Phone</h4>
+<!--                                    <h4 class="info-label">Phone</h4>-->
+                                    <h4 class="info-label">{{ $t('contactPhone') }}</h4>
                                     <p class="info-value">+1 (555) 123-SNACK</p>
                                 </div>
                             </div>
@@ -100,7 +119,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                                 </svg>
                                 <div class="info-text">
-                                    <h4 class="info-label">Email</h4>
+                                    <h4 class="info-label">{{ $t('FormEmail') }}</h4>
                                     <p class="info-value">hello@skebob.com</p>
                                 </div>
                             </div>
@@ -110,12 +129,18 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                                 <div class="info-text">
-                                    <h4 class="info-label">Business Hours</h4>
+                                    <h4 class="info-label">{{ $t('BusinessHours') }}</h4>
                                     <p class="info-value">
-                                        Monday - Friday: 9:00 AM - 6:00 PM<br />
-                                        Saturday: 10:00 AM - 4:00 PM<br />
-                                        Sunday: Closed
+                                        {{ $t('WorkingDays') }}<br />
+                                        {{ $t('WorkingSaturday') }}<br />
+                                        {{ $t('WorkingSunday') }}
                                     </p>
+<!--                                    <h4 class="info-label">Business Hours</h4>-->
+<!--                                    <p class="info-value">-->
+<!--                                        Monday - Friday: 9:00 AM - 6:00 PM<br />-->
+<!--                                        Saturday: 10:00 AM - 4:00 PM<br />-->
+<!--                                        Sunday: Closed-->
+<!--                                    </p>-->
                                 </div>
                             </div>
                         </div>
@@ -128,7 +153,8 @@
 
                             <!-- Interactive map note -->
                             <div class="map-note">
-                                <p class="map-note-text">📍 Interactive map</p>
+                                <p class="map-note-text">{{ $t('InteractiveMap') }}</p>
+<!--                                <p class="map-note-text">📍 Interactive map</p>-->
                             </div>
                         </div>
                     </div>
@@ -184,7 +210,7 @@ const submit = () => {
 
 .contact-subtitle {
     color: #4b5563; /* gray-600 */
-    max-width: 32rem;
+    max-width: 40rem;
     margin: 0 auto;
     font-size: var(--text-base);
     font-weight: var(--font-weight-normal);

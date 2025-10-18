@@ -5,8 +5,16 @@
                 <div class="search">
                     <i class="fa fa-search"></i>
                     <form @submit.prevent="handleSearch" id="searchForm" class="form-inline form">
-                        <input type="text" id="searchInput" class="form-control" placeholder="Searching..." v-model="query" @input="fetchSuggestions">
-                        <button type="submit" class="btn btn-primary">Search</button>
+<!--                        <input type="text" id="searchInput" class="form-control" placeholder="Searching..." v-model="query" @input="fetchSuggestions">-->
+                        <input
+                            type="text"
+                            id="searchInput"
+                            class="form-control"
+                            :placeholder="$t('searching')"
+                            v-model="query"
+                            @input="fetchSuggestions"
+                        />
+                        <button type="submit" class="btn btn-primary">{{ $t('search') }}</button>
                     </form>
                     <!-- Suggestions list -->
                     <ul v-if="filteredQueries.length > 0" id="suggestions" class="suggestions-list">
@@ -34,11 +42,14 @@ export default {
     methods: {
         // Fetch suggestions from the server based on the query
         async fetchSuggestions() {
+            console.log("Typing query:", this.query);
+
             if (this.query.length > 2) {
                 try {
                     const response = await axios.get('/search', {
-                        params: {query: this.query},
+                        params: { query: this.query },
                     });
+                    console.log("Fetched results:", response.data);
                     this.filteredQueries = response.data;
                 } catch (error) {
                     console.error('Error fetching search suggestions:', error);
@@ -61,17 +72,23 @@ export default {
                 window.location.href = "/contact";
             } else if (['market', 'markets', 'shop'].includes(query)) {
                 window.location.href = "/market";
-            } else if (['laptop', 'laptops', 'notebook'].includes(query)) {
-                window.location.href = "/laptops";
-            } else if (['pc', 'PC', 'pcs', 'computer'].includes(query)) {
-                window.location.href = "/pcs";
-            } else if (['components', 'videocards', 'cpu', 'ram', 'ssd', 'gpu', 'processor'].includes(query)) {
-                window.location.href = "/components";
+            } else if (['chip', 'chips', 'crisps'].includes(query)) {
+                window.location.href = "/chips";
+            } else if (['chocolate', 'chocolates'].includes(query)) {
+                window.location.href = "/chocolates";
+            } else if (['drink', 'drinks'].includes(query)) {
+                window.location.href = "/drinks";
+            } else if (['nut', 'nuts'].includes(query)) {
+                window.location.href = "/nuts";
+            } else if (['cookie', 'cookies', 'biscuit', 'biscuits'].includes(query)) {
+                window.location.href = "/biscuits";
+            } else if (['fruit', 'fruitsnacks'].includes(query)) {
+                window.location.href = "/fruitsnacks";
+            } else if (['candy', 'candies'].includes(query)) {
+                window.location.href = "/candy";
+            } else if (['snackbox', 'snackboxes'].includes(query)) {
+                window.location.href = "/snackboxes";
             }
-            // } else {
-            //     // If no predefined page matches, search the products
-            //
-            // }
         },
 
         // Handle click on suggestion to directly navigate

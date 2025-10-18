@@ -7,9 +7,9 @@ const goToMysteryBox = () => {
 <template>
     <section class="mystery-banner" @click="goToMysteryBox">
         <div class="content">
-            <h2>🎁 Mystery Box</h2>
-            <p>Get exclusive snacks & drinks inside every box!</p>
-            <button @click="goToMysteryBox">Shop Now</button>
+            <h2>{{ $t('MysteryBox') }}</h2>
+            <p>{{ $t('MysteryBoxText') }}</p>
+            <button @click="goToMysteryBox">{{ $t('MysteryBoxShopNow') }}</button>
         </div>
         <img src="/images/front/mysterybox.png" alt="Mystery Box" class="mystery-img" />
     </section>
