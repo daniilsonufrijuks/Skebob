@@ -71,7 +71,7 @@ const clearFilter = () => {
                 class="date-input"
             />
             <button v-if="selectedDate" @click="clearFilter" class="clear-btn">
-                Clear
+                {{ $t('Clear') }}
             </button>
         </div>
 
@@ -79,7 +79,8 @@ const clearFilter = () => {
         <div v-if="loading" class="loading">{{ $t('LoadingYourOrders') }}...</div>
         <div v-else-if="error" class="error"><p>{{ error }}</p></div>
         <div v-else-if="filteredOrders.length === 0" class="empty">
-            <p>No orders found{{ selectedDate ? " for that date." : "." }}</p>
+<!--            <p>No orders found{{ selectedDate ? " for that date." : "." }}</p>-->
+            <p>{{ selectedDate ? $t('NoOrdersFoundForDate') : $t('NoOrdersFound') }}</p>
         </div>
 
         <div v-else>

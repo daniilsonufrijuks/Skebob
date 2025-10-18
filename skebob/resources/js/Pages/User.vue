@@ -13,7 +13,10 @@
                             </div>
                             <h6 class="f-w-600">{{ user.name }}</h6>
                             <i class="fas fa-edit edit-icon m-t-10 f-16" @click="toggleEditMode"></i>
-                            <p class="m-t-10">{{ isEditing ? 'Editing Mode' : 'Click pencil to edit' }}</p>
+                            <p class="m-t-10">
+                                {{ isEditing ? $t('EditingMode') : $t('ClickPencilToEdit') }}
+                            </p>
+<!--                            <p class="m-t-10">{{ isEditing ? 'Editing Mode' : 'Click pencil to edit' }}</p>-->
                         </div>
                     </div>
                     <div class="col-sm-8">

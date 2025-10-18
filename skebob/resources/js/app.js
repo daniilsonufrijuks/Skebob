@@ -49,3 +49,8 @@ createInertiaApp({
     console.log('Inertia.js app is set up with Vue Router.');
     console.log('Inertia.js app with i18n is ready 🎉');
 });
+
+// Ensure persisted locale on reload
+const savedLang = localStorage.getItem('lang');
+if (savedLang) i18n.global.locale.value = savedLang;
+

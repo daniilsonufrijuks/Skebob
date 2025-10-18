@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watchEffect } from 'vue';
+import { ref, watch } from 'vue';
 import { useUser } from '../Composables/useUser';
 import axios from 'axios';
 import { useRouter } from 'vue-router';  // For navigation after logout
@@ -39,29 +39,17 @@ const goToUserPage = () => {
 
 // FOR LANGUAGE CHANGE
 // const currentLang = ref('en');
-const { locale } = useI18n();
+// const { locale } = useI18n();
+const { locale } = useI18n({ useScope: 'global' });
 const currentLang = ref(localStorage.getItem('lang') || 'en');
 
 // Sync Vue i18n locale with stored value on mount
 locale.value = currentLang.value;
 
-// Change language when dropdown changes
-const switchLanguage = () => {
-    // Save to localStorage for persistence
-    locale.value = currentLang.value;
-    localStorage.setItem('lang', currentLang.value);
-    // You’ll use this value to show translations later
-};
-// On mount, load saved language
-if (localStorage.getItem('lang')) {
-    currentLang.value = localStorage.getItem('lang');
-}
-
-// Keep locale reactive if something changes externally
-watchEffect(() => {
-    if (locale.value !== currentLang.value) {
-        currentLang.value = locale.value;
-    }
+// Reactively change locale when dropdown changes
+watch(currentLang, (newLang) => {
+    locale.value = newLang;
+    localStorage.setItem('lang', newLang);
 });
 </script>
 
@@ -107,7 +95,7 @@ watchEffect(() => {
 
             <!-- FOR LANGUAGE CHANGE-->
             <li>
-                <select v-model="currentLang" @change="switchLanguage" style="margin-left: 10px;">
+                <select v-model="currentLang" style="margin-left: 10px;">
                     <option value="en">EN</option>
                     <option value="lv">LV</option>
                 </select>

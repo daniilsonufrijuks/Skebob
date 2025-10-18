@@ -222,6 +222,11 @@ const messages = {
         BackToCart: 'Back to Cart',
         Processing: "Processing...",
         ProceedToPayment: "Proceed to Payment",
+        NoOrdersFound: "No orders found.",
+        NoOrdersFoundForDate: "No orders found for that date.",
+        Clear: 'Clear',
+        EditingMode: "Editing Mode",
+        ClickPencilToEdit: "Click the pencil to edit",
         // ...add more keys
 
         // products
@@ -457,6 +462,11 @@ const messages = {
         BackToCart: 'Atpakaļ uz grozu',
         Processing: "Apstrādā...",
         ProceedToPayment: "Turpināt uz maksājumu",
+        NoOrdersFound: "Pasūtījumi nav atrasti.",
+        NoOrdersFoundForDate: "Pasūtījumi šajā datumā nav atrasti.",
+        Clear: 'Dzēst',
+        EditingMode: "Rediģēšanas režīms",
+        ClickPencilToEdit: "Noklikšķiniet uz zīmuļa, lai rediģētu",
         // ...add more keys
 
         // products

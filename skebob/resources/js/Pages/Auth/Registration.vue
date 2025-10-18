@@ -3,26 +3,20 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 import {route} from "ziggy-js";
 import Wave from "../../Components/Wave.vue";
 import Particles from "../../Components/BG_Particles.vue";
-import { ref, watchEffect } from 'vue';
+import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';     // For translating stuff
 
 // For translating function
-const { locale } = useI18n();
+const { locale } = useI18n({ useScope: 'global' });
 const currentLang = ref(localStorage.getItem('lang') || 'en');
 
-// Sync Vue i18n locale with stored value
+// Sync Vue i18n locale with stored value on mount
 locale.value = currentLang.value;
 
-const switchLanguage = () => {
-    locale.value = currentLang.value;
-    localStorage.setItem('lang', currentLang.value);
-};
-
-// Keep locale reactive if changed externally
-watchEffect(() => {
-    if (locale.value !== currentLang.value) {
-        currentLang.value = locale.value;
-    }
+// Reactively change locale when dropdown changes
+watch(currentLang, (newLang) => {
+    locale.value = newLang;
+    localStorage.setItem('lang', newLang);
 });
 
 const form = useForm({
