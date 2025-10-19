@@ -32,27 +32,37 @@ onMounted(async () => {
 
     <div class="order-details-wrapper">
         <div class="order-details-card">
-            <h2>Order #{{ order.id }}</h2>
+            <h2>{{ $t('Order') }} #{{ order.id }}</h2>
+<!--            <h2>Order #{{ order.id }}</h2>-->
 
-            <p><strong>Status:</strong> {{ order.status }}</p>
-            <p><strong>Total:</strong> ${{ Number(order.total_price).toFixed(2) }}</p>
-            <p><strong>Shipping Address:</strong> {{ order.shipping_address }}</p>
-            <p><strong>Date:</strong> {{ formatDate(order.ordered_at) }}</p>
+            <p><strong>{{ $t('status') }}:</strong> {{ order.status }}</p>
+            <p><strong>{{ $t('total') }}:</strong> ${{ Number(order.total_price).toFixed(2) }}</p>
+            <p><strong>{{ $t('shippingAddress') }}:</strong> {{ order.shipping_address }}</p>
+            <p><strong>{{ $t('date') }}:</strong> {{ formatDate(order.ordered_at) }}</p>
+<!--            <p><strong>Status:</strong> {{ order.status }}</p>-->
+<!--            <p><strong>Total:</strong> ${{ Number(order.total_price).toFixed(2) }}</p>-->
+<!--            <p><strong>Shipping Address:</strong> {{ order.shipping_address }}</p>-->
+<!--            <p><strong>Date:</strong> {{ formatDate(order.ordered_at) }}</p>-->
 
-            <h3>Items</h3>
+<!--            <h3>Items</h3>-->
+            <h3>{{ $t('Items') }}</h3>
             <ul>
                 <li v-for="item in items" :key="item.id">
                     <strong>{{ item.name }}</strong> — {{ item.quantity }} × ${{ Number(item.price).toFixed(2) }}
                 </li>
 
                 <li>
-                    <strong>Tax Fee</strong> — $5.99
+                    <strong>{{ $t('TaxFee') }}</strong> — $5.99
+<!--                    <strong>Tax Fee</strong> — $5.99-->
                 </li>
             </ul>
 
             <button @click="$inertia.visit('/user')" class="back-btn">
-                ← Back to Order History
+                ← {{ $t('BackToOrderHistory') }}
             </button>
+<!--            <button @click="$inertia.visit('/user')" class="back-btn">-->
+<!--                ← Back to Order History-->
+<!--            </button>-->
         </div>
     </div>
 

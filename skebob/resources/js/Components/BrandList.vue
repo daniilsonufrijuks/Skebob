@@ -15,7 +15,8 @@ const brands = ref([
 
 <template>
     <section class="brands">
-        <h2>Popular Brands</h2>
+<!--        <h2>Popular Brands</h2>-->
+        <h2>{{ $t('popularBrands') }}</h2>
         <div class="brand-list">
             <div
                 v-for="brand in brands"

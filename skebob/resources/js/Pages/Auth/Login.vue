@@ -3,6 +3,21 @@ import {route} from "ziggy-js";
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import Wave from "../../Components/Wave.vue";
 import Particles from "../../Components/BG_Particles.vue";
+import {ref, watch} from 'vue';
+import { useI18n } from 'vue-i18n';     // For translating stuff
+
+// For translating function
+const { locale } = useI18n({ useScope: 'global' });
+const currentLang = ref(localStorage.getItem('lang') || 'en');
+
+// Sync Vue i18n locale with stored value on mount
+locale.value = currentLang.value;
+
+// Reactively change locale when dropdown changes
+watch(currentLang, (newLang) => {
+    locale.value = newLang;
+    localStorage.setItem('lang', newLang);
+});
 
 const form = useForm({
     email: '',
@@ -21,32 +36,45 @@ const submit = () => {
         <Particles/>
 
         <Link :href="route('home')" class="back-button">
-            Back to Home
+            {{ $t('BackToHome') }}
         </Link>
+
+        <select
+            v-model="currentLang"
+            @change="switchLanguage"
+            class="lang-switcher"
+        >
+            <option value="en">EN</option>
+            <option value="lv">LV</option>
+        </select>
 
         <div class="form login">
             <img class="imglogo" src="/skebob.png"/>
             <div class="form-content">
-                <header>Login</header>
+                <header>{{ $t('Login') }}</header>
+<!--                <header>Login</header>-->
+
                 <form @submit.prevent="submit"  autocomplete="off">
                     <div class="field input-field">
-                        <input type="email" v-model="form.email" placeholder="Email" class="input" required autocomplete="off">
+                        <input type="email" v-model="form.email" :placeholder="$t('FormEmail')" class="input" required autocomplete="off">
                     </div>
                     <div class="field input-field">
-                        <input type="password" v-model="form.password" placeholder="Password" class="password" required autocomplete="off">
+                        <input type="password" v-model="form.password" :placeholder="$t('Password')" class="password" required autocomplete="off">
                         <i class='bx bx-hide eye-icon'></i>
                     </div>
                     <div class="form-link">
-                        <a href="#" class="forgot-pass">Forgot password?</a>
+                        <a href="#" class="forgot-pass">{{ $t('ForgotPassword') }}?</a>
+<!--                        <a href="#" class="forgot-pass">Forgot password?</a>-->
                     </div>
                     <div class="field button-field">
                         <button type="submit"
                                 :disabled="form.processing"
-                        >Login</button>
+                        >{{ $t('login') }}</button>
                     </div>
                 </form>
                 <div class="form-link">
-                    <span>Don't have an account? <a href="/registration" class="link signup-link">Signup</a></span>
+                    <span>{{ $t('DontHaveAnAccount') }}? <a href="/registration" class="link signup-link">{{ $t('signup') }}</a></span>
+<!--                    <span>Don't have an account? <a href="/registration" class="link signup-link">Signup</a></span>-->
                 </div>
             </div>
 <!--            <div class="line"></div>-->
@@ -261,6 +289,26 @@ a.google span{
     background-color: #985016;
     color: #fff;
     cursor: pointer;
+}
+
+.lang-switcher {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #fff;
+    color: #985016;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 2px solid #985016;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.lang-switcher:hover {
+    background-color: #985016;
+    color: #fff;
 }
 
 @media screen and (max-width: 400px) {

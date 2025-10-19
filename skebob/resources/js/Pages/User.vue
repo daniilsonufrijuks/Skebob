@@ -13,12 +13,16 @@
                             </div>
                             <h6 class="f-w-600">{{ user.name }}</h6>
                             <i class="fas fa-edit edit-icon m-t-10 f-16" @click="toggleEditMode"></i>
-                            <p class="m-t-10">{{ isEditing ? 'Editing Mode' : 'Click pencil to edit' }}</p>
+                            <p class="m-t-10">
+                                {{ isEditing ? $t('EditingMode') : $t('ClickPencilToEdit') }}
+                            </p>
+<!--                            <p class="m-t-10">{{ isEditing ? 'Editing Mode' : 'Click pencil to edit' }}</p>-->
                         </div>
                     </div>
                     <div class="col-sm-8">
                         <div class="card-block">
-                            <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Information</h6>
+                            <h6 class="m-b-20 p-b-5 b-b-default f-w-600">{{ $t('userInformation') }}</h6>
+<!--                            <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Information</h6>-->
 
                             <!-- Success/Error Messages -->
                             <div v-if="successMessage" class="alert alert-success">
@@ -30,7 +34,8 @@
 
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <p class="m-b-10 f-w-600">Email</p>
+                                    <p class="m-b-10 f-w-600">{{ $t('FormEmail') }}</p>
+<!--                                    <p class="m-b-10 f-w-600">Email</p>-->
                                     <div v-if="!isEditing">
                                         <h6 class="text-muted f-w-400">{{ user.email }}</h6>
                                     </div>
@@ -39,7 +44,8 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <p class="m-b-10 f-w-600">Name</p>
+                                    <p class="m-b-10 f-w-600">{{ $t('FormName') }}</p>
+<!--                                    <p class="m-b-10 f-w-600">Name</p>-->
                                     <div v-if="!isEditing">
                                         <h6 class="text-muted f-w-400">{{ user.name }}</h6>
                                     </div>
@@ -53,20 +59,27 @@
                             <div class="row m-t-20" v-if="isEditing">
                                 <div class="col-sm-12">
                                     <button class="btn btn-primary btn-sm" @click="updateProfile" :disabled="loading">
-                                        <span v-if="loading">Updating...</span>
-                                        <span v-else>Save Changes</span>
+                                        <span v-if="loading">{{ $t('Updating') }}...</span>
+                                        <span v-else>{{ $t('SaveChanges') }}</span>
+<!--                                        <span v-if="loading">Updating...</span>-->
+<!--                                        <span v-else>Save Changes</span>-->
                                     </button>
-                                    <button class="btn btn-secondary btn-sm m-l-10" @click="cancelEdit">Cancel</button>
+                                    <button class="btn btn-secondary btn-sm m-l-10" @click="cancelEdit">{{ $t('Cancel') }}</button>
+<!--                                    <button class="btn btn-secondary btn-sm m-l-10" @click="cancelEdit">Cancel</button>-->
                                 </div>
                             </div>
                             <!-- Delete Account Section -->
                             <div class="row m-t-30">
                                 <div class="col-sm-12">
-                                    <h6 class="m-b-20 p-b-5 b-b-default f-w-600 text-danger">Danger Zone</h6>
-                                    <p class="text-muted m-b-15">Once you delete your account, there is no going back. Please be certain.</p>
+                                    <h6 class="m-b-20 p-b-5 b-b-default f-w-600 text-danger">{{ $t('DangerZone') }}</h6>
+<!--                                    <h6 class="m-b-20 p-b-5 b-b-default f-w-600 text-danger">Danger Zone</h6>-->
+                                    <p class="text-muted m-b-15">{{ $t('DeleteAccWarning') }}</p>
+<!--                                    <p class="text-muted m-b-15">Once you delete your account, there is no going back. Please be certain.</p>-->
                                     <button class="btn btn-danger btn-sm" @click="confirmDelete" :disabled="deleting">
-                                        <span v-if="deleting">Deleting...</span>
-                                        <span v-else>Delete Account</span>
+                                        <span v-if="deleting">{{ $t('Deleting') }}...</span>
+                                        <span v-else>{{ $t('DeleteAccount') }}</span>
+<!--                                        <span v-if="deleting">Deleting...</span>-->
+<!--                                        <span v-else>Delete Account</span>-->
                                     </button>
                                 </div>
                             </div>
@@ -75,20 +88,26 @@
                             <div v-if="showDeleteModal" class="modal-backdrop">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title">Confirm Account Deletion</h5>
+                                        <h5 class="modal-title">{{ $t('ConfirmAccountDeletion') }}</h5>
+<!--                                        <h5 class="modal-title">Confirm Account Deletion</h5>-->
                                     </div>
                                     <div class="modal-body">
-                                        <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+                                        <p>{{ $t('AreYouSureDelete') }}</p>
+<!--                                        <p>Are you sure you want to delete your account? This action cannot be undone.</p>-->
                                         <div class="form-group">
-                                            <label for="password">Enter your password to confirm:</label>
-                                            <input type="password" v-model="deletePassword" class="form-control" id="password" placeholder="Your password">
+                                            <label for="password">{{ $t('EnterYourPasswordToConfirm') }}:</label>
+<!--                                            <label for="password">Enter your password to confirm:</label>-->
+                                            <input type="password" v-model="deletePassword" class="form-control" id="password" :placeholder="$t('YourPassword')">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" @click="cancelDelete">Cancel</button>
+                                        <button type="button" class="btn btn-secondary" @click="cancelDelete">{{ $t('Cancel') }}</button>
+<!--                                        <button type="button" class="btn btn-secondary" @click="cancelDelete">Cancel</button>-->
                                         <button type="button" class="btn btn-danger" @click="deleteAccount" :disabled="!deletePassword || deleting">
-                                            <span v-if="deleting">Deleting...</span>
-                                            <span v-else>Delete Account</span>
+                                            <span v-if="deleting">{{ $t('Deleting') }}...</span>
+                                            <span v-else>{{ $t('DeleteAccount') }}</span>
+<!--                                            <span v-if="deleting">Deleting...</span>-->
+<!--                                            <span v-else>Delete Account</span>-->
                                         </button>
                                     </div>
                                 </div>
@@ -266,7 +285,9 @@ export default {
                     }
                 })
                 .then((data) => {
-                    this.successMessage = 'Profile updated successfully!';
+                    // this.successMessage = 'Profile updated successfully!';
+                    this.successMessage = this.$t('ProfileUpdated');
+
                     // Update the user data with new values
                     this.user.name = this.editForm.name;
                     this.user.email = this.editForm.email;

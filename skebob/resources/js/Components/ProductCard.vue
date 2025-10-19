@@ -24,9 +24,11 @@
                 @input="handleInput"
                 @blur="validateQuantity"
             >
-            <button class="normal" @click="addToCart(product)">Add to Cart</button>
-            <h4>Product Details</h4>
-            <span class="gcardt">{{ product.ingredients }}.</span>
+<!--            <button class="normal" @click="addToCart(product)">Add to Cart</button>-->
+<!--            <h4>Product Details</h4>-->
+            <button class="normal" @click="addToCart(product)">{{ $t('AddToCart') }}</button>
+            <h4>{{ $t('ProductDetails') }}</h4>
+            <span class="gcardt">{{ product.ingredients }}. </span>
             <span class="gcardt">{{ product.country_origin }}.</span>
         </div>
     </section>
@@ -35,8 +37,11 @@
     <!-- Notification Slider -->
     <transition name="slide">
         <div v-if="showNotification" class="notification">
-            Item added to cart!
+            {{ $t('ItemAddedToCart') }}!
         </div>
+<!--        <div v-if="showNotification" class="notification">-->
+<!--            Item added to cart!-->
+<!--        </div>-->
     </transition>
 </template>
 

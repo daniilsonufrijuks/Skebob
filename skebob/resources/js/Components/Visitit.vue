@@ -3,27 +3,26 @@
     <div class="product-cards-top">
         <div class="product-card-top">
             <img src="/images/front/prod1.png" alt="Product 1">
-            <p>Best feasting chocolate!</p>
-            <button onclick="location.href='https://feastables.com/'">Visit feastables.com</button>
+            <p>{{ $t('visitFeastables') }}</p>
+            <button onclick="location.href='https://feastables.com/'">{{ $t('visitFeastablesButton') }}</button>
         </div>
 
         <div class="product-card-top">
             <img src="/images/front/prod2.png" alt="Product 2">
-            <p>Vietnamese snack special!<br>Available on website now!</p>
-            <button onclick="location.href='https://www.oishi.com.vn/san-pham'">Visit oishi.com.vn</button>
+            <p>{{ $t('visitOishi') }}</p>
+            <button onclick="location.href='https://www.oishi.com.vn/san-pham'">{{ $t('visitOishiButton') }}</button>
         </div>
 
         <div class="product-card-top">
             <img src="/images/front/prod3.png" alt="Product 3">
-<!--            <p>Top choice among customers this month.</p>-->
-            <p>Limited Edition Doritos,<br>don't miss 'em!</p>
-            <button onclick="location.href='https://www.doritos.com/'">Visit doritos.com</button>
+            <p>{{ $t('visitDoritos') }}</p>
+            <button onclick="location.href='https://www.doritos.com/'">{{ $t('visitDoritosButton') }}</button>
         </div>
 
         <div class="product-card-top">
             <img src="/images/front/prod4.png" alt="Product 4">
-            <p>Special discount for a limited period.</p>
-            <button onclick="location.href='https://www.skittles.com/'">Visit skittles.com</button>
+            <p>{{ $t('visitSkittles') }}</p>
+            <button onclick="location.href='https://www.skittles.com/'">{{ $t('visitSkittlesButton') }}</button>
         </div>
     </div>
     <!-- visit this -->
