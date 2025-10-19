@@ -118,6 +118,14 @@ watch(currentLang, (newLang) => {
 <!--            <li><a href="/contacts">Contacts</a></li>-->
 <!--            <li><a href="/tutor">Blog</a></li>-->
 
+            <!-- FOR LANGUAGE CHANGE-->
+            <li>
+                <select v-model="currentLang" style="margin-left: 10px;">
+                    <option value="en">EN</option>
+                    <option value="lv">LV</option>
+                </select>
+            </li>
+
             <li><a href="/">{{ $t('home') }}</a></li>
             <li><a href="/market">{{ $t('market') }}</a></li>
             <li><a href="/gifts">{{ $t('gifts') }}</a></li>
