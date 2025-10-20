@@ -38,7 +38,11 @@ class ContactController extends Controller
     public function __invoke(ContactRequest $request)
     {
         \Log::info('CONTACT FORM SUBMITTED', $request->all());
-        Mail::to('skebob-shop@outlook.com')->send(new UserContact($request->name, $request->email, $request->body));
+        Mail::to('skebob-shop@outlook.com')
+            ->send(
+                (new UserContact($request->name, $request->email, $request->body))
+                    ->from('skeboba138@gmail.com', 'Admin')
+            );
         \Log::info('MAIL SENT FROM CONTACT FORM');
         return redirect()->back();
 
