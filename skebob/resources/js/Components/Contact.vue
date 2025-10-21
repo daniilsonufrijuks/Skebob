@@ -178,8 +178,18 @@ const form = useForm({
 });
 
 const submit = () => {
+    console.log('Form data:', form);
     form.post(route('contact'), {
-
+        preserveScroll: true,
+        onSuccess: () => {
+            form.reset();
+            // Optional: Show success message
+            alert('Message sent successfully!');
+        },
+        onError: (errors) => {
+            // Optional: Show error message
+            alert('There was an error sending your message. Please try again.');
+        }
     });
 };
 </script>
