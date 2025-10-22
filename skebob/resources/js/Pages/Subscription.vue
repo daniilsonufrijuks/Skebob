@@ -21,9 +21,40 @@
             </div>
         </div>
 
-        <!-- Subscription Card -->
         <div v-else class="subscription-container">
-            <div v-if="subscription" class="subscription-card">
+            <!-- Already Subscribed View -->
+            <div v-if="userHasSubscription" class="already-subscribed">
+                <div class="subscription-image">
+                    <img :src="'/' + subscription.image" :alt="subscription.name" />
+                </div>
+                <div class="subscription-status">
+                    <div class="status-icon">✅</div>
+                    <h2 class="status-title">You're Already Subscribed!</h2>
+                    <p class="status-message">
+                        Thank you for being a valued SNACKtastic subscriber!
+                        You're all set to enjoy your exclusive benefits, including your
+                        <strong>free Mystery Box every 2 months</strong>.
+                    </p>
+                    <div class="active-benefits">
+                        <h3>Your Active Benefits:</h3>
+                        <ul class="benefits-list">
+                            <li>🎁 <strong>FREE Mystery Box every 2 months</strong></li>
+                            <li>🚚 Free express shipping on all orders</li>
+                            <li>⭐ Early access to new product launches</li>
+                            <li>💰 Members-only discounts</li>
+                            <li>🎯 Personalized recommendations</li>
+                            <li>📞 Priority customer support</li>
+                        </ul>
+                    </div>
+                    <p class="next-box-info">
+                        Your next Mystery Box is scheduled to arrive in the coming weeks.
+                        Keep an eye on your email for shipping updates!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Subscribe View -->
+            <div v-else-if="subscription" class="subscription-card">
                 <div class="subscription-image">
                     <img :src="'/' + subscription.image" :alt="subscription.name" />
                 </div>
@@ -122,6 +153,11 @@ export default {
 
         const isAuthenticated = computed(() => isLoggedIn.value);
 
+        // check if user already has subscription
+        const userHasSubscription = computed(() => {
+            return user.value?.has_subscription === true;
+        });
+
         onMounted(() => {
             fetchSubscription();
         });
@@ -151,6 +187,12 @@ export default {
             if (!isAuthenticated.value) {
                 alert('Please log in to subscribe.');
                 redirectToLogin();
+                return;
+            }
+
+            // double-check that user doesn't already have subscription
+            if (userHasSubscription.value) {
+                alert('You already have an active subscription!');
                 return;
             }
 
@@ -226,6 +268,7 @@ export default {
             loading,
             processing,
             isAuthenticated,
+            userHasSubscription,
             processSubscription,
             redirectToLogin,
             redirectToRegister
@@ -233,6 +276,7 @@ export default {
     }
 };
 </script>
+
 
 <style scoped>
 .main-container {
@@ -491,6 +535,87 @@ export default {
     color: #e74c3c;
 }
 
+.already-subscribed {
+    display: flex;
+    max-width: 1000px;
+    width: 100%;
+    border: 1px solid #e0e0e0;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+.subscription-status {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.status-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.status-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #4CAF50;
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.status-message {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.active-benefits {
+    margin: 25px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border-left: 4px solid #4CAF50;
+}
+
+.active-benefits h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.active-benefits .benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.active-benefits .benefits-list li {
+    padding: 8px 0;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.4;
+}
+
+.next-box-info {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+    padding: 15px;
+    background: #e8f5e8;
+    border-radius: 8px;
+    border: 1px solid #4CAF50;
+}
+
 @media screen and (max-width: 768px) {
     .subscription-card {
         flex-direction: column;
@@ -524,9 +649,19 @@ export default {
         padding: 15px 30px;
         font-size: 16px;
     }
+
+    .already-subscribed {
+        flex-direction: column;
+        max-width: 400px;
+    }
+
+    .subscription-status {
+        padding: 25px;
+    }
 }
 
 @media screen and (max-width: 480px) {
+
     .subscription-image {
         flex: 0 0 250px;
         height: 250px;
