@@ -186,7 +186,7 @@ export default {
 
         const isAuthenticated = computed(() => isLoggedIn.value);
 
-        // Get cart data from Vuex store
+        // get cart data from Vuex store
         const cartItems = computed(() => {
             const items = store.getters.cartItems || [];
             console.log('Cart items in OrderOverview:', items);
@@ -215,7 +215,7 @@ export default {
             country: '',
         });
 
-        // Pre-fill email if user is logged in
+        // pre-fill email if user is logged in
         onMounted(() => {
             console.log('OrderOverview mounted');
             console.log('User:', user.value);
@@ -225,7 +225,7 @@ export default {
                 shippingAddress.value.email = user.value.email || '';
             }
 
-            // If cart is empty, try to load from session storage as fallback
+            // if cart is empty, try to load from session storage as fallback
             if (cartItems.value.length === 0) {
                 const savedCart = sessionStorage.getItem('pendingOrder');
                 if (savedCart) {
@@ -239,7 +239,7 @@ export default {
                 }
             }
 
-            // If still no cart items, redirect back to cart
+            // if still no cart items, redirect back to cart
             if (cartItems.value.length === 0) {
                 console.log('No items in cart, redirecting to cart page');
                 setTimeout(() => {
@@ -251,14 +251,14 @@ export default {
         const validateAndProceed = async () => {
             if (processing.value) return;
 
-            // Double-check authentication
+            // double-check authentication
             if (!isAuthenticated.value) {
                 alert('Please log in to proceed with your order.');
                 redirectToLogin();
                 return;
             }
 
-            // Validate cart has items
+            // validate cart has items
             if (cartItems.value.length === 0) {
                 alert('Your cart is empty. Please add items before proceeding.');
                 router.push('/cart');
@@ -335,17 +335,14 @@ export default {
                 processing.value = false;
             }
         };
-
         const redirectToLogin = () => {
             const currentPath = router.currentRoute.value.fullPath;
             router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
         };
-
         const redirectToRegister = () => {
             const currentPath = router.currentRoute.value.fullPath;
             router.push(`/register?redirect=${encodeURIComponent(currentPath)}`);
         };
-
         const goBackToCart = () => {
             console.log('Router object:', router);
             if (router) {

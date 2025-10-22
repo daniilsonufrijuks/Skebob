@@ -358,4 +358,16 @@ class ProductsController extends Controller
         return response()->json($products);
     }
 
+    /*
+     * Get subscription product. At the moment there is only one subscription product
+     */
+    public function getSubscription(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $subscription = Product::where('category_id', '10')->first();
+        if (!$subscription) {
+            return response()->json(['error' => 'Subscription product not found'], 404);
+        }
+        return response()->json($subscription);
+    }
+
 }

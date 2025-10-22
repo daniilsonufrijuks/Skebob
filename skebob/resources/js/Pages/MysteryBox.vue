@@ -138,13 +138,13 @@ export default {
 .main-container {
     display: flex;
     flex-direction: column;
-    gap: 70px; /* Adjust as needed */
+    gap: 70px;
 }
 .products {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px; /* Adjust spacing between product cards */
-    justify-content: center; /* Center product cards */
+    gap: 20px;
+    justify-content: center;
 }
 .filters {
     display: flex;
@@ -154,15 +154,15 @@ export default {
 }
 @media screen and (max-width: 768px) {
     .filters {
-        flex-direction: column; /* Stack filters vertically */
-        align-items: center;   /* Center the filters horizontally */
-        gap: 0.5rem;           /* Adjust spacing between inputs */
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
     }
 
     .filters input,
     .filters select {
-        width: 100%;          /* Make inputs and select dropdown full-width */
-        max-width: 300px;     /* Optionally limit the maximum width */
+        width: 100%;
+        max-width: 300px;
     }
 }
 </style>
