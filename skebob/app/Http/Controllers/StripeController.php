@@ -64,7 +64,7 @@ class StripeController extends Controller
                 ]],
                 'mode' => 'payment',
                 'success_url' => url('/subscription/success?session_id={CHECKOUT_SESSION_ID}'),
-                'cancel_url' => url('/subscription'),
+                'cancel_url' => url('/subscriptions'),
                 'metadata' => [
                     'subscription_id' => $request->subscription_id,
                     'user_id' => auth()->id(),
@@ -87,13 +87,16 @@ class StripeController extends Controller
         Stripe::setApiKey(config('services.stripe.secret'));
         try {
             $session = Session::retrieve($sessionId);
+            // Check if payment was successful
             if ($session->payment_status === 'paid') {
                 $userId = $session->metadata->user_id;
+                // Activate subscription
                 $user = User::find($userId);
                 if ($user) {
                     $user->has_subscription = true;
                     $user->save();
-                    return redirect('/')->with('success', 'Subscription activated successfully!');
+                    // Redirect with URL parameter instead of cookie
+                    return redirect('/?just_subscribed=true');
                 }
             }
             return redirect('/')->with('error', 'Payment not completed');
@@ -102,5 +105,4 @@ class StripeController extends Controller
             return redirect('/')->with('error', 'Error processing your subscription');
         }
     }
-
 }

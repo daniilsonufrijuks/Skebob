@@ -5,11 +5,11 @@
     <div class="main-container">
         <Visitit />
 
-        <!-- Authentication Check -->
+        <!-- Authentication check -->
         <div v-if="!isAuthenticated" class="auth-required">
             <div class="auth-message">
                 <h3>{{ $t('AuthenticationRequired') }}</h3>
-                <p>{{ $t('PleaseLogInToSubscribe') }}</p>
+                <p>{{ $t('Please Log In To Subscribe') }}</p>
                 <div class="auth-actions">
                     <button @click="redirectToLogin" class="login-button">
                         {{ $t('login') }}
@@ -22,7 +22,7 @@
         </div>
 
         <div v-else class="subscription-container">
-            <!-- Already Subscribed View -->
+            <!-- Already Subscribed view -->
             <div v-if="userHasSubscription" class="already-subscribed">
                 <div class="subscription-image">
                     <img :src="'/' + subscription.image" :alt="subscription.name" />
@@ -32,18 +32,14 @@
                     <h2 class="status-title">You're Already Subscribed!</h2>
                     <p class="status-message">
                         Thank you for being a valued SNACKtastic subscriber!
-                        You're all set to enjoy your exclusive benefits, including your
-                        <strong>free Mystery Box every 2 months</strong>.
+                        You're all set to enjoy your exclusive benefits, including your <strong>free Mystery Box every 2 months</strong>.
                     </p>
                     <div class="active-benefits">
                         <h3>Your Active Benefits:</h3>
                         <ul class="benefits-list">
                             <li>🎁 <strong>FREE Mystery Box every 2 months</strong></li>
-                            <li>🚚 Free express shipping on all orders</li>
-                            <li>⭐ Early access to new product launches</li>
-                            <li>💰 Members-only discounts</li>
-                            <li>🎯 Personalized recommendations</li>
-                            <li>📞 Priority customer support</li>
+                            <li>🚚 With free express shipping for it</li>
+                            <li>📞 And constant priority customer support</li>
                         </ul>
                     </div>
                     <p class="next-box-info">
@@ -53,7 +49,7 @@
                 </div>
             </div>
 
-            <!-- Subscribe View -->
+            <!-- Subscribe view -->
             <div v-else-if="subscription" class="subscription-card">
                 <div class="subscription-image">
                     <img :src="'/' + subscription.image" :alt="subscription.name" />
@@ -65,12 +61,9 @@
                     <div class="subscription-benefits">
                         <h3>Unlock Exclusive Benefits:</h3>
                         <ul class="benefits-list">
-                            <li>🎁 <strong>FREE Mystery Box every 2 months</strong> - Discover surprise products worth up to $100!</li>
-                            <li>🚚 Free express shipping on all orders</li>
-                            <li>⭐ Early access to new product launches</li>
-                            <li>💰 Members-only discounts and special offers</li>
-                            <li>🎯 Personalized product recommendations</li>
-                            <li>📞 Priority customer support</li>
+                            <li>🎁 <strong>FREE Mystery Box every 2 months</strong> - Discover surprise products worth up to $50!</li>
+                            <li>🚚 With free express shipping for it</li>
+                            <li>📞 And constant priority customer support</li>
                         </ul>
                     </div>
 
@@ -100,17 +93,17 @@
                                 🔥 {{ $t('Get Subscription Now') }}!
                             </span>
                         </button>
-                        <p class="cta-note">{{ $t('CancelAnytime') }} • {{ $t('NoCommitment') }} • {{ $t('FirstMysteryBoxShipsToday') }}!</p>
+                        <p class="cta-note">{{ $t('Cancel Anytime') }} • {{ $t('No Commitment') }} • {{ $t('First Mystery Box Ships Today') }}!</p>
                     </div>
                 </div>
             </div>
 
             <div v-else-if="loading" class="loading">
-                {{ $t('LoadingSubscription') }}...
+                {{ $t('Loading Subscription') }}...
             </div>
 
             <div v-else class="error">
-                {{ $t('SubscriptionNotAvailable') }}
+                {{ $t('Subscription Not Available') }}
             </div>
         </div>
 
@@ -150,21 +143,17 @@ export default {
         const subscription = ref(null);
         const loading = ref(true);
         const processing = ref(false);
-
         const isAuthenticated = computed(() => isLoggedIn.value);
 
         // check if user already has subscription
         const userHasSubscription = computed(() => {
             return user.value?.has_subscription === true;
         });
-
         onMounted(() => {
             fetchSubscription();
         });
-
         const fetchSubscription = async () => {
             loading.value = true;
-
             try {
                 const response = await fetch('/products/subscription');
                 if (!response.ok) {
@@ -182,62 +171,49 @@ export default {
 
         const processSubscription = async () => {
             if (processing.value || !subscription.value) return;
-
-            // Double-check authentication
+            // double-check authentication
             if (!isAuthenticated.value) {
                 alert('Please log in to subscribe.');
                 redirectToLogin();
                 return;
             }
-
             // double-check that user doesn't already have subscription
             if (userHasSubscription.value) {
                 alert('You already have an active subscription!');
                 return;
             }
-
             processing.value = true;
-
             try {
-                // Prepare subscription data for Stripe
+                // prepare subscription data for Stripe
                 const subscriptionData = {
                     subscription_id: subscription.value.id,
                     name: subscription.value.name,
                     price: parseFloat(subscription.value.price),
                     type: 'subscription'
                 };
-
                 console.log('Sending subscription data to Stripe:', subscriptionData);
-
-                // Create Stripe session for subscription
+                // create Stripe session
                 const response = await axios.post('/subscription/checkout', subscriptionData);
-
                 if (!response.data.id) {
                     throw new Error('No session ID received from server');
                 }
-
-                // Redirect to Stripe Checkout immediately
+                // redirect to Stripe checkout
                 const stripeKey = import.meta.env.VITE_STRIPE_KEY;
                 if (!stripeKey) {
                     throw new Error('Stripe public key is not defined');
                 }
-
                 const stripe = await loadStripe(stripeKey);
                 if (!stripe) {
                     throw new Error('Failed to load Stripe');
                 }
-
                 const { error } = await stripe.redirectToCheckout({
                     sessionId: response.data.id
                 });
-
                 if (error) {
                     throw new Error(error.message);
                 }
-
             } catch (error) {
                 console.error('Error processing subscription:', error);
-
                 if (error.response && error.response.status === 401) {
                     alert('Your session has expired. Please log in again.');
                     redirectToLogin();
@@ -248,7 +224,6 @@ export default {
                 } else {
                     alert('There was an error processing your subscription: ' + error.message);
                 }
-
                 processing.value = false;
             }
         };
@@ -262,7 +237,6 @@ export default {
             const currentPath = router.currentRoute.value.fullPath;
             router.push(`/register?redirect=${encodeURIComponent(currentPath)}`);
         };
-
         return {
             subscription,
             loading,
@@ -277,7 +251,6 @@ export default {
 };
 </script>
 
-
 <style scoped>
 .main-container {
     display: flex;
@@ -285,7 +258,7 @@ export default {
     gap: 70px;
 }
 
-/* Authentication Styles */
+/* authentication styles */
 .auth-required {
     display: flex;
     justify-content: center;
@@ -353,7 +326,7 @@ export default {
     background-color: #545b62;
 }
 
-/* Subscription Container */
+/* subscription container */
 .subscription-container {
     display: flex;
     justify-content: center;
@@ -373,7 +346,6 @@ export default {
     background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
 }
 
-/* Image container for 1024x1024 square image */
 .subscription-image {
     flex: 0 0 400px;
     width: 400px;
@@ -661,14 +633,12 @@ export default {
 }
 
 @media screen and (max-width: 480px) {
-
     .subscription-image {
         flex: 0 0 250px;
         height: 250px;
     }
 }
 
-/* Animation for the mystery box highlight */
 @keyframes pulse-glow {
     0% { box-shadow: 0 0 0 0 rgba(255, 214, 0, 0.7); }
     70% { box-shadow: 0 0 0 10px rgba(255, 214, 0, 0); }
