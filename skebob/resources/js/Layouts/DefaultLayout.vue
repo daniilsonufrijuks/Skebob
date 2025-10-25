@@ -4,7 +4,7 @@
         <!-- Main content slot -->
         <slot />
 
-        <!-- Global Mystery Box Modal -->
+        <!-- Global Mystery Box modal -->
         <div v-if="showMysteryBoxModal" class="mystery-box-modal-overlay">
             <div class="mystery-box-modal">
                 <div class="modal-content">
@@ -19,7 +19,7 @@
                             <strong>Select one of these exclusive Deluxe Mystery Boxes:</strong>
                         </p>
 
-                        <!-- Mystery Boxes Selection -->
+                        <!-- Mystery Boxes selection -->
                         <div v-if="mysteryBoxes.length > 0" class="mystery-boxes-grid">
                             <div
                                 v-for="(box, index) in mysteryBoxes"
@@ -43,14 +43,78 @@
                             </div>
                         </div>
 
-                        <!-- Loading State -->
+                        <!-- Loading -->
                         <div v-else-if="loadingBoxes" class="loading-boxes">
                             <p>Loading your mystery boxes...</p>
                         </div>
 
-                        <!-- Error State -->
+                        <!-- Error -->
                         <div v-else class="error-boxes">
                             <p>Unable to load mystery boxes. Please try again.</p>
+                        </div>
+
+                        <!-- Shipping Information section -->
+                        <div v-if="selectedBoxIndex !== null" class="shipping-section">
+                            <h3 class="shipping-title">{{ $t('ShippingInformation') }}</h3>
+                            <form class="shipping-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="email">{{ $t('EmailAddress') }} *</label>
+                                        <input
+                                            type="email"
+                                            id="email"
+                                            v-model="shippingAddress.email"
+                                            required
+                                            :placeholder="$t('EnterYourEmail')"
+                                        >
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="address">{{ $t('StreetAddress') }} *</label>
+                                    <input
+                                        type="text"
+                                        id="address"
+                                        v-model="shippingAddress.address"
+                                        required
+                                        :placeholder="$t('EnterYourStreetAddress')"
+                                    >
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="city">{{ $t('City') }} *</label>
+                                        <input
+                                            type="text"
+                                            id="city"
+                                            v-model="shippingAddress.city"
+                                            required
+                                            :placeholder="$t('EnterYourCity')"
+                                        >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="zipCode">{{ $t('ZipCode') }} *</label>
+                                        <input
+                                            type="text"
+                                            id="zipCode"
+                                            v-model="shippingAddress.zipCode"
+                                            required
+                                            :placeholder="$t('EnterZipCode')"
+                                        >
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="country">{{ $t('Country') }} *</label>
+                                    <input
+                                        type="text"
+                                        id="country"
+                                        v-model="shippingAddress.country"
+                                        required
+                                        :placeholder="$t('EnterYourCountry')"
+                                    >
+                                </div>
+                            </form>
                         </div>
                     </div>
 
@@ -58,13 +122,16 @@
                         <button
                             @click="claimMysteryBox"
                             class="modal-button primary"
-                            :disabled="selectedBoxIndex === null || claiming"
+                            :disabled="selectedBoxIndex === null || claiming || !isShippingFormValid"
                         >
                             <span v-if="claiming">Claiming...</span>
                             <span v-else>Claim My Mystery Box</span>
                         </button>
                         <p v-if="selectedBoxIndex === null" class="selection-required">
                             Please select a mystery box to continue
+                        </p>
+                        <p v-else-if="!isShippingFormValid" class="selection-required">
+                            Please fill in all shipping information
                         </p>
                     </div>
                 </div>
@@ -74,7 +141,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
 export default {
     setup() {
@@ -83,8 +150,27 @@ export default {
         const loadingBoxes = ref(false)
         const selectedBoxIndex = ref(null)
         const claiming = ref(false)
+        const shippingAddress = ref({
+            email: '',
+            address: '',
+            city: '',
+            zipCode: '',
+            country: '',
+        })
 
-        // Function to clean URL parameters
+        // computed property to check if shipping form is valid
+        const isShippingFormValid = computed(() => {
+            const address = shippingAddress.value
+            return (
+                address.email &&
+                address.address &&
+                address.city &&
+                address.zipCode &&
+                address.country
+            )
+        })
+
+        // function to clean URL parameters
         const cleanUrlParameters = () => {
             const url = new URL(window.location)
             if (url.searchParams.has('just_subscribed')) {
@@ -94,8 +180,15 @@ export default {
             }
         }
 
-        // Fetch random mystery boxes
+        // fetch random mystery boxes
         const fetchMysteryBoxes = async () => {
+            // Check if we already have mystery boxes stored
+            const storedBoxes = localStorage.getItem('mystery_boxes')
+            if (storedBoxes) {
+                console.log('Using stored mystery boxes')
+                mysteryBoxes.value = JSON.parse(storedBoxes)
+                return
+            }
             loadingBoxes.value = true
             try {
                 const response = await fetch('/products/subscription-mystery-boxes')
@@ -104,7 +197,9 @@ export default {
                 }
                 const data = await response.json()
                 mysteryBoxes.value = data
-                console.log('Fetched mystery boxes:', data)
+                // store the fetched boxes in localStorage
+                localStorage.setItem('mystery_boxes', JSON.stringify(data))
+                console.log('Fetched and stored mystery boxes:', data)
             } catch (error) {
                 console.error('Error fetching mystery boxes:', error)
                 mysteryBoxes.value = []
@@ -113,37 +208,35 @@ export default {
             }
         }
 
+        // clear stored mystery boxes
+        const clearStoredMysteryBoxes = () => {
+            localStorage.removeItem('mystery_boxes')
+            console.log('Cleared stored mystery boxes')
+        }
+
         const checkSubscription = () => {
-            // Check URL parameters first
+            // check URL parameters first
             const urlParams = new URLSearchParams(window.location.search)
             const justSubscribedFromUrl = urlParams.get('just_subscribed')
-
-            // Check localStorage for persistence
+            // check localStorage for persistence
             const justSubscribedFromStorage = localStorage.getItem('just_subscribed')
-
             console.log('URL parameter:', justSubscribedFromUrl)
             console.log('localStorage:', justSubscribedFromStorage)
-
             if (justSubscribedFromUrl === 'true') {
                 showMysteryBoxModal.value = true
                 document.body.style.overflow = 'hidden'
-
-                // Set localStorage so it persists after navigation
+                // set localStorage so it persists after navigation
                 localStorage.setItem('just_subscribed', 'true')
-
-                // Fetch mystery boxes when modal opens
+                // fetch mystery boxes when modal opens
                 fetchMysteryBoxes()
-
                 console.log('Modal shown from URL parameter')
             }
-            // Also check localStorage for persistence (but only if no URL parameter)
+            // also check localStorage for persistence but only if no URL parameter
             else if (justSubscribedFromStorage === 'true' && !justSubscribedFromUrl) {
                 showMysteryBoxModal.value = true
                 document.body.style.overflow = 'hidden'
-
-                // Fetch mystery boxes when modal opens
+                // fetch mystery boxes when modal opens
                 fetchMysteryBoxes()
-
                 console.log('Modal shown from localStorage')
             } else {
                 console.log('No subscription flag found')
@@ -156,53 +249,67 @@ export default {
         }
 
         const claimMysteryBox = async () => {
-            if (selectedBoxIndex.value === null) return
-
+            if (selectedBoxIndex.value === null || !isShippingFormValid.value) return
             claiming.value = true
-
             try {
                 const selectedBox = mysteryBoxes.value[selectedBoxIndex.value]
+                const shippingData = shippingAddress.value
                 console.log('Claiming mystery box:', selectedBox)
-
-                // Here you would typically make an API call to process the claim
-                // For now, we'll simulate the API call
-                await new Promise(resolve => setTimeout(resolve, 1000))
-
-                // Remove from ALL storage methods
+                console.log('Shipping address:', shippingData)
+                // make API call to create the order
+                const response = await fetch('/order/mystery-box-claim', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        mystery_box_id: selectedBox.id,
+                        product_id: selectedBox.product.id,
+                        shipping_address: shippingData
+                    })
+                })
+                const result = await response.json()
+                if (!response.ok) {
+                    throw new Error(result.error || 'Failed to claim mystery box')
+                }
+                // remove from all storage methods
                 localStorage.removeItem('just_subscribed')
-
-                // Clean URL parameters
+                clearStoredMysteryBoxes()
                 cleanUrlParameters()
-
-                // Close modal
                 showMysteryBoxModal.value = false
                 document.body.style.overflow = 'auto'
-
-                console.log('Mystery box claimed successfully:', selectedBox)
-
-                // Show success message or redirect
-                alert(`Congratulations! You've claimed the ${selectedBox.product.name} mystery box!`)
-
+                console.log('Mystery box claimed successfully:', result)
+                // show success message with order details
+                alert(`🎉 Congratulations! You've claimed the "${selectedBox.product.name}" mystery box!\n\nYour order #${result.order_id} has been created and will be shipped to:\n${shippingData.address}, ${shippingData.city}, ${shippingData.zipCode}, ${shippingData.country}\n\nYou will receive a confirmation email at ${shippingData.email}`)
             } catch (error) {
                 console.error('Error claiming mystery box:', error)
-                alert('There was an error claiming your mystery box. Please try again.')
+                alert('There was an error claiming your mystery box: ' + error.message)
             } finally {
                 claiming.value = false
             }
         }
-
+        // also clear stored boxes if modal is closed without claiming
+        const closeModalIfNeeded = () => {
+            clearStoredMysteryBoxes()
+            showMysteryBoxModal.value = false
+            document.body.style.overflow = 'auto'
+        }
         onMounted(() => {
             checkSubscription()
         })
-
         return {
             showMysteryBoxModal,
             mysteryBoxes,
             loadingBoxes,
             selectedBoxIndex,
             claiming,
+            shippingAddress,
+            isShippingFormValid,
             selectBox,
-            claimMysteryBox
+            claimMysteryBox,
+            closeModalIfNeeded
         }
     }
 }
@@ -280,7 +387,26 @@ export default {
     margin: 20px 0 !important;
 }
 
-/* Mystery Boxes Grid */
+/* custom scrollbar for modal */
+.modal-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: #d87220;
+    border-radius: 3px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: #a5500d;
+}
+
+/* Mystery Boxes grid */
 .mystery-boxes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -371,7 +497,62 @@ export default {
     color: #999;
 }
 
-/* Loading and Error States */
+.shipping-section {
+    background: #f9f9f9;
+    padding: 25px;
+    border-radius: 8px;
+    margin: 25px 0;
+    border: 1px solid #e0e0e0;
+}
+
+.shipping-title {
+    color: #333;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #d87220;
+    padding-bottom: 10px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.shipping-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.form-group input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #d87220;
+    box-shadow: 0 0 0 2px rgba(216, 114, 32, 0.1);
+}
+
+/* Loading and error */
 .loading-boxes, .error-boxes {
     padding: 40px;
     text-align: center;
@@ -426,9 +607,9 @@ export default {
     color: #e74c3c;
     font-size: 14px;
     margin: 0;
+    text-align: center;
 }
 
-/* Animations */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -445,7 +626,6 @@ export default {
     }
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .mystery-box-modal-overlay {
         padding: 10px;
@@ -490,25 +670,20 @@ export default {
         font-size: 16px;
         min-width: 180px;
     }
-}
 
-/* Custom scrollbar for modal */
-.modal-content::-webkit-scrollbar {
-    width: 6px;
-}
+    .shipping-section {
+        padding: 20px;
+        margin: 20px 0;
+    }
 
-.modal-content::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 3px;
-}
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
 
-.modal-content::-webkit-scrollbar-thumb {
-    background: #d87220;
-    border-radius: 3px;
-}
-
-.modal-content::-webkit-scrollbar-thumb:hover {
-    background: #a5500d;
+    .shipping-title {
+        font-size: 16px;
+    }
 }
 
 </style>

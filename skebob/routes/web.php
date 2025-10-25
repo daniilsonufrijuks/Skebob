@@ -245,6 +245,7 @@ Route::post('/subscription/checkout', [StripeController::class, 'createSubscript
 Route::get('/subscription/success', [StripeController::class, 'subscriptionSuccess'])
     ->name('subscription.success');
 Route::get('/products/subscription-mystery-boxes', [ProductsController::class, 'getSubscriptionMysteryBoxes']);
+Route::post('/order/mystery-box-claim', [OrderController::class, 'handleMysteryBoxClaim'])->middleware('auth');
 
 Route::get('/products/{id}', [ProductsController::class, 'show']);
 Route::get('/mystery-boxes/{id}', [ProductsController::class, 'showMysteryBox']);
