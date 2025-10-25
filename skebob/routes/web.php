@@ -128,6 +128,10 @@ Route::get('/mystery-box', function () {
     return Inertia::render('MysteryBox');
 })->name('mystery-box');
 
+Route::get('/subscriptions', function () {
+    return Inertia::render('Subscription');
+})->name('subscriptions');
+
 Route::get('/snackboxes', function () {
     return Inertia::render('Snackboxes');
 })->name('snackboxes');
@@ -235,6 +239,13 @@ Route::get('/products/candy', [ProductsController::class, 'getCandyProducts']);
 Route::get('/products/snackboxes', [ProductsController::class, 'getSnackboxesProducts']);
 
 Route::get('/products/mystery-boxes', [ProductsController::class, 'getMysteryBox']);
+
+Route::get('/products/subscription', [ProductsController::class, 'getSubscription']);
+Route::post('/subscription/checkout', [StripeController::class, 'createSubscriptionSession']);
+Route::get('/subscription/success', [StripeController::class, 'subscriptionSuccess'])
+    ->name('subscription.success');
+Route::get('/products/subscription-mystery-boxes', [ProductsController::class, 'getSubscriptionMysteryBoxes']);
+Route::post('/order/mystery-box-claim', [OrderController::class, 'handleMysteryBoxClaim'])->middleware('auth');
 
 Route::get('/products/{id}', [ProductsController::class, 'show']);
 Route::get('/mystery-boxes/{id}', [ProductsController::class, 'showMysteryBox']);

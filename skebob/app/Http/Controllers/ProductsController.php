@@ -10,6 +10,40 @@ use Inertia\Inertia;
 
 class ProductsController extends Controller
 {
+
+    /*
+     * Method for search bar suggestions.
+     */
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        if (!$query) {
+            return response()->json([]);
+        }
+
+        $products = Product::where(function ($q) use ($query) {
+            $q->where('name', 'LIKE', "%{$query}%")
+                ->orWhere('ingredients', 'LIKE', "%{$query}%")
+                ->orWhere('country_origin', 'LIKE', "%{$query}%");
+        })
+            ->select('id', 'name')
+            ->take(5)
+            ->get();
+
+//        $products = Product::where('name', 'LIKE', "%{$query}%")
+//            ->orWhere('ingredients', 'LIKE', "%{$query}%")
+//            ->orWhere(' country_origin', 'LIKE', "%{$query}%")
+//            ->get();
+
+//        return view('products.search-results', compact('products', 'query'));
+//        return Inertia::render('SearchResults', [
+//            'products' => $products,
+//            'query' => $query,
+//        ]);
+        return response()->json($products);
+    }
+
     public function getChipsProducts(Request $request): \Illuminate\Http\JsonResponse
     {
 
@@ -327,35 +361,48 @@ class ProductsController extends Controller
         ]);
     }
 
-//     for search bar for suggestions
-    public function search(Request $request)
+    /*
+     * Get subscription product. At the moment there is only one subscription product
+     */
+    public function getSubscription(Request $request): \Illuminate\Http\JsonResponse
     {
-        $query = $request->input('query');
-
-        if (!$query) {
-            return response()->json([]);
+        $subscription = Product::where('category_id', '10')->first();
+        if (!$subscription) {
+            return response()->json(['error' => 'Subscription product not found'], 404);
         }
+        return response()->json($subscription);
+    }
 
-        $products = Product::where(function ($q) use ($query) {
-            $q->where('name', 'LIKE', "%{$query}%")
-                ->orWhere('ingredients', 'LIKE', "%{$query}%")
-                ->orWhere('country_origin', 'LIKE', "%{$query}%");
-        })
-            ->select('id', 'name')
-            ->take(5)
-            ->get();
+    /*
+     * Get 3 random deluxe mystery boxes for subscription reward
+     */
+    public function getSubscriptionMysteryBoxes(): \Illuminate\Http\JsonResponse
+    {
+        $mysteryBoxes = MysteryBox::with([
+            'product:id,name,price,image,category_id'
+        ])
+            ->where('category', 'deluxe')
+            ->whereHas('product', function ($q) {
+                $q->where('category_id', 9);
+            })
+            ->inRandomOrder()
+            ->limit(3)
+            ->get()
+            ->map(function ($box) {
+                return [
+                    'id' => $box->id,
+                    'category' => $box->category,
+                    'description' => $box->description,
+                    'product' => [
+                        'id' => $box->product->id ?? null,
+                        'name' => $box->product->name ?? null,
+                        'price' => $box->product->price ?? null,
+                        'image' => $box->product->image ?? null,
+                    ],
+                ];
+            });
 
-//        $products = Product::where('name', 'LIKE', "%{$query}%")
-//            ->orWhere('ingredients', 'LIKE', "%{$query}%")
-//            ->orWhere(' country_origin', 'LIKE', "%{$query}%")
-//            ->get();
-
-//        return view('products.search-results', compact('products', 'query'));
-//        return Inertia::render('SearchResults', [
-//            'products' => $products,
-//            'query' => $query,
-//        ]);
-        return response()->json($products);
+        return response()->json($mysteryBoxes);
     }
 
 }

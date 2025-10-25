@@ -55,6 +55,24 @@
                                 </div>
                             </div>
 
+                            <!-- Subscription Status -->
+                            <div class="row m-t-20">
+                                <div class="col-sm-12">
+                                    <p class="m-b-10 f-w-600">{{ $t('SNACKtastic Subscription Status') }}</p>
+                                    <div class="subscription-status-display">
+                                        <span :class="['status-badge', user.has_subscription ? 'status-active' : 'status-inactive']">
+                                            <i :class="user.has_subscription ? 'fas fa-crown' : 'fas fa-hourglass-half'"></i>
+                                            {{ user.has_subscription ? $t('Active') : $t('Inactive') }}
+                                        </span>
+                                        <div v-if="!user.has_subscription" class="subscription-cta">
+                                            <a href="/subscriptions" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-gift"></i> {{ $t('Get SNACKtastic subscription') }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Edit buttons -->
                             <div class="row m-t-20" v-if="isEditing">
                                 <div class="col-sm-12">
@@ -458,8 +476,6 @@ export default {
     border-radius: 5px;
 }
 
-
-
 h6 {
     font-size: 14px;
 }
@@ -644,6 +660,47 @@ h6 {
 
 .edit-icon:hover {
     color: #ffc107;
+}
+
+.subscription-status-display {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.status-active {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-inactive {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.subscription-cta {
+    margin-top: 10px;
+}
+
+.subscription-cta .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
 }
 
 /* CONFIRM DELETION MODAL */
