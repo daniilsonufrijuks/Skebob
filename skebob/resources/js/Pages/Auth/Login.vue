@@ -54,22 +54,60 @@ const submit = () => {
                 <header>{{ $t('Login') }}</header>
 <!--                <header>Login</header>-->
 
+                <!-- Display general errors -->
+                <div v-if="form.hasErrors" class="error-message general-error">
+                    <div v-if="form.errors.email && !form.errors.password">
+                        {{ form.errors.email }}
+                    </div>
+                    <div v-else-if="Object.keys(form.errors).length > 0">
+                        Invalid credentials. Please try again.
+                    </div>
+                </div>
+
                 <form @submit.prevent="submit"  autocomplete="off">
                     <div class="field input-field">
-                        <input type="email" v-model="form.email" :placeholder="$t('FormEmail')" class="input" required autocomplete="off">
+                        <input
+                            type="email"
+                            v-model="form.email"
+                            :placeholder="$t('FormEmail')"
+                            class="input"
+                            :class="{ 'error': form.errors.email }"
+                            required
+                            autocomplete="off"
+                        >
+                        <div v-if="form.errors.email" class="error-message">
+                            {{ form.errors.email }}
+                        </div>
                     </div>
+
                     <div class="field input-field">
-                        <input type="password" v-model="form.password" :placeholder="$t('Password')" class="password" required autocomplete="off">
+                        <input
+                            type="password"
+                            v-model="form.password"
+                            :placeholder="$t('Password')"
+                            class="password"
+                            :class="{ 'error': form.errors.password }"
+                            required
+                            autocomplete="off"
+                        >
                         <i class='bx bx-hide eye-icon'></i>
+                        <div v-if="form.errors.password" class="error-message">
+                            {{ form.errors.password }}
+                        </div>
                     </div>
-                    <div class="form-link">
-                        <a href="#" class="forgot-pass">{{ $t('ForgotPassword') }}?</a>
-<!--                        <a href="#" class="forgot-pass">Forgot password?</a>-->
-                    </div>
+<!--                    <div class="form-link">-->
+<!--                        <a href="#" class="forgot-pass">{{ $t('ForgotPassword') }}?</a>-->
+<!--&lt;!&ndash;                        <a href="#" class="forgot-pass">Forgot password?</a>&ndash;&gt;-->
+<!--                    </div>-->
                     <div class="field button-field">
-                        <button type="submit"
-                                :disabled="form.processing"
-                        >{{ $t('login') }}</button>
+                        <button
+                            type="submit"
+                            :disabled="form.processing"
+                            :class="{ 'loading': form.processing }"
+                        >
+                            <span v-if="form.processing">Logging in...</span>
+                            <span v-else>{{ $t('login') }}</span>
+                        </button>
                     </div>
                 </form>
                 <div class="form-link">
@@ -309,6 +347,37 @@ a.google span{
 .lang-switcher:hover {
     background-color: #985016;
     color: #fff;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 5px;
+    padding: 5px;
+    border-radius: 4px;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+
+.general-error {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.input.error,
+.password.error {
+    border-color: #dc3545 !important;
+    border-width: 2px !important;
+}
+
+.field button.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.field button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
 }
 
 @media screen and (max-width: 400px) {
