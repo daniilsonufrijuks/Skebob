@@ -13,8 +13,8 @@
                     <div class="cart-item-details">
                         <h3>{{ item.name }}</h3>
                         <p>{{ item.description }}</p>
-                        <p>Price: ${{ item.price }}</p>
-                        <p>Quantity: {{ item.quantity }}</p>
+                        <p>{{ $t('Price') }}: ${{ item.price }}</p>
+                        <p>{{ $t('Quantity') }}: {{ item.quantity }}</p>
                         <button @click="removeFromCart(item.id)" class="remove-btn">{{ $t('RemoveItem') }}</button>
 <!--                        <button @click="removeFromCart(item.id)" class="remove-btn">Remove Item</button>-->
                     </div>
