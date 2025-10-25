@@ -38,6 +38,15 @@ class AuthenticatedSessionController extends Controller
         // First, check if it's an admin login
 //        $admin = Admin::where('name', $request->email)->first();
 
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+        ], [
+            'password.min' => 'The password must be at least 8 characters.',
+            'email.required' => 'The email field is required.',
+            'email.email' => 'Please enter a valid email address.',
+            'password.required' => 'The password field is required.',
+        ]);
         // If admin exists, attempt login with admin credentials
         $admin = Admin::where('name', $request->email)->first();
 

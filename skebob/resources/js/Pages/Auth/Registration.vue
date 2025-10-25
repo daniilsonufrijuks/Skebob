@@ -3,7 +3,7 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 import {route} from "ziggy-js";
 import Wave from "../../Components/Wave.vue";
 import Particles from "../../Components/BG_Particles.vue";
-import { ref, watch } from 'vue';
+import {computed, ref, watch} from 'vue';
 import { useI18n } from 'vue-i18n';     // For translating stuff
 
 // For translating function
@@ -24,6 +24,34 @@ const form = useForm({
     email: '',
     password: '',
     password_confirmation: '',
+});
+
+// Password strength indicators
+const passwordStrength = computed(() => {
+    if (!form.password) return { strength: 0, message: '' };
+
+    let strength = 0;
+    let message = '';
+
+    // Check length
+    if (form.password.length >= 8) strength += 25;
+
+    // Check for letters
+    if (/[a-zA-Z]/.test(form.password)) strength += 25;
+
+    // Check for numbers
+    if (/\d/.test(form.password)) strength += 25;
+
+    // Check for symbols
+    if (/[@$!%*?&]/.test(form.password)) strength += 25;
+
+    // Determine message
+    if (strength <= 25) message = 'Very Weak';
+    else if (strength <= 50) message = 'Weak';
+    else if (strength <= 75) message = 'Good';
+    else message = 'Strong';
+
+    return { strength, message };
 });
 
 const submit = () => {
@@ -66,18 +94,85 @@ const submit = () => {
 
                 <form @submit.prevent="submit">
                     <div class="field input-field">
-                        <input type="email" v-model="form.email" :placeholder="$t('FormEmail')" class="input" required>
+                        <input
+                            type="email"
+                            v-model="form.email"
+                            :placeholder="$t('FormEmail')"
+                            class="input"
+                            :class="{ 'error': form.errors.email }"
+                            required
+                        >
+                        <div v-if="form.errors.email" class="error-message">
+                            {{ form.errors.email }}
+                        </div>
                     </div>
+
+                    <!-- Password Field -->
                     <div class="field input-field">
-                        <input type="password" v-model="form.password" :placeholder="$t('Password')" class="password" required>
+                        <input
+                            type="password"
+                            v-model="form.password"
+                            :placeholder="$t('Password')"
+                            class="password"
+                            :class="{ 'error': form.errors.password }"
+                            required
+                        >
+                        <div v-if="form.errors.password" class="error-message">
+                            {{ form.errors.password }}
+                        </div>
                     </div>
+
+                    <!-- Password Strength Indicator -->
+                    <div v-if="form.password" class="password-strength">
+                        <div class="strength-bar">
+                            <div
+                                class="strength-fill"
+                                :style="{ width: passwordStrength.strength + '%' }"
+                                :class="{
+                                        'very-weak': passwordStrength.strength <= 25,
+                                        'weak': passwordStrength.strength > 25 && passwordStrength.strength <= 50,
+                                        'good': passwordStrength.strength > 50 && passwordStrength.strength <= 75,
+                                        'strong': passwordStrength.strength > 75
+                                    }"
+                            ></div>
+                        </div>
+                        <span class="strength-text">{{ passwordStrength.message }}</span>
+                    </div>
+
+                    <!-- Password Requirements -->
+                    <div class="password-requirements">
+                        <p>Password must contain:</p>
+                        <ul>
+                            <li :class="{ 'met': form.password.length >= 8 }">At least 8 characters</li>
+                            <li :class="{ 'met': /[a-zA-Z]/.test(form.password) }">At least one letter</li>
+                            <li :class="{ 'met': /\d/.test(form.password) }">At least one number</li>
+                            <li :class="{ 'met': /[@$!%*?&]/.test(form.password) }">At least one symbol (@$!%*?&)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Password Confirmation Field -->
                     <div class="field input-field">
-                        <input type="password" v-model="form.password_confirmation" :placeholder="$t('RepeatPassword')" class="password" required>
+                        <input
+                            type="password"
+                            v-model="form.password_confirmation"
+                            :placeholder="$t('RepeatPassword')"
+                            class="password"
+                            :class="{ 'error': form.errors.password_confirmation }"
+                            required
+                        >
+                        <div v-if="form.errors.password_confirmation" class="error-message">
+                            {{ form.errors.password_confirmation }}
+                        </div>
                     </div>
                     <div class="field button-field">
-                        <button type="submit"
-                                :disabled="form.processing"
-                        >{{ $t('signup') }}</button>
+                        <button
+                            type="submit"
+                            :disabled="form.processing"
+                            :class="{ 'loading': form.processing }"
+                        >
+                            <span v-if="form.processing">Creating Account...</span>
+                            <span v-else>{{ $t('signup') }}</span>
+                        </button>
                     </div>
                 </form>
                 <div class="form-link">
@@ -92,6 +187,105 @@ const submit = () => {
 
 
 <style scoped>
+.error-message {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 5px;
+    padding: 5px;
+    border-radius: 4px;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+
+.input.error,
+.password.error {
+    border-color: #dc3545 !important;
+    border-width: 2px !important;
+}
+
+.field button.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.field button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Password Strength Indicator */
+.password-strength {
+    margin-top: 10px;
+}
+
+.strength-bar {
+    width: 100%;
+    height: 5px;
+    background-color: #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.strength-fill {
+    height: 100%;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strength-fill.very-weak {
+    background-color: #dc3545;
+}
+
+.strength-fill.weak {
+    background-color: #fd7e14;
+}
+
+.strength-fill.good {
+    background-color: #ffc107;
+}
+
+.strength-fill.strong {
+    background-color: #28a745;
+}
+
+.strength-text {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Password Requirements */
+.password-requirements {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border-left: 4px solid #985016;
+}
+
+.password-requirements p {
+    margin: 0 0 8px 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #495057;
+}
+
+.password-requirements ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.password-requirements li {
+    font-size: 11px;
+    color: #6c757d;
+    margin-bottom: 4px;
+    transition: color 0.3s ease;
+}
+
+.password-requirements li.met {
+    color: #28a745;
+    text-decoration: line-through;
+}
+
 .imglogo {
     max-width: 50px;
     height: auto;
