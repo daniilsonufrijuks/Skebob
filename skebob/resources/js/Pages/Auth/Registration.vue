@@ -26,6 +26,16 @@ const form = useForm({
     password_confirmation: '',
 });
 
+// Check if email error is about duplicate
+const isEmailAlreadyRegistered = computed(() => {
+    const emailError = form.errors.email;
+    console.log('Email error:', emailError); // DEBUG
+    if (!emailError) return false;
+
+    const errorText = String(emailError).toLowerCase();
+    return errorText.includes('already') || errorText.includes('taken') || errorText.includes('exists');
+});
+
 // Password strength indicators
 const passwordStrength = computed(() => {
     if (!form.password) return { strength: 0, message: '' };
@@ -79,7 +89,6 @@ const submit = () => {
 
         <select
             v-model="currentLang"
-            @change="switchLanguage"
             class="lang-switcher"
         >
             <option value="en">EN</option>
@@ -90,7 +99,24 @@ const submit = () => {
             <img class="imglogo" src="/skebob.png"/>
             <div class="form-content">
                 <header>{{ $t('Registration') }}</header>
-<!--                <header>Registration</header>-->
+
+                <!-- Show specific message for duplicate email -->
+                <div v-if="isEmailAlreadyRegistered"
+                     class="error-message general-error email-exists-error">
+                    <div class="email-exists-content">
+                        <strong>Email Already Registered</strong>
+                        <p>{{ form.errors.email }}</p>
+                        <div class="suggestion-links">
+                            <Link :href="route('login')" class="suggestion-link">
+                                Try logging in instead
+                            </Link>
+                            <span class="suggestion-divider">or</span>
+                            <button type="button" @click="form.email = ''; form.clearErrors('email')" class="suggestion-link">
+                                Use a different email
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
                 <form @submit.prevent="submit">
                     <div class="field input-field">
@@ -102,7 +128,9 @@ const submit = () => {
                             :class="{ 'error': form.errors.email }"
                             required
                         >
-                        <div v-if="form.errors.email" class="error-message">
+                        <!-- Show regular error only if it's NOT the "already registered" error -->
+                        <div v-if="form.errors.email && !isEmailAlreadyRegistered"
+                             class="error-message">
                             {{ form.errors.email }}
                         </div>
                     </div>
@@ -129,11 +157,11 @@ const submit = () => {
                                 class="strength-fill"
                                 :style="{ width: passwordStrength.strength + '%' }"
                                 :class="{
-                                        'very-weak': passwordStrength.strength <= 25,
-                                        'weak': passwordStrength.strength > 25 && passwordStrength.strength <= 50,
-                                        'good': passwordStrength.strength > 50 && passwordStrength.strength <= 75,
-                                        'strong': passwordStrength.strength > 75
-                                    }"
+                                    'very-weak': passwordStrength.strength <= 25,
+                                    'weak': passwordStrength.strength > 25 && passwordStrength.strength <= 50,
+                                    'good': passwordStrength.strength > 50 && passwordStrength.strength <= 75,
+                                    'strong': passwordStrength.strength > 75
+                                }"
                             ></div>
                         </div>
                         <span class="strength-text">{{ passwordStrength.message }}</span>
@@ -164,6 +192,7 @@ const submit = () => {
                             {{ form.errors.password_confirmation }}
                         </div>
                     </div>
+
                     <div class="field button-field">
                         <button
                             type="submit"
@@ -175,9 +204,9 @@ const submit = () => {
                         </button>
                     </div>
                 </form>
+
                 <div class="form-link">
                     <span>{{ $t('AlreadyHaveAnAccount') }}? <a href="/login" class="link signup-link">{{ $t('login') }}</a></span>
-<!--                    <span>Already have an account? <a href="/login" class="link signup-link">Login</a></span>-->
                 </div>
             </div>
         </div>
@@ -187,6 +216,130 @@ const submit = () => {
 
 
 <style scoped>
+body {
+    background-color: #7e411e;
+}
+
+/* ========== General Layout ========== */
+.container {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+/* ========== Form Styles ========== */
+.form {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    border-radius: 12px;
+    background: #fff;
+    outline: 2px solid #d87220;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+}
+
+.form.signup {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.forms.show-signup .form.signup {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.forms.show-signup .form.login {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ========== Logo ========== */
+.imglogo {
+    max-width: 60px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* ========== Text + Headers ========== */
+header {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 600;
+    color: #232836;
+    text-align: center;
+}
+
+/* ========== Form Inputs & Buttons ========== */
+form {
+    margin-top: 30px;
+}
+
+.field {
+    position: relative;
+    height: 50px;
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 6px;
+}
+
+.field input,
+.field button {
+    height: 100%;
+    width: 100%;
+    border: none;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    font-weight: 400;
+    border-radius: 6px;
+}
+
+.field input {
+    outline: none;
+    padding: 0 15px;
+    border: 1px solid #cacaca;
+    background-color: #fff;
+    transition: border-color 0.2s ease;
+}
+
+.field input:focus {
+    border-color: #985016;
+    border-bottom-width: 2px;
+}
+
+.eye-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #8b8b8b;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.field button {
+    color: #fff;
+    background-color: #985016;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.field button:hover {
+    background-color: #d87220;
+    transform: translateY(-1px);
+}
+
+.field button.loading,
+.field button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* ========== Error Messages ========== */
 .error-message {
     color: #dc3545;
     font-size: 14px;
@@ -197,23 +350,18 @@ const submit = () => {
     border: 1px solid #f5c6cb;
 }
 
+.general-error {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
 .input.error,
 .password.error {
     border-color: #dc3545 !important;
     border-width: 2px !important;
 }
 
-.field button.loading {
-    opacity: 0.7;
-    cursor: not-allowed;
-}
-
-.field button:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-}
-
-/* Password Strength Indicator */
+/* ========== Password Strength Indicator ========== */
 .password-strength {
     margin-top: 10px;
 }
@@ -253,7 +401,7 @@ const submit = () => {
     color: #666;
 }
 
-/* Password Requirements */
+/* ========== Password Requirements ========== */
 .password-requirements {
     margin-top: 10px;
     padding: 10px;
@@ -286,171 +434,80 @@ const submit = () => {
     text-decoration: line-through;
 }
 
-.imglogo {
-    max-width: 50px;
-    height: auto;
-    display: block;
-    margin: 0 auto;
+/* ========== Email Exists Error ========== */
+.email-exists-error {
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+    color: #856404;
 }
 
-.container{
-    height: 100vh;
-    width: 100%;
+.email-exists-content {
+    padding: 10px;
+}
+
+.email-exists-content strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.email-exists-content p {
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.suggestion-links {
     display: flex;
     align-items: center;
-    justify-content: center;
-    /*background-color: #d87220;*/
-    column-gap: 30px;
+    gap: 10px;
+    flex-wrap: wrap;
 }
-.form{
-    position: absolute;
-    max-width: 430px;
-    width: 100%;
-    padding: 30px;
-    border-radius: 6px;
-    background: #FFF;
-    outline: #d87220 solid 2px;
-}
-.form.signup{
-    opacity: 0;
-    pointer-events: none;
-}
-.forms.show-signup .form.signup{
-    opacity: 1;
-    pointer-events: auto;
-}
-.forms.show-signup .form.login{
-    opacity: 0;
-    pointer-events: none;
-}
-header{
-    font-size: 28px;
-    font-weight: 600;
-    color: #232836;
-    text-align: center;
-}
-form{
-    margin-top: 30px;
-}
-.form .field{
-    position: relative;
-    height: 50px;
-    width: 100%;
-    margin-top: 20px;
-    border-radius: 6px;
-}
-.field input,
-.field button{
-    height: 100%;
-    width: 100%;
-    border: none;
-    font-size: 16px;
-    font-weight: 400;
-    border-radius: 6px;
-}
-.field input{
-    outline: none;
-    padding: 0 15px;
-    border: 1px solid#CACACA;
-}
-.field input:focus{
-    border-bottom-width: 2px;
-}
-.eye-icon{
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    font-size: 18px;
-    color: #8b8b8b;
-    cursor: pointer;
-    padding: 5px;
-}
-.field button{
-    color: #fff;
-    background-color: #985016;
+
+.suggestion-link {
+    color: #985016;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: rgba(152, 80, 22, 0.1);
     transition: all 0.3s ease;
-    cursor: pointer;
 }
-.field button:hover{
-    background-color: #d87220;
+
+.suggestion-link:hover {
+    background-color: #985016;
+    color: white;
+    text-decoration: none;
 }
-.form-link{
+
+.suggestion-divider {
+    color: #666;
+    font-size: 12px;
+}
+
+/* ========== Form Links ========== */
+.form-link {
     text-align: center;
-    margin-top: 10px;
+    margin-top: 15px;
 }
+
 .form-link span,
-.form-link a{
+.form-link a {
     font-size: 14px;
     font-weight: 400;
     color: #232836;
 }
-.form a{
+
+.form a {
     color: #d87220;
     text-decoration: none;
 }
-.form-content a:hover{
+
+.form-content a:hover {
     text-decoration: underline;
 }
-.line{
-    position: relative;
-    height: 1px;
-    width: 100%;
-    margin: 36px 0;
-    background-color: #d4d4d4;
-}
-.line::before{
-    content: 'Or';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #FFF;
-    color: #8b8b8b;
-    padding: 0 15px;
-}
-.media-options a{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-a.facebook{
-    color: #fff;
-    background-color: #d87220;
-}
-a.facebook .facebook-icon{
-    height: 28px;
-    width: 28px;
-    color: #d87220;
-    font-size: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #fff;
-}
-.facebook-icon,
-img.google-img{
-    position: absolute;
-    top: 50%;
-    left: 15px;
-    transform: translateY(-50%);
-}
-img.google-img{
-    height: 20px;
-    width: 20px;
-    object-fit: cover;
-}
-a.google{
-    border: 1px solid #CACACA;
-}
-a.google span{
-    font-weight: 500;
-    opacity: 0.6;
-    color: #232836;
-}
 
-/* BACK BUTTON */
+/* ========== Back Button ========== */
 .back-button {
     position: absolute;
     top: 20px;
@@ -472,6 +529,7 @@ a.google span{
     cursor: pointer;
 }
 
+/* ========== Language Switcher ========== */
 .lang-switcher {
     position: absolute;
     top: 20px;
@@ -492,10 +550,63 @@ a.google span{
     color: #fff;
 }
 
-@media screen and (max-width: 400px) {
-    .form{
-        padding: 20px 10px;
+/* ========== Focus Styles (Accessibility) ========== */
+input:focus,
+button:focus,
+select:focus {
+    outline: 2px solid #985016;
+    outline-offset: 2px;
+}
+
+/* ========== Media Queries ========== */
+
+/* Small devices (phones) */
+@media (max-width: 600px) {
+    .form {
+        padding: 1.5rem;
+        margin: 0 1rem;
     }
 
+    .field {
+        margin-top: 15px;
+    }
+
+    .field button {
+        height: 48px;
+        font-size: 1rem;
+    }
+
+    .lang-switcher,
+    .back-button {
+        position: fixed;
+        z-index: 50;
+        top: 10px;
+        font-size: 0.9rem;
+    }
+
+    .lang-switcher {
+        right: 10px;
+        padding: 6px 10px;
+    }
+
+    .back-button {
+        left: 10px;
+        padding: 6px 10px;
+    }
+}
+
+/* Medium screens (tablets) */
+@media (min-width: 600px) and (max-width: 900px) {
+    .form {
+        max-width: 480px;
+        padding: 2rem 2.5rem;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 400px) {
+    .form {
+        padding: 20px 10px;
+    }
 }
 </style>

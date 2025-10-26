@@ -96,7 +96,7 @@ class RegisteredUserController extends Controller
         ], [
             'email.required' => 'The email address is required.',
             'email.email' => 'Please enter a valid email address.',
-            'email.unique' => 'This email address is already registered.',
+            'email.unique' => 'This email address is already registered. Please use a different email or try logging in.',
             'password.required' => 'The password is required.',
             'password.min' => 'The password must be at least 8 characters.',
             'password.regex' => 'The password must contain letters, numbers, and symbols.',
