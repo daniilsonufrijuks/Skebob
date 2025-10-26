@@ -65,7 +65,7 @@ watch(currentLang, (newLang) => {
         <ul>
             <li><a href="/">{{ $t('home') }}</a></li>
             <li><a href="/market">{{ $t('market') }}</a></li>
-            <li><a href="/gifts">{{ $t('gifts') }}</a></li>
+            <li><a href="/subscriptions">Subscriptions</a></li>
             <li><a href="/about">{{ $t('about') }}</a></li>
             <li><a href="/contacts">{{ $t('contacts') }}</a></li>
             <li><a href="/tutor">{{ $t('blog') }}</a></li>
@@ -113,7 +113,6 @@ watch(currentLang, (newLang) => {
         <ul>
 <!--            <li><a href="/">Home</a></li>-->
 <!--            <li><a href="/market">Market</a></li>-->
-<!--            <li><a href="/gifts">Gifts</a></li>-->
 <!--            <li><a href="/about">About</a></li>-->
 <!--            <li><a href="/contacts">Contacts</a></li>-->
 <!--            <li><a href="/tutor">Blog</a></li>-->
@@ -128,7 +127,7 @@ watch(currentLang, (newLang) => {
 
             <li><a href="/">{{ $t('home') }}</a></li>
             <li><a href="/market">{{ $t('market') }}</a></li>
-            <li><a href="/gifts">{{ $t('gifts') }}</a></li>
+            <li><a href="/subscriptions">Subscriptions</a></li>
             <li><a href="/about">{{ $t('about') }}</a></li>
             <li><a href="/contacts">{{ $t('contacts') }}</a></li>
             <li><a href="/tutor">{{ $t('blog') }}</a></li>
