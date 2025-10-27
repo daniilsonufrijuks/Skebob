@@ -3,8 +3,13 @@
 <!--        <h2>Chat with SKEBOB AI</h2>-->
         <h2>{{ $t('chatWithSkebobAI') }}</h2>
         <div class="chat-box" ref="chatBox">
-            <div v-for="(message, index) in chatMessages" :key="index" :class="['chat-message', message.sender]">
-                <p>{{ message.text }}</p>
+            <div
+                v-for="(message, index) in chatMessages"
+                :key="index"
+                :class="['chat-message', message.sender]"
+            >
+                <div v-if="message.sender === 'ai'" v-html="formatMessage(message.text)" class="message-text"></div>
+                <p v-else>{{ message.text }}</p>
             </div>
             <p v-if="isLoading" class="loading-message">{{ $t('AIisTyping') }}</p>
 <!--            <p v-if="isLoading" class="loading-message">AI is typing...</p>-->
@@ -24,6 +29,8 @@
 </template>
 
 <script>
+import {marked} from "marked";
+
 export default {
     name: "ChatWithAI",
     data() {
@@ -114,6 +121,11 @@ export default {
                     chatBox.scrollTop = chatBox.scrollHeight;
                 }
             });
+        },
+        formatMessage(text) {
+            if (!text) return "";
+            // Convert Markdown to safe HTML
+            return marked.parse(text);
         },
     },
 };
@@ -230,5 +242,44 @@ h2 {
         height: 300px;
         min-height: 200px;
     }
+}
+
+.message-text {
+    white-space: pre-wrap;
+    line-height: 1.6;
+    word-break: break-word;
+}
+
+.message-text h3 {
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.message-text strong {
+    font-weight: bold;
+}
+
+.message-text em {
+    font-style: italic;
+}
+
+.message-text ul, .message-text ol {
+    padding-left: 1.5rem;
+    margin: 0.5rem 0;
+}
+
+.message-text code {
+    background: #f4f4f4;
+    border-radius: 4px;
+    padding: 2px 5px;
+    font-family: monospace;
+}
+
+.message-text pre {
+    background: #f4f4f4;
+    border-radius: 6px;
+    padding: 10px;
+    overflow-x: auto;
 }
 </style>
