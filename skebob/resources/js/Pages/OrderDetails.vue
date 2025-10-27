@@ -5,7 +5,6 @@ import Navbar from "../Components/Navbar.vue";
 import Footer from "../Components/Footer.vue";
 
 const props = defineProps({ orderId: Number });
-
 const order = ref({});
 const items = ref([]);
 
@@ -17,6 +16,10 @@ function formatDate(dateStr) {
         hour: "2-digit",
         minute: "2-digit",
     });
+}
+
+function isZero(number, tolerance = 1e-10) {
+    return Math.abs(number) < tolerance;
 }
 
 onMounted(async () => {
@@ -36,7 +39,8 @@ onMounted(async () => {
 <!--            <h2>Order #{{ order.id }}</h2>-->
 
             <p><strong>{{ $t('status') }}:</strong> {{ order.status }}</p>
-            <p><strong>{{ $t('total') }}:</strong> ${{ Number(order.total_price).toFixed(2) }}</p>
+            <p v-if="isZero(Number(order.total_price).toFixed(2))"><strong>{{ $t('total') }}:</strong> ${{ Number(order.total_price).toFixed(2) }}, part of subscription plan</p>
+            <p v-else><strong>{{ $t('total') }}:</strong> ${{ Number(order.total_price).toFixed(2) }}</p>
             <p><strong>{{ $t('shippingAddress') }}:</strong> {{ order.shipping_address }}</p>
             <p><strong>{{ $t('date') }}:</strong> {{ formatDate(order.ordered_at) }}</p>
 <!--            <p><strong>Status:</strong> {{ order.status }}</p>-->
@@ -51,10 +55,14 @@ onMounted(async () => {
                     <strong>{{ item.name }}</strong> — {{ item.quantity }} × ${{ Number(item.price).toFixed(2) }}
                 </li>
 
-                <li>
+                <li v-if="!isZero(Number(order.total_price).toFixed(2))">
                     <strong>{{ $t('TaxFee') }}</strong> — $5.99
 <!--                    <strong>Tax Fee</strong> — $5.99-->
                 </li>
+<!--                <li>-->
+<!--                    <strong>{{ $t('TaxFee') }}</strong> — $5.99-->
+<!--                    &lt;!&ndash;                    <strong>Tax Fee</strong> — $5.99&ndash;&gt;-->
+<!--                </li>-->
             </ul>
 
             <button @click="$inertia.visit('/user')" class="back-btn">
