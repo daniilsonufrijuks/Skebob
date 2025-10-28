@@ -1,7 +1,9 @@
 <template>
     <div class="admin-dashboard">
-        <button @click="$inertia.visit('/')" class="back-button">Back to user page</button>
-        <h1 class="title">Admin Dashboard</h1>
+        <button @click="$inertia.visit('/')" class="back-button">{{ $t('BackToUserPage') }}</button>
+        <h1 class="title">{{ $t('AdminDashboard') }}</h1>
+<!--        <button @click="$inertia.visit('/')" class="back-button">Back to user page</button>-->
+<!--        <h1 class="title">Admin Dashboard</h1>-->
 
         <!-- Navigation Tabs -->
         <div class="navigation-tabs">
@@ -9,61 +11,70 @@
                 @click="activeTab = 'orders'"
                 :class="['tab-button', { active: activeTab === 'orders' }]"
             >
-                Orders
+                {{ $t('Orders') }}
             </button>
             <button
                 @click="activeTab = 'orderItems'"
                 :class="['tab-button', { active: activeTab === 'orderItems' }]"
             >
-                Order Items
+                {{ $t('OrderItems') }}
             </button>
             <button
                 @click="activeTab = 'users'"
                 :class="['tab-button', { active: activeTab === 'users' }]"
             >
-                Users
+                {{ $t('Users') }}
             </button>
             <button
                 @click="activeTab = 'products'"
                 :class="['tab-button', { active: activeTab === 'products' }]"
             >
-                Products
+                {{ $t('Products') }}
             </button>
             <button
                 @click="activeTab = 'brands'"
                 :class="['tab-button', { active: activeTab === 'brands' }]"
             >
-                Brands
+                {{ $t('Brands') }}
             </button>
             <button
                 @click="activeTab = 'categories'"
                 :class="['tab-button', { active: activeTab === 'categories' }]"
             >
-                Categories
+                {{ $t('Categories') }}
             </button>
             <button
                 @click="activeTab = 'addProduct'"
                 :class="['tab-button', { active: activeTab === 'addProduct' }]"
             >
-                Add Product
+                {{ $t('AddProduct') }}
             </button>
         </div>
 
         <!-- Orders -->
         <section v-if="activeTab === 'orders'" class="section">
-            <h2 class="section-title">Orders</h2>
+            <h2 class="section-title">{{ $t('Orders') }}</h2>
+<!--            <h2 class="section-title">Orders</h2>-->
+
             <div class="scrollable-container">
                 <div class="card-grid">
                     <div class="card" v-for="order in orders" :key="order.id">
                         <p><strong>ID:</strong> {{ order.id }}</p>
-                        <p><strong>Customer ID:</strong> {{ order.user_id }}</p>
-                        <p><strong>Status:</strong> {{ order.status }}</p>
-                        <p><strong>Total Price:</strong> ${{ order.total_price }}</p>
-                        <p><strong>Shipping Address:</strong> {{ order.shipping_address }}</p>
-                        <p><strong>Ordered At:</strong> {{ formatDate(order.ordered_at) }}</p>
-                        <p><strong>Created:</strong> {{ formatDate(order.created_at) }}</p>
+                        <p><strong>{{ $t('CustomerID') }}:</strong> {{ order.user_id }}</p>
+                        <p><strong>{{ $t('status') }}:</strong> {{ order.status }}</p>
+                        <p><strong>{{ $t('TotalPrice') }}:</strong> ${{ order.total_price }}</p>
+                        <p><strong>{{ $t('shippingAddress') }}:</strong> {{ order.shipping_address }}</p>
+                        <p><strong>{{ $t('OrderedAt') }}:</strong> {{ formatDate(order.ordered_at) }}</p>
+                        <p><strong>{{ $t('Created') }}:</strong> {{ formatDate(order.created_at) }}</p>
+<!--                        <p><strong>Customer ID:</strong> {{ order.user_id }}</p>-->
+<!--                        <p><strong>Status:</strong> {{ order.status }}</p>-->
+<!--                        <p><strong>Total Price:</strong> ${{ order.total_price }}</p>-->
+<!--                        <p><strong>Shipping Address:</strong> {{ order.shipping_address }}</p>-->
+<!--                        <p><strong>Ordered At:</strong> {{ formatDate(order.ordered_at) }}</p>-->
+<!--                        <p><strong>Created:</strong> {{ formatDate(order.created_at) }}</p>-->
                         <div class="actions">
-                            <button @click="deleteRecord('order', order.id)" class="delete-btn">Delete</button>
+                            <button @click="deleteRecord('order', order.id)" class="delete-btn">{{ $t('Delete') }}</button>
+<!--                            <button @click="deleteRecord('order', order.id)" class="delete-btn">Delete</button>-->
                         </div>
                     </div>
                 </div>
@@ -72,19 +83,22 @@
 
         <!-- Order Items -->
         <section v-if="activeTab === 'orderItems'" class="section">
-            <h2 class="section-title">Order Items</h2>
+            <h2 class="section-title">{{ $t('OrderItems') }}</h2>
+<!--            <h2 class="section-title">Order Items</h2>-->
+
             <div class="scrollable-container">
                 <div class="card-grid">
                     <div class="card" v-for="orderItem in orderItems" :key="orderItem.id">
                         <p><strong>ID:</strong> {{ orderItem.id }}</p>
-                        <p><strong>Order ID:</strong> {{ orderItem.order_id }}</p>
-                        <p><strong>Product ID:</strong> {{ orderItem.product_id }}</p>
-                        <p><strong>Quantity:</strong> {{ orderItem.quantity }}</p>
-                        <p><strong>Unit Price:</strong> ${{ orderItem['unit-price'] }}</p>
-                        <p><strong>Subtotal:</strong> ${{ orderItem.subtotal }}</p>
-                        <p><strong>Created:</strong> {{ formatDate(orderItem.created_at) }}</p>
+                        <p><strong>{{ $t('OrderID') }}:</strong> {{ orderItem.order_id }}</p>
+                        <p><strong>{{ $t('ProductID') }}:</strong> {{ orderItem.product_id }}</p>
+                        <p><strong>{{ $t('Quantity') }}:</strong> {{ orderItem.quantity }}</p>
+                        <p><strong>{{ $t('UnitPrice') }}:</strong> ${{ orderItem['unit-price'] }}</p>
+                        <p><strong>{{ $t('subtotal') }}:</strong> ${{ orderItem.subtotal }}</p>
+                        <p><strong>{{ $t('Created') }}:</strong> {{ formatDate(orderItem.created_at) }}</p>
                         <div class="actions">
-                            <button @click="deleteRecord('orderitem', orderItem.id)" class="delete-btn">Delete</button>
+                            <button @click="deleteRecord('orderitem', orderItem.id)" class="delete-btn">{{ $t('Delete') }}</button>
+<!--                            <button @click="deleteRecord('orderitem', orderItem.id)" class="delete-btn">Delete</button>-->
                         </div>
                     </div>
                 </div>
@@ -93,22 +107,28 @@
 
         <!-- Users -->
         <section v-if="activeTab === 'users'" class="section">
-            <h2 class="section-title">Users</h2>
+            <h2 class="section-title">{{ $t('Users') }}</h2>
+<!--            <h2 class="section-title">Users</h2>-->
+
             <div class="scrollable-container">
                 <div class="card-grid">
                     <div class="card" v-for="user in users" :key="user.id">
                         <p><strong>ID:</strong> {{ user.id }}</p>
-                        <p><strong>Name:</strong> {{ user.name }}</p>
-                        <p><strong>Email:</strong> {{ user.email }}</p>
-                        <p><strong>Subscription:</strong>
+                        <p><strong>{{ $t('Username') }}:</strong> {{ user.name }}</p>
+                        <p><strong>{{ $t('Email') }}:</strong> {{ user.email }}</p>
+                        <p><strong>{{ $t('Subscription') }}: </strong>
                             <span :class="['subscription-badge', user.has_subscription ? 'active' : 'inactive']">
-                        {{ user.has_subscription ? 'Active' : 'Inactive' }}
-                    </span>
+                        {{ user.has_subscription ? $t('Active') : $t('Inactive') }}
+                            </span>
+<!--                            <span :class="['subscription-badge', user.has_subscription ? 'active' : 'inactive']">-->
+<!--                        {{ user.has_subscription ? 'Active' : 'Inactive' }}-->
+<!--                            </span>-->
                         </p>
-                        <p><strong>Created:</strong> {{ formatDate(user.created_at) }}</p>
-                        <p><strong>Updated:</strong> {{ formatDate(user.updated_at) }}</p>
+                        <p><strong>{{ $t('Created') }}:</strong> {{ formatDate(user.created_at) }}</p>
+                        <p><strong>{{ $t('Updated') }}:</strong> {{ formatDate(user.updated_at) }}</p>
                         <div class="actions">
-                            <button @click="deleteRecord('user', user.id)" class="delete-btn">Delete</button>
+                            <button @click="deleteRecord('user', user.id)" class="delete-btn">{{ $t('Delete') }}</button>
+<!--                            <button @click="deleteRecord('user', user.id)" class="delete-btn">Delete</button>-->
                         </div>
                     </div>
                 </div>
@@ -117,15 +137,20 @@
 
         <!-- Products -->
         <section v-if="activeTab === 'products'" class="section">
-            <h2 class="section-title">Products</h2>
+            <h2 class="section-title">{{ $t('Products') }}</h2>
+<!--            <h2 class="section-title">Products</h2>-->
+
             <div class="scrollable-container">
                 <div class="card-grid">
                     <div class="card" v-for="product in products" :key="product.id">
                         <template v-if="editProduct && editProduct.id === product.id">
                             <div class="edit-form">
-                                <input v-model="editProduct.name" placeholder="Name" class="form-input" />
-                                <input v-model="editProduct.price" type="number" step="0.01" placeholder="Price" class="form-input" />
-                                <input v-model="editProduct.amount_value" type="number" step="0.01" placeholder="Amount Value" class="form-input" />
+                                <input v-model="editProduct.name" :placeholder="$t('ProductName')" class="form-input" />
+                                <input v-model="editProduct.price" type="number" step="0.01" :placeholder="$t('Price')" class="form-input" />
+                                <input v-model="editProduct.amount_value" type="number" step="0.01" :placeholder="$t('AmountValue')" class="form-input" />
+<!--                                <input v-model="editProduct.name" placeholder="Name" class="form-input" />-->
+<!--                                <input v-model="editProduct.price" type="number" step="0.01" placeholder="Price" class="form-input" />-->
+<!--                                <input v-model="editProduct.amount_value" type="number" step="0.01" placeholder="Amount Value" class="form-input" />-->
                                 <select v-model="editProduct.amount_unit" class="form-input">
                                     <option value="g">g</option>
                                     <option value="kg">kg</option>
@@ -136,7 +161,8 @@
 
                                 <!-- Brand Selection -->
                                 <select v-model="editProduct.brand_id" class="form-input">
-                                    <option value="">Select Brand</option>
+                                    <option value="">{{ $t('SelectBrand') }}</option>
+<!--                                    <option value="">Select Brand</option>-->
                                     <option v-for="brand in brands" :key="brand.id" :value="brand.id">
                                         {{ brand.name }}
                                     </option>
@@ -144,72 +170,89 @@
 
                                 <!-- Category Selection -->
                                 <select v-model="editProduct.category_id" class="form-input">
-                                    <option value="">Select Category</option>
+                                    <option value="">{{ $t('SelectCategory') }}</option>
+<!--                                    <option value="">Select Category</option>-->
                                     <option v-for="category in categories" :key="category.id" :value="category.id">
                                         {{ category.name }}
                                     </option>
                                 </select>
 
-                                <input v-model="editProduct.country_origin" placeholder="Country Origin" class="form-input" />
-                                <textarea v-model="editProduct.ingredients" placeholder="Ingredients" class="form-input"></textarea>
-                                <textarea v-model="editProduct.nutritional_info" placeholder="Nutritional Info" class="form-input"></textarea>
-                                <input v-model="editProduct.storage_conditions" placeholder="Storage Conditions" class="form-input" />
+                                <input v-model="editProduct.country_origin" :placeholder="$t('CountryOrigin')" class="form-input" />
+                                <textarea v-model="editProduct.ingredients" :placeholder="$t('Ingredients')" class="form-input"></textarea>
+                                <textarea v-model="editProduct.nutritional_info" :placeholder="$t('NutritionalInfo')" class="form-input"></textarea>
+                                <input v-model="editProduct.storage_conditions" :placeholder="$t('StorageConditions')" class="form-input" />
+<!--                                <input v-model="editProduct.country_origin" placeholder="Country Origin" class="form-input" />-->
+<!--                                <textarea v-model="editProduct.ingredients" placeholder="Ingredients" class="form-input"></textarea>-->
+<!--                                <textarea v-model="editProduct.nutritional_info" placeholder="Nutritional Info" class="form-input"></textarea>-->
+<!--                                <input v-model="editProduct.storage_conditions" placeholder="Storage Conditions" class="form-input" />-->
 
                                 <!-- Current Image Preview -->
                                 <div v-if="product.image && !editImageFile" class="current-image">
-                                    <p><strong>Current Image:</strong></p>
+                                    <p><strong>{{ $t('CurrentImage') }}:</strong></p>
+<!--                                    <p><strong>Current Image:</strong></p>-->
                                     <img :src="'/' + product.image" alt="Current Product Image" />
                                     <p class="image-path">{{ product.image }}</p>
                                 </div>
 
                                 <!-- New Image Preview -->
                                 <div v-if="editImageFile" class="new-image">
-                                    <p><strong>New Image:</strong></p>
+                                    <p><strong>{{ $t('NewImage') }}:</strong></p>
+<!--                                    <p><strong>New Image:</strong></p>-->
                                     <img :src="editImagePreview" alt="New Product Image" />
                                     <p class="image-name">{{ editImageFile.name }}</p>
                                 </div>
 
                                 <!-- File Upload -->
                                 <div class="file-upload">
-                                    <label>Update Image (optional):</label>
+                                    <label>{{ $t('UpdateImageOptional') }}:</label>
+<!--                                    <label>Update Image (optional):</label>-->
                                     <input type="file" @change="handleEditImageUpload" accept="image/*" />
-                                    <small>Leave empty to keep current image</small>
+                                    <small>{{ $t('LeaveEmptyToKeepCurrentImage') }}</small>
+<!--                                    <small>Leave empty to keep current image</small>-->
                                 </div>
 
                                 <div class="edit-actions">
-                                    <button @click="updateProduct" class="save-btn">Save Changes</button>
-                                    <button @click="cancelEdit" class="cancel-btn">Cancel</button>
+                                    <button @click="updateProduct" class="save-btn">{{ $t('SaveChanges') }}</button>
+                                    <button @click="cancelEdit" class="cancel-btn">{{ $t('Cancel') }}</button>
+<!--                                    <button @click="updateProduct" class="save-btn">Save Changes</button>-->
+<!--                                    <button @click="cancelEdit" class="cancel-btn">Cancel</button>-->
                                 </div>
                             </div>
                         </template>
                         <template v-else>
                             <p><strong>ID:</strong> {{ product.id }}</p>
-                            <p><strong>Name:</strong> {{ product.name }}</p>
-                            <p><strong>Price:</strong> ${{ product.price }}</p>
-                            <p><strong>Amount:</strong> {{ product.amount_value }} {{ product.amount_unit }}</p>
+                            <p><strong>{{ $t('NameName') }}:</strong> {{ product.name }}</p>
+                            <p><strong>{{ $t('Price') }}:</strong> ${{ product.price }}</p>
+                            <p><strong>{{ $t('ProductAmount') }}:</strong> {{ product.amount_value }} {{ product.amount_unit }}</p>
 
                             <!-- Add Brand Name -->
-                            <p><strong>Brand: </strong>
+                            <p><strong>{{ $t('Brand') }}: </strong>
                                 <span v-if="product.brand">{{ product.brand.name }}</span>
                                 <span v-else>N/A</span>
                             </p>
 
                             <!-- Add Category Name -->
-                            <p><strong>Category: </strong>
+                            <p><strong>{{ $t('Category') }}: </strong>
                                 <span v-if="product.category">{{ product.category.name }}</span>
                                 <span v-else>N/A</span>
                             </p>
 
-                            <p><strong>Country Origin:</strong> {{ product.country_origin || 'N/A' }}</p>
-                            <p><strong>Ingredients:</strong> {{ product.ingredients || 'N/A' }}</p>
-                            <p><strong>Nutritional Info:</strong> {{ product.nutritional_info || 'N/A' }}</p>
-                            <p><strong>Storage:</strong> {{ product.storage_conditions || 'N/A' }}</p>
+<!--                            <p><strong>Country Origin:</strong> {{ product.country_origin || 'N/A' }}</p>-->
+<!--                            <p><strong>Ingredients:</strong> {{ product.ingredients || 'N/A' }}</p>-->
+<!--                            <p><strong>Nutritional Info:</strong> {{ product.nutritional_info || 'N/A' }}</p>-->
+<!--                            <p><strong>Storage:</strong> {{ product.storage_conditions || 'N/A' }}</p>-->
+                            <p><strong>{{ $t('CountryOrigin') }}:</strong> {{ product.country_origin || 'N/A' }}</p>
+                            <p><strong>{{ $t('Ingredients') }}:</strong> {{ product.ingredients || 'N/A' }}</p>
+                            <p><strong>{{ $t('NutritionalInfo') }}:</strong> {{ product.nutritional_info || 'N/A' }}</p>
+                            <p><strong>{{ $t('Storage') }}:</strong> {{ product.storage_conditions || 'N/A' }}</p>
                             <div v-if="product.image" class="product-image">
                                 <img :src="'/' + product.image" alt="Product Image" />
                             </div>
                             <div class="actions">
-                                <button @click="startEdit(product)" class="edit-btn">Edit</button>
-                                <button @click="deleteRecord('product', product.id)" class="delete-btn">Delete</button>
+                                <button @click="startEdit(product)" class="edit-btn">{{ $t('Edit') }}</button>
+                                <button @click="deleteRecord('product', product.id)" class="delete-btn">{{ $t('Delete') }}</button>
+<!--                                <button @click="startEdit(product)" class="edit-btn">Edit</button>-->
+<!--                                <button @click="deleteRecord('product', product.id)" class="delete-btn">Delete</button>-->
                             </div>
                         </template>
                     </div>
@@ -219,17 +262,23 @@
 
         <!-- Brands -->
         <section v-if="activeTab === 'brands'" class="section">
-            <h2 class="section-title">Brands</h2>
+            <h2 class="section-title">{{ $t('Brands') }}</h2>
+<!--            <h2 class="section-title">Brands</h2>-->
+
             <!-- Add Brand Form -->
             <div class="add-brand-form">
-                <h3>Add New Brand</h3>
+                <h3>{{ $t('AddNewBrand') }}</h3>
+<!--                <h3>Add New Brand</h3>-->
+
                 <form @submit.prevent="addBrand" class="form">
                     <div class="form-group">
-                        <label>Brand Name *</label>
-                        <input v-model="newBrand.name" type="text" placeholder="Brand Name" required />
+                        <label>{{ $t('brandName') }} *</label>
+<!--                        <label>Brand Name *</label>-->
+                        <input v-model="newBrand.name" type="text" :placeholder="$t('brandName')" required />
+<!--                        <input v-model="newBrand.name" type="text" placeholder="Brand Name" required />-->
                     </div>
                     <button type="submit" class="submit-btn" :disabled="isAddingBrand">
-                        {{ isAddingBrand ? 'Adding Brand...' : 'Add Brand' }}
+                        {{ isAddingBrand ? $t('AddingBrand') : $t('AddBrand') }}
                     </button>
                 </form>
             </div>
@@ -238,11 +287,12 @@
                 <div class="card-grid">
                     <div class="card" v-for="brand in brands" :key="brand.id">
                         <p><strong>ID:</strong> {{ brand.id }}</p>
-                        <p><strong>Name:</strong> {{ brand.name }}</p>
-                        <p><strong>Created:</strong> {{ formatDate(brand.created_at) }}</p>
-                        <p><strong>Updated:</strong> {{ formatDate(brand.updated_at) }}</p>
+                        <p><strong>{{ $t('NameName') }}:</strong> {{ brand.name }}</p>
+                        <p><strong>{{ $t('Created') }}:</strong> {{ formatDate(brand.created_at) }}</p>
+                        <p><strong>{{ $t('Updated') }}:</strong> {{ formatDate(brand.updated_at) }}</p>
                         <div class="actions">
-                            <button @click="deleteRecord('brand', brand.id)" class="delete-btn">Delete</button>
+                            <button @click="deleteRecord('brand', brand.id)" class="delete-btn">{{ $t('Delete') }}</button>
+<!--                            <button @click="deleteRecord('brand', brand.id)" class="delete-btn">Delete</button>-->
                         </div>
                     </div>
                 </div>
@@ -251,17 +301,23 @@
 
         <!-- Categories -->
         <section v-if="activeTab === 'categories'" class="section">
-            <h2 class="section-title">Categories</h2>
+            <h2 class="section-title">{{ $t('Categories') }}</h2>
+<!--            <h2 class="section-title">Categories</h2>-->
+
             <!-- Add Category Form -->
             <div class="add-category-form">
-                <h3>Add New Category</h3>
+                <h3>{{ $t('AddNewCategory') }}</h3>
+<!--                <h3>Add New Category</h3>-->
+
                 <form @submit.prevent="addCategory" class="form">
                     <div class="form-group">
-                        <label>Category Name *</label>
-                        <input v-model="newCategory.name" type="text" placeholder="Category Name" required />
+                        <label>{{ $t('CategoryName') }} *</label>
+                        <input v-model="newCategory.name" type="text" :placeholder="$t('CategoryName')" required />
+<!--                        <label>Category Name *</label>-->
+<!--                        <input v-model="newCategory.name" type="text" placeholder="Category Name" required />-->
                     </div>
                     <button type="submit" class="submit-btn" :disabled="isAddingCategory">
-                        {{ isAddingCategory ? 'Adding Category...' : 'Add Category' }}
+                        {{ isAddingCategory ? $t('AddingCategory') : $t('AddCategory') }}
                     </button>
                 </form>
             </div>
@@ -270,11 +326,12 @@
                 <div class="card-grid">
                     <div class="card" v-for="category in categories" :key="category.id">
                         <p><strong>ID:</strong> {{ category.id }}</p>
-                        <p><strong>Name:</strong> {{ category.name }}</p>
-                        <p><strong>Created:</strong> {{ formatDate(category.created_at) }}</p>
-                        <p><strong>Updated:</strong> {{ formatDate(category.updated_at) }}</p>
+                        <p><strong>{{ $t('NameName') }}:</strong> {{ category.name }}</p>
+                        <p><strong>{{ $t('Created') }}:</strong> {{ formatDate(category.created_at) }}</p>
+                        <p><strong>{{ $t('Updated') }}:</strong> {{ formatDate(category.updated_at) }}</p>
                         <div class="actions">
-                            <button @click="deleteRecord('category', category.id)" class="delete-btn">Delete</button>
+                            <button @click="deleteRecord('category', category.id)" class="delete-btn">{{ $t('Delete') }}</button>
+<!--                            <button @click="deleteRecord('category', category.id)" class="delete-btn">Delete</button>-->
                         </div>
                     </div>
                 </div>
@@ -283,28 +340,38 @@
 
         <!-- Add Product -->
         <section v-if="activeTab === 'addProduct'" class="section">
-            <h2 class="section-title">Add Product</h2>
+            <h2 class="section-title">{{ $t('AddProduct') }}</h2>
+<!--            <h2 class="section-title">Add Product</h2>-->
+
             <div class="scrollable-container">
                 <form @submit.prevent="addProduct" class="form">
                     <div class="form-group">
-                        <label>Product Name *</label>
-                        <input v-model="newProduct.name" type="text" placeholder="Product Name" required />
+                        <label>{{ $t('ProductName') }} *</label>
+                        <input v-model="newProduct.name" type="text" :placeholder="$t('ProductName')" required />
+<!--                        <label>Product Name *</label>-->
+<!--                        <input v-model="newProduct.name" type="text" placeholder="Product Name" required />-->
                     </div>
 
                     <div class="form-group">
-                        <label>Price *</label>
-                        <input v-model="newProduct.price" type="number" step="0.01" placeholder="Price" required />
+                        <label>{{ $t('Price') }} *</label>
+                        <input v-model="newProduct.price" type="number" step="0.01" :placeholder="$t('Price')" required />
+<!--                        <label>Price *</label>-->
+<!--                        <input v-model="newProduct.price" type="number" step="0.01" placeholder="Price" required />-->
                     </div>
 
                     <div class="form-group">
-                        <label>Amount Value *</label>
-                        <input v-model="newProduct.amount_value" type="number" step="0.01" placeholder="Amount Value" required />
+                        <label>{{ $t('AmountValue') }} *</label>
+                        <input v-model="newProduct.amount_value" type="number" step="0.01" :placeholder="$t('AmountValue')" required />
+<!--                        <label>Amount Value *</label>-->
+<!--                        <input v-model="newProduct.amount_value" type="number" step="0.01" placeholder="Amount Value" required />-->
                     </div>
 
                     <div class="form-group">
-                        <label>Amount Unit *</label>
+                        <label>{{ $t('AmountUnit') }} *</label>
+<!--                        <label>Amount Unit *</label>-->
                         <select v-model="newProduct.amount_unit" required>
-                            <option value="">Select Unit</option>
+                            <option value="">{{ $t('SelectUnit') }}</option>
+<!--                            <option value="">Select Unit</option>-->
                             <option value="g">g</option>
                             <option value="kg">kg</option>
                             <option value="ml">ml</option>
@@ -315,9 +382,11 @@
 
                     <!-- Brand Selection -->
                     <div class="form-group">
-                        <label>Brand *</label>
+                        <label>{{ $t('Brand') }} *</label>
+<!--                        <label>Brand *</label>-->
                         <select v-model="newProduct.brand_id" required>
-                            <option value="">Select Brand</option>
+                            <option value="">{{ $t('SelectBrand') }}</option>
+<!--                            <option value="">Select Brand</option>-->
                             <option v-for="brand in brands" :key="brand.id" :value="brand.id">
                                 {{ brand.name }}
                             </option>
@@ -326,9 +395,11 @@
 
                     <!-- Category Selection -->
                     <div class="form-group">
-                        <label>Category *</label>
+                        <label>{{ $t('Category') }} *</label>
+<!--                        <label>Category *</label>-->
                         <select v-model="newProduct.category_id" required>
-                            <option value="">Select Category</option>
+                            <option value="">{{ $t('SelectCategory') }}</option>
+<!--                            <option value="">Select Category</option>-->
                             <option v-for="category in categories" :key="category.id" :value="category.id">
                                 {{ category.name }}
                             </option>
@@ -336,39 +407,51 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Country Origin</label>
-                        <input v-model="newProduct.country_origin" type="text" placeholder="Country Origin" />
+                        <label>{{ $t('CountryOrigin') }}</label>
+                        <input v-model="newProduct.country_origin" type="text" :placeholder="$t('CountryOrigin')" />
+<!--                        <label>Country Origin</label>-->
+<!--                        <input v-model="newProduct.country_origin" type="text" placeholder="Country Origin" />-->
                     </div>
 
                     <div class="form-group">
-                        <label>Ingredients</label>
-                        <textarea v-model="newProduct.ingredients" placeholder="Ingredients"></textarea>
+                        <label>{{ $t('Ingredients') }}</label>
+                        <textarea v-model="newProduct.ingredients" :placeholder="$t('Ingredients')"></textarea>
+<!--                        <label>Ingredients</label>-->
+<!--                        <textarea v-model="newProduct.ingredients" placeholder="Ingredients"></textarea>-->
                     </div>
 
                     <div class="form-group">
-                        <label>Nutritional Info</label>
-                        <textarea v-model="newProduct.nutritional_info" placeholder="Nutritional Info"></textarea>
+                        <label>{{ $t('NutritionalInfo') }}</label>
+                        <textarea v-model="newProduct.nutritional_info" :placeholder="$t('NutritionalInfo')"></textarea>
+<!--                        <label>Nutritional Info</label>-->
+<!--                        <textarea v-model="newProduct.nutritional_info" placeholder="Nutritional Info"></textarea>-->
                     </div>
 
                     <div class="form-group">
-                        <label>Storage Conditions</label>
-                        <input v-model="newProduct.storage_conditions" type="text" placeholder="Storage Conditions" />
+                        <label>{{ $t('StorageConditions') }}</label>
+                        <input v-model="newProduct.storage_conditions" type="text" :placeholder="$t('StorageConditions')" />
+<!--                        <label>Storage Conditions</label>-->
+<!--                        <input v-model="newProduct.storage_conditions" type="text" placeholder="Storage Conditions" />-->
                     </div>
 
                     <div class="form-group">
-                        <label>Product Image *</label>
+                        <label>{{ $t('ProductImage') }} *</label>
                         <input type="file" @change="handleFileUpload" accept="image/*" required />
-                        <small>Supported formats: JPEG, PNG, JPG, GIF (Max: 2MB)</small>
+                        <small>{{ $t('SupportedFormats') }}: JPEG, PNG, JPG, GIF (Max: 2MB)</small>
+<!--                        <label>Product Image *</label>-->
+<!--                        <input type="file" @change="handleFileUpload" accept="image/*" required />-->
+<!--                        <small>Supported formats: JPEG, PNG, JPG, GIF (Max: 2MB)</small>-->
                     </div>
 
                     <div v-if="imageFile" class="image-preview">
-                        <p><strong>Image Preview:</strong></p>
+                        <p><strong>{{ $t('ImagePreview') }}:</strong></p>
+<!--                        <p><strong>Image Preview:</strong></p>-->
                         <img :src="imagePreview" alt="Product Image Preview" />
                         <p class="image-name">{{ imageFile.name }}</p>
                     </div>
 
                     <button type="submit" class="submit-btn" :disabled="isAdding">
-                        {{ isAdding ? 'Adding Product...' : 'Add Product' }}
+                        {{ isAdding ? $t('AddingProduct') : $t('AddProduct') }}
                     </button>
                 </form>
             </div>

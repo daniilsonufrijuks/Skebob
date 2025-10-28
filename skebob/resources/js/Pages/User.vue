@@ -58,7 +58,7 @@
                             <!-- Subscription Status -->
                             <div class="row m-t-20">
                                 <div class="col-sm-12">
-                                    <p class="m-b-10 f-w-600">{{ $t('SNACKtastic Subscription Status') }}</p>
+                                    <p class="m-b-10 f-w-600">{{ $t('SNACKtasticSubscriptionStatus') }}</p>
                                     <div class="subscription-status-display">
                                         <span :class="['status-badge', user.has_subscription ? 'status-active' : 'status-inactive']">
                                             <i :class="user.has_subscription ? 'fas fa-crown' : 'fas fa-hourglass-half'"></i>

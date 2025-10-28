@@ -9,7 +9,7 @@
         <div v-if="!isAuthenticated" class="auth-required">
             <div class="auth-message">
                 <h3>{{ $t('AuthenticationRequired') }}</h3>
-                <p>{{ $t('Please Log In To Subscribe') }}</p>
+                <p>{{ $t('PleaseLogInToSubscribe') }}</p>
                 <div class="auth-actions">
                     <button @click="redirectToLogin" class="login-button">
                         {{ $t('login') }}
@@ -29,23 +29,37 @@
                 </div>
                 <div class="subscription-status">
                     <div class="status-icon">✅</div>
-                    <h2 class="status-title">You're Already Subscribed!</h2>
+                    <h2 class="status-title">{{ $t('YoureAlreadySubscribed') }}!</h2>
                     <p class="status-message">
-                        Thank you for being a valued SNACKtastic subscriber!
-                        You're all set to enjoy your exclusive benefits, including your <strong>free Mystery Box every 2 months</strong>.
+                        {{ $t('ThankYouSNACKtasticSubscriber') }}!
+                        {{ $t('YoureAllSetForExclusiveBenefits') }} <strong>{{ $t('freeMysteryBoxEvery2Months') }}</strong>.
                     </p>
+<!--                    <h2 class="status-title">You're Already Subscribed!</h2>-->
+<!--                    <p class="status-message">-->
+<!--                        Thank you for being a valued SNACKtastic subscriber!-->
+<!--                        You're all set to enjoy your exclusive benefits, including your <strong>free Mystery Box every 2 months</strong>.-->
+<!--                    </p>-->
+
                     <div class="active-benefits">
-                        <h3>Your Active Benefits:</h3>
+                        <h3>{{ $t('YourActiveBenefits') }}:</h3>
+<!--                        <h3>Your Active Benefits:</h3>-->
                         <ul class="benefits-list">
-                            <li>🎁 <strong>FREE Mystery Box every 2 months</strong></li>
-                            <li>🚚 With free express shipping for it</li>
-                            <li>📞 And constant priority customer support</li>
+                            <li>🎁 <strong>{{ $t('freeMysteryBoxEveryTwoMonths') }}</strong></li>
+                            <li>🚚 {{ $t('WithFreeExpressShippingForIt') }}</li>
+                            <li>📞 {{ $t('AndConstantPriorityCustomerSupport') }}</li>
+<!--                            <li>🎁 <strong>FREE Mystery Box every 2 months</strong></li>-->
+<!--                            <li>🚚 With free express shipping for it</li>-->
+<!--                            <li>📞 And constant priority customer support</li>-->
                         </ul>
                     </div>
                     <p class="next-box-info">
-                        Your next Mystery Box is scheduled to arrive in the coming weeks.
-                        Keep an eye on your email for shipping updates!
+                        {{ $t('YourNextMysteryBoxIsScheduled') }}.
+                        {{ $t('KeepAnEyeOnYourEmailForShippingUpdates') }}!
                     </p>
+<!--                    <p class="next-box-info">-->
+<!--                        Your next Mystery Box is scheduled to arrive in the coming weeks.-->
+<!--                        Keep an eye on your email for shipping updates!-->
+<!--                    </p>-->
                 </div>
             </div>
 
@@ -59,26 +73,37 @@
                     <p class="subscription-price">${{ subscription.price }}</p>
 
                     <div class="subscription-benefits">
-                        <h3>Unlock Exclusive Benefits:</h3>
+                        <h3>{{ $t('UnlockExclusiveBenefits') }}:</h3>
+<!--                        <h3>Unlock Exclusive Benefits:</h3>-->
+
                         <ul class="benefits-list">
-                            <li>🎁 <strong>FREE Mystery Box every 2 months</strong> - Discover surprise products worth up to $50!</li>
-                            <li>🚚 With free express shipping for it</li>
-                            <li>📞 And constant priority customer support</li>
+                            <li>🎁 <strong>{{ $t('freeMysteryBoxEveryTwoMonths') }}</strong> - {{ $t('DiscoverSurpriseProductsWorthUpTo') }} $50!</li>
+                            <li>🚚 {{ $t('WithFreeExpressShippingForIt') }}</li>
+                            <li>📞 {{ $t('AndConstantPriorityCustomerSupport') }}</li>
+<!--                            <li>🎁 <strong>FREE Mystery Box every 2 months</strong> - Discover surprise products worth up to $50!</li>-->
+<!--                            <li>🚚 With free express shipping for it</li>-->
+<!--                            <li>📞 And constant priority customer support</li>-->
                         </ul>
                     </div>
 
                     <div class="mystery-box-highlight">
                         <div class="highlight-icon">🎁</div>
                         <div class="highlight-text">
-                            <strong>BONUS:</strong> Your first Mystery Box ships immediately after subscription!
+                            <strong>{{ $t('BONUS') }}:</strong> {{ $t('YourFirstMysteryBoxShips') }}!
+<!--                            <strong>BONUS:</strong> Your first Mystery Box ships immediately after subscription!-->
                         </div>
                     </div>
 
                     <p class="subscription-description">
-                        Join thousands of satisfied members who enjoy the thrill of surprise and the best deals!
-                        Every two months, we curate a special Mystery Box filled with premium products tailored to your preferences.
-                        It's not just a subscription - it's an experience that keeps giving!
+                        {{ $t('JoinThousandsOfSatisfiedMembers') }}!
+                        {{ $t('WeCurateSpecialMysteryBox') }}.
+                        {{ $t('ItsNotJustSubscription') }}!
                     </p>
+<!--                    <p class="subscription-description">-->
+<!--                        Join thousands of satisfied members who enjoy the thrill of surprise and the best deals!-->
+<!--                        Every two months, we curate a special Mystery Box filled with premium products tailored to your preferences.-->
+<!--                        It's not just a subscription - it's an experience that keeps giving!-->
+<!--                    </p>-->
 
                     <div class="subscription-cta">
                         <button
@@ -123,6 +148,7 @@ import { useUser } from "../Composables/useUser.js";
 import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { loadStripe } from "@stripe/stripe-js";
+import { useI18n } from 'vue-i18n'
 
 export default {
     name: 'SubscriptionPage',
@@ -138,6 +164,7 @@ export default {
         routes: Object,
     },
     setup() {
+        const { t } = useI18n({ useScope: 'global' });
         const { isLoggedIn, user } = useUser();
         const router = useRouter();
         const subscription = ref(null);
@@ -173,7 +200,8 @@ export default {
             if (processing.value || !subscription.value) return;
             // double-check authentication
             if (!isAuthenticated.value) {
-                alert('Please log in to subscribe.');
+                alert(t('PleaseLogInToSubscribe'))
+                // alert('Please log in to subscribe.');
                 redirectToLogin();
                 return;
             }
