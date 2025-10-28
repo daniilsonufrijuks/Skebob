@@ -192,6 +192,7 @@ const messages = {
         ProductDetails: 'Product Details',
         Buy: 'Buy',
         Price: 'Price',
+        Quantity: 'Quantity',
         Origin: 'Origin',
         ItemAddedToCart: 'Item added to cart',
         YourShoppingCart: 'Your Shopping Cart',
@@ -227,6 +228,9 @@ const messages = {
         Clear: 'Clear',
         EditingMode: "Editing Mode",
         ClickPencilToEdit: "Click the pencil to edit",
+        subscriptions: 'Subscriptions',
+        PleaseLogInToSubscribe: 'Please log in to Subscribe!',
+        SubscriptionNotAvailable: 'Subscription Not Available',
         // ...add more keys
 
         // products
@@ -433,6 +437,7 @@ const messages = {
         ProductDetails: 'Produkta informācija',
         Buy: 'Pirkt',
         Price: 'Cena',
+        Quantity: 'Daudzums',
         Origin: 'Izcelsme',
         ItemAddedToCart: 'Prece pievienota grozā',
         YourShoppingCart: 'Jūsu iepirkšanās grozs',
@@ -467,6 +472,9 @@ const messages = {
         Clear: 'Dzēst',
         EditingMode: "Rediģēšanas režīms",
         ClickPencilToEdit: "Noklikšķiniet uz zīmuļa, lai rediģētu",
+        subscriptions: 'Abonementi',
+        PleaseLogInToSubscribe: 'Lūdzu piesakieties, lai abonētu!',
+        SubscriptionNotAvailable: 'Abonements nav pieejams',
         // ...add more keys
 
         // products

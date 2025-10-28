@@ -6,22 +6,24 @@ let ctx, animationFrame, particles = [];
 
 const shapes = ["circle", "square", "triangle"];
 
+// Fixed dimensions that never change
+const FIXED_WIDTH = 1920;
+const FIXED_HEIGHT = 1080;
+
 class Particle {
-    constructor(width, height) {
-        this.x = Math.random() * width;
-        this.y = height + 20;
+    constructor() {
+        this.x = Math.random() * FIXED_WIDTH;
+        this.y = FIXED_HEIGHT + 20;
         this.size = (Math.random() * 10 + 10) * 3;
         this.speedY = Math.random() * 1 + 0.5;
         this.opacity = 0;
         this.life = 0;
         this.shape = shapes[Math.floor(Math.random() * shapes.length)];
-
-        this.angle = 0; // rotation angle in radians
+        this.angle = 0;
         this.rotationSpeed = (2 * Math.PI) / (60 * 5);
-        // 1 rotation every 5 seconds @ ~60fps
     }
 
-    update(height) {
+    update() {
         this.y -= this.speedY;
         this.life += 0.02;
         this.angle += this.rotationSpeed;
@@ -33,19 +35,18 @@ class Particle {
         }
 
         if (this.y < -20 || this.opacity <= 0) {
-            this.reset(height);
+            this.reset();
         }
     }
 
-    reset(height) {
-        this.x = Math.random() * canvas.value.width;
-        this.y = height + 20;
+    reset() {
+        this.x = Math.random() * FIXED_WIDTH;
+        this.y = FIXED_HEIGHT + 20;
         this.size = (Math.random() * 10 + 10) * 3;
-        this.speedY = Math.random() * 2 + 0.5;
+        this.speedY = Math.random() * 1 + 0.5;
         this.opacity = 0;
         this.life = 0;
         this.shape = shapes[Math.floor(Math.random() * shapes.length)];
-
         this.angle = 0;
     }
 
@@ -84,55 +85,65 @@ class Particle {
 }
 
 function init() {
-    const width = canvas.value.width = window.innerWidth;
-    const height = canvas.value.height = window.innerHeight;
-    ctx = canvas.value.getContext("2d");
+    const canvasEl = canvas.value;
+    ctx = canvasEl.getContext("2d");
+
+    // Set fixed dimensions
+    canvasEl.width = FIXED_WIDTH;
+    canvasEl.height = FIXED_HEIGHT;
 
     particles = [];
     for (let i = 0; i < 60; i++) {
-        particles.push(new Particle(width, height));
+        particles.push(new Particle());
     }
 
     animate();
 }
 
 function animate() {
-    const width = canvas.value.width;
-    const height = canvas.value.height;
-
-    ctx.clearRect(0, 0, width, height);
+    ctx.clearRect(0, 0, FIXED_WIDTH, FIXED_HEIGHT);
 
     particles.forEach(p => {
-        p.update(height);
+        p.update();
         p.draw(ctx);
     });
 
     animationFrame = requestAnimationFrame(animate);
 }
 
+function handleResize() {
+    // No need to reinitialize particles, just let CSS handle the scaling
+}
+
 onMounted(() => {
     init();
-    window.addEventListener("resize", init);
+    window.addEventListener("resize", handleResize);
 });
 
 onBeforeUnmount(() => {
     cancelAnimationFrame(animationFrame);
-    window.removeEventListener("resize", init);
+    window.removeEventListener("resize", handleResize);
 });
 </script>
 
 <template>
-    <canvas ref="canvas" class="absolute inset-0 -z-10"></canvas>
+    <canvas
+        ref="canvas"
+        class="absolute inset-0 -z-10"
+        style="width: 100vw; height: 100vh;"
+    ></canvas>
 </template>
 
 <style scoped>
 canvas {
-    background: white; /* or transparent if you want overlay effect */
+    background: white;
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;   /* viewport width */
-    height: 100vh;  /* viewport height */
     display: block;
+    /* Let the browser handle scaling via CSS */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
 }
 </style>

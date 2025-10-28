@@ -211,6 +211,8 @@ const submit = () => {
             </div>
         </div>
     </section>
+
+    <br><br>
     <Wave/>
 </template>
 
