@@ -1,5 +1,18 @@
 <template>
     <div class="admin-dashboard">
+        <!-- Header Bar -->
+        <div class="admin-header">
+            <div class="logo-container">
+                <img src="/skebob.png" alt="SKEBOB Logo" class="logo" />
+                <h1 class="logo-text"><strong>SKEBOB</strong></h1>
+            </div>
+
+            <select v-model="currentLang" class="lang-switcher">
+                <option value="en">EN</option>
+                <option value="lv">LV</option>
+            </select>
+        </div>
+
         <button @click="$inertia.visit('/')" class="back-button">{{ $t('BackToUserPage') }}</button>
         <h1 class="title">{{ $t('AdminDashboard') }}</h1>
 <!--        <button @click="$inertia.visit('/')" class="back-button">Back to user page</button>-->
@@ -1211,6 +1224,73 @@ input[type="file"] {
 .add-category-form .form {
     max-width: 400px;
     margin: 0;
+}
+
+/* HEADER BAR */
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background-color: #fff;
+    border-bottom: 2px solid #420d65;
+    margin-bottom: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    width: 45px;
+    height: auto;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    color: #420d65;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+/* === Language Switcher === */
+.lang-switcher {
+    background-color: #fff;
+    color: #420d65;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 2px solid #420d65;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.lang-switcher:hover {
+    background-color: #420d65;
+    color: #fff;
+}
+
+/* Responsive Header */
+@media (max-width: 600px) {
+    .admin-header {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .logo-text {
+        font-size: 1.2rem;
+    }
+
+    .lang-switcher {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+    }
 }
 
 @media (max-width: 768px) {
