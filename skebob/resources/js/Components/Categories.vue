@@ -203,10 +203,7 @@ const handleShopNowClick = (category) => {
 const handleMysteryBoxClick = () => {
     console.log('Mystery box clicked');
     // Scroll to mystery box section or navigate
-    const mysterySection = document.querySelector('[class*="mystery"]');
-    if (mysterySection) {
-        mysterySection.scrollIntoView({ behavior: 'smooth' });
-    }
+    window.location.href = '/mystery-box';
 };
 </script>
 

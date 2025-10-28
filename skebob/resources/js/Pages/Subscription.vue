@@ -229,13 +229,11 @@ export default {
         };
 
         const redirectToLogin = () => {
-            const currentPath = router.currentRoute.value.fullPath;
-            router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
+            window.location.href = '/login';
         };
 
         const redirectToRegister = () => {
-            const currentPath = router.currentRoute.value.fullPath;
-            router.push(`/register?redirect=${encodeURIComponent(currentPath)}`);
+            window.location.href = '/registration';
         };
         return {
             subscription,
