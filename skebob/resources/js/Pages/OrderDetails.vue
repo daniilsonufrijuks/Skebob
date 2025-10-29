@@ -39,7 +39,8 @@ onMounted(async () => {
 <!--            <h2>Order #{{ order.id }}</h2>-->
 
             <p><strong>{{ $t('status') }}:</strong> {{ order.status }}</p>
-            <p v-if="isZero(Number(order.total_price).toFixed(2))"><strong>{{ $t('total') }}:</strong> ${{ Number(order.total_price).toFixed(2) }}, part of subscription plan</p>
+            <p v-if="isZero(Number(order.total_price).toFixed(2))"><strong>{{ $t('total') }}:</strong> ${{ Number(order.total_price).toFixed(2) }}, {{ $t('PartOfSubscriptionPlan') }}</p>
+<!--            <p v-if="isZero(Number(order.total_price).toFixed(2))"><strong>{{ $t('total') }}:</strong> ${{ Number(order.total_price).toFixed(2) }}, part of subscription plan</p>-->
             <p v-else><strong>{{ $t('total') }}:</strong> ${{ Number(order.total_price).toFixed(2) }}</p>
             <p><strong>{{ $t('shippingAddress') }}:</strong> {{ order.shipping_address }}</p>
             <p><strong>{{ $t('date') }}:</strong> {{ formatDate(order.ordered_at) }}</p>

@@ -6,29 +6,37 @@
             <!-- Success Header -->
             <div class="success-header">
                 <div class="success-icon">✓</div>
-                <h1 class="success-title">Order Confirmed!</h1>
-                <p class="success-message">Thank you for your purchase. Your order has been successfully processed.</p>
+                <h1 class="success-title">{{ $t('OrderConfirmed') }}!</h1>
+                <p class="success-message">{{ $t('ThankYouForYourPurchase') }}.</p>
+<!--                <h1 class="success-title">Order Confirmed!</h1>-->
+<!--                <p class="success-message">Thank you for your purchase. Your order has been successfully processed.</p>-->
             </div>
 
             <!-- Order Details -->
             <div class="order-details-section">
-                <h2 class="section-title">Order Details</h2>
+                <h2 class="section-title">{{ $t('OrderDetails') }}</h2>
+<!--                <h2 class="section-title">Order Details</h2>-->
 
                 <div class="details-grid">
                     <div class="detail-item">
-                        <span class="detail-label">Order ID:</span>
+                        <span class="detail-label">{{ $t('OrderID') }}:</span>
+<!--                        <span class="detail-label">Order ID:</span>-->
                         <span class="detail-value">#{{ order?.id || 'Loading...' }}</span>
                     </div>
                     <div class="detail-item">
-                        <span class="detail-label">Order Date:</span>
+                        <span class="detail-label">{{ $t('OrderDate') }}:</span>
+<!--                        <span class="detail-label">Order Date:</span>-->
                         <span class="detail-value">{{ orderDate }}</span>
                     </div>
                     <div class="detail-item">
-                        <span class="detail-label">Order Status:</span>
-                        <span class="status-badge paid">Paid</span>
+                        <span class="detail-label">{{ $t('OrderStatus') }}:</span>
+                        <span class="status-badge paid">{{ $t('Paid') }}</span>
+<!--                        <span class="detail-label">Order Status:</span>-->
+<!--                        <span class="status-badge paid">Paid</span>-->
                     </div>
                     <div class="detail-item">
-                        <span class="detail-label">Total Amount:</span>
+                        <span class="detail-label">{{ $t('TotalAmount') }}:</span>
+<!--                        <span class="detail-label">Total Amount:</span>-->
                         <span class="detail-value total-amount">${{ formatCurrency(order?.total_price) }}</span>
                     </div>
                 </div>
@@ -36,29 +44,34 @@
 
             <!-- Products Summary -->
             <div class="products-section">
-                <h3 class="section-title">Order Items</h3>
+                <h3 class="section-title">{{ $t('OrderItems') }}</h3>
+<!--                <h3 class="section-title">Order Items</h3>-->
+
                 <div v-if="orderItems.length > 0">
                     <div class="order-item" v-for="item in orderItems" :key="item.id">
                         <img :src="item.image" alt="Product Image" class="order-item-img" />
                         <div class="order-item-details">
                             <h4>{{ item.name }}</h4>
                             <p>{{ item.description }}</p>
-                            <p>Price: ${{ item.price }}</p>
-                            <p>Quantity: {{ item.quantity }}</p>
-                            <p class="item-total">Item Total: ${{ formatCurrency(item.price * item.quantity) }}</p>
+                            <p>{{ $t('Price') }}: ${{ item.price }}</p>
+                            <p>{{ $t('Quantity') }}: {{ item.quantity }}</p>
+                            <p class="item-total">{{ $t('ItemTotal') }}: ${{ formatCurrency(item.price * item.quantity) }}</p>
+<!--                            <p class="item-total">Item Total: ${{ formatCurrency(item.price * item.quantity) }}</p>-->
                         </div>
                     </div>
                 </div>
                 <div v-else class="loading-message">
-                    Loading order items...
+                    {{ $t('LoadingOrderItems') }}...
                 </div>
             </div>
 
             <!-- Shipping Information -->
             <div class="shipping-section" v-if="order?.shipping_address">
-                <h3 class="section-title">Shipping Information</h3>
+                <h3 class="section-title">{{ $t('ShippingInformation') }}</h3>
+<!--                <h3 class="section-title">Shipping Information</h3>-->
                 <div class="shipping-details">
-                    <p><strong>Shipping Address:</strong></p>
+                    <p><strong>{{ $t('shippingAddress') }}:</strong></p>
+<!--                    <p><strong>Shipping Address:</strong></p>-->
                     <p>{{ order.shipping_address }}</p>
                 </div>
             </div>
@@ -84,27 +97,34 @@
 
             <!-- Next Steps -->
             <div class="next-steps-section">
-                <h3 class="section-title">What's Next?</h3>
+                <h3 class="section-title">{{ $t('WhatsNext') }}?</h3>
+<!--                <h3 class="section-title">What's Next?</h3>-->
                 <div class="steps-grid">
                     <div class="step-item">
                         <div class="step-icon">📧</div>
                         <div class="step-content">
-                            <h4>Order Confirmation</h4>
-                            <p>You will receive an email confirmation shortly with your order details.</p>
+                            <h4>{{ $t('OrderConfirmation') }}</h4>
+                            <p>{{ $t('YouWillReceiveAnEmailConfirmation') }}.</p>
+<!--                            <h4>Order Confirmation</h4>-->
+<!--                            <p>You will receive an email confirmation shortly with your order details.</p>-->
                         </div>
                     </div>
                     <div class="step-item">
                         <div class="step-icon">🚚</div>
                         <div class="step-content">
-                            <h4>Shipping Updates</h4>
-                            <p>We'll send you tracking information once your order ships.</p>
+                            <h4>{{ $t('ShippingUpdates') }}</h4>
+                            <p>{{ $t('WellSendYouTrackingInformation') }}.</p>
+<!--                            <h4>Shipping Updates</h4>-->
+<!--                            <p>We'll send you tracking information once your order ships.</p>-->
                         </div>
                     </div>
                     <div class="step-item">
                         <div class="step-icon">⏱️</div>
                         <div class="step-content">
-                            <h4>Delivery Time</h4>
-                            <p>Most orders are delivered within 3-5 business days.</p>
+                            <h4>{{ $t('DeliveryTime') }}</h4>
+                            <p>{{ $t('MostOrdersAreDelivered') }}.</p>
+<!--                            <h4>Delivery Time</h4>-->
+<!--                            <p>Most orders are delivered within 3-5 business days.</p>-->
                         </div>
                     </div>
                 </div>
@@ -113,7 +133,7 @@
             <!-- Action Buttons -->
             <div class="confirmation-actions">
                 <button @click="continueShopping" class="continue-shopping-button">
-                    Continue Shopping
+                    {{ $t('ContinueShopping') }}
                 </button>
 <!--                <button @click="viewOrderHistory" class="order-history-button">-->
 <!--                    View Order History-->

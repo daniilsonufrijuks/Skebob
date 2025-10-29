@@ -28,7 +28,8 @@
 <!--            <p v-else style="text-align: center;">Your cart is empty.</p>-->
 
             <div class="cart-total" v-if="cartItems.length > 0">
-                <span>Total: ${{ cartTotal.toFixed(2) }}</span>
+                <span>{{ $t('total') }}: ${{ cartTotal.toFixed(2) }}</span>
+<!--                <span>Total: ${{ cartTotal.toFixed(2) }}</span>-->
                 <button @click="proceedToCheckout" class="checkout-btn">{{ $t('ProceedToCheckout') }}</button>
 <!--                <button @click="proceedToCheckout" class="checkout-btn">Proceed to Checkout</button>-->
             </div>

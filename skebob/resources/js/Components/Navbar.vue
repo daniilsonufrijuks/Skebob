@@ -65,7 +65,7 @@ watch(currentLang, (newLang) => {
         <ul>
             <li><a href="/">{{ $t('home') }}</a></li>
             <li><a href="/market">{{ $t('market') }}</a></li>
-            <li><a href="/subscriptions">Subscriptions</a></li>
+            <li><a href="/subscriptions">{{ $t('subscriptions') }}</a></li>
             <li><a href="/about">{{ $t('about') }}</a></li>
             <li><a href="/contacts">{{ $t('contacts') }}</a></li>
             <li><a href="/tutor">{{ $t('blog') }}</a></li>

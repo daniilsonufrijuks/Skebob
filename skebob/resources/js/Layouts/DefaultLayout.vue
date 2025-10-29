@@ -9,15 +9,21 @@
             <div class="mystery-box-modal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2>🎉 Congratulations! 🎉</h2>
-                        <p class="modal-subtitle">Choose Your FREE Mystery Box!</p>
+                        <h2>🎉 {{ $t('Congratulations') }}! 🎉</h2>
+                        <p class="modal-subtitle">{{ $t('ChooseYourFreeMysteryBox') }}!</p>
+<!--                        <h2>🎉 Congratulations! 🎉</h2>-->
+<!--                        <p class="modal-subtitle">Choose Your FREE Mystery Box!</p>-->
                     </div>
 
                     <div class="modal-body">
-                        <p>You've successfully subscribed to SNACKtastic!</p>
+                        <p>{{ $t('YouveSuccessfullySubscribedToSNACKtastic') }}!</p>
                         <p class="highlight-text">
-                            <strong>Select one of these exclusive Deluxe Mystery Boxes:</strong>
+                            <strong>{{ $t('SelectDeluxeMysteryBoxes') }}:</strong>
                         </p>
+<!--                        <p>You've successfully subscribed to SNACKtastic!</p>-->
+<!--                        <p class="highlight-text">-->
+<!--                            <strong>Select one of these exclusive Deluxe Mystery Boxes:</strong>-->
+<!--                        </p>-->
 
                         <!-- Mystery Boxes selection -->
                         <div v-if="mysteryBoxes.length > 0" class="mystery-boxes-grid">
@@ -34,10 +40,12 @@
                                 <div class="box-details">
                                     <h3 class="box-name">{{ box.product.name }}</h3>
                                     <p class="box-description">{{ box.description }}</p>
-                                    <p class="box-value">Value: ${{ box.product.price }}</p>
+                                    <p class="box-value">{{ $t('SubscriptionValue') }}: ${{ box.product.price }}</p>
+<!--                                    <p class="box-value">Value: ${{ box.product.price }}</p>-->
                                     <div class="selection-indicator">
                                         <div v-if="selectedBoxIndex === index" class="selected-check">✓ Selected</div>
-                                        <div v-else class="select-prompt">Click to select</div>
+                                        <div v-else class="select-prompt">{{ $t('ClickToSelectMysteryBox') }}</div>
+<!--                                        <div v-else class="select-prompt">Click to select</div>-->
                                     </div>
                                 </div>
                             </div>
@@ -124,15 +132,23 @@
                             class="modal-button primary"
                             :disabled="selectedBoxIndex === null || claiming || !isShippingFormValid"
                         >
-                            <span v-if="claiming">Claiming...</span>
-                            <span v-else>Claim My Mystery Box</span>
+                            <span v-if="claiming">{{ $t('Claiming') }}...</span>
+                            <span v-else>{{ $t('ClaimMyMysteryBox') }}</span>
+<!--                            <span v-if="claiming">Claiming...</span>-->
+<!--                            <span v-else>Claim My Mystery Box</span>-->
                         </button>
                         <p v-if="selectedBoxIndex === null" class="selection-required">
-                            Please select a mystery box to continue
+                            {{ $t('PleaseSelectMysteryBox') }}
                         </p>
+<!--                        <p v-if="selectedBoxIndex === null" class="selection-required">-->
+<!--                            Please select a mystery box to continue-->
+<!--                        </p>-->
                         <p v-else-if="!isShippingFormValid" class="selection-required">
-                            Please fill in all shipping information
+                            {{ $t('PleaseFillInAllShippingInfo') }}
                         </p>
+<!--                        <p v-else-if="!isShippingFormValid" class="selection-required">-->
+<!--                            Please fill in all shipping information-->
+<!--                        </p>-->
                     </div>
                 </div>
             </div>
@@ -142,9 +158,11 @@
 
 <script>
 import { ref, onMounted, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
     setup() {
+        const { t } = useI18n({ useScope: 'global' });
         const showMysteryBoxModal = ref(false)
         const mysteryBoxes = ref([])
         const loadingBoxes = ref(false)
@@ -176,7 +194,8 @@ export default {
             if (url.searchParams.has('just_subscribed')) {
                 url.searchParams.delete('just_subscribed')
                 window.history.replaceState({}, document.title, url.toString())
-                console.log('URL parameters cleaned')
+                console.log(t('URLparametersCleaned'))
+                // console.log(t('URL parameters cleaned'))
             }
         }
 
@@ -185,7 +204,8 @@ export default {
             // Check if we already have mystery boxes stored
             const storedBoxes = localStorage.getItem('mystery_boxes')
             if (storedBoxes) {
-                console.log('Using stored mystery boxes')
+                console.log(t('UsingStoredMysteryBoxes'))
+                // console.log('Using stored mystery boxes')
                 mysteryBoxes.value = JSON.parse(storedBoxes)
                 return
             }
@@ -193,13 +213,15 @@ export default {
             try {
                 const response = await fetch('/products/subscription-mystery-boxes')
                 if (!response.ok) {
-                    throw new Error('Failed to fetch mystery boxes')
+                    throw new Error(t('FailedToFetchMysteryBoxes'))
+                    // throw new Error('Failed to fetch mystery boxes')
                 }
                 const data = await response.json()
                 mysteryBoxes.value = data
                 // store the fetched boxes in localStorage
                 localStorage.setItem('mystery_boxes', JSON.stringify(data))
                 console.log('Fetched and stored mystery boxes:', data)
+                // console.log('Fetched and stored mystery boxes:', data)
             } catch (error) {
                 console.error('Error fetching mystery boxes:', error)
                 mysteryBoxes.value = []
@@ -229,7 +251,8 @@ export default {
                 localStorage.setItem('just_subscribed', 'true')
                 // fetch mystery boxes when modal opens
                 fetchMysteryBoxes()
-                console.log('Modal shown from URL parameter')
+                console.log(t('ModalShownFromURLParameter'))
+                // console.log('Modal shown from URL parameter')
             }
             // also check localStorage for persistence but only if no URL parameter
             else if (justSubscribedFromStorage === 'true' && !justSubscribedFromUrl) {
@@ -282,10 +305,17 @@ export default {
                 document.body.style.overflow = 'auto'
                 console.log('Mystery box claimed successfully:', result)
                 // show success message with order details
-                alert(`🎉 Congratulations! You've claimed the "${selectedBox.product.name}" mystery box!\n\nYour order #${result.order_id} has been created and will be shipped to:\n${shippingData.address}, ${shippingData.city}, ${shippingData.zipCode}, ${shippingData.country}\n\nYou will receive a confirmation email at ${shippingData.email}`)
+                // alert(`🎉 Congratulations! You've claimed the "${selectedBox.product.name}" mystery box!\n\nYour order #${result.order_id} has been created and will be shipped to:\n${shippingData.address}, ${shippingData.city}, ${shippingData.zipCode}, ${shippingData.country}\n\nYou will receive a confirmation email at ${shippingData.email}`)
+                alert(`🎉 ${t('Congratulations')}! ${t('YouveClaimedMysteryBox', { box: selectedBox.product.name })}
+${t('OrderCreatedWithID', { id: result.order_id })}
+${t('WillBeShippedTo')}:
+${shippingData.address}, ${shippingData.city}, ${shippingData.zipCode}, ${shippingData.country}
+${t('ConfirmationEmailSentTo', { email: shippingData.email })}`)
+
             } catch (error) {
                 console.error('Error claiming mystery box:', error)
-                alert('There was an error claiming your mystery box: ' + error.message)
+                alert(`${t('ErrorClaimingMysteryBox')}: ${error.message}`)
+                // alert('There was an error claiming your mystery box: ' + error.message)
             } finally {
                 claiming.value = false
             }
