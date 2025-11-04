@@ -1,5 +1,18 @@
 <template>
     <div class="admin-dashboard">
+        <!-- Header Bar -->
+        <div class="admin-header">
+            <div class="logo-container">
+                <img src="/skebob.png" alt="SKEBOB Logo" class="logo" />
+                <h1 class="logo-text"><strong>SKEBOB</strong></h1>
+            </div>
+
+            <select v-model="currentLang" class="lang-switcher">
+                <option value="en">EN</option>
+                <option value="lv">LV</option>
+            </select>
+        </div>
+
         <button @click="$inertia.visit('/')" class="back-button">{{ $t('BackToUserPage') }}</button>
         <h1 class="title">{{ $t('AdminDashboard') }}</h1>
 <!--        <button @click="$inertia.visit('/')" class="back-button">Back to user page</button>-->
@@ -464,376 +477,298 @@
     </div>
 </template>
 
-<script>
-export default {
-    props: {
-        orders: {
-            type: Array,
-            default: () => []
-        },
-        products: {
-            type: Array,
-            default: () => []
-        },
-        orderItems: {
-            type: Array,
-            default: () => []
-        },
-        users: {
-            type: Array,
-            default: () => []
-        },
-        brands: {
-            type: Array,
-            default: () => []
-        },
-        categories: {
-            type: Array,
-            default: () => []
-        }
-    },
-    data() {
-        return {
-            activeTab: 'orders',
-            newProduct: {
-                name: '',
-                price: '',
-                amount_value: '',
-                amount_unit: '',
-                brand_id: '',
-                category_id: '',
-                country_origin: '',
-                ingredients: '',
-                nutritional_info: '',
-                storage_conditions: ''
-            },
-            newBrand: {
-                name: ''
-            },
-            newCategory: {
-                name: ''
-            },
-            imageFile: null,
-            imagePreview: null,
-            editProduct: null,
-            editImageFile: null,
-            editImagePreview: null,
-            isAdding: false,
-            isAddingBrand: false,
-            isAddingCategory: false,
-            notification: {
-                show: false,
-                message: '',
-                type: 'success'
-            }
-        };
-    },
-    methods: {
-        startEdit(product) {
-            // Create a clean copy without the image path string
-            this.editProduct = {
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                amount_value: product.amount_value,
-                amount_unit: product.amount_unit,
-                brand_id: product.brand_id, // Add this
-                category_id: product.category_id, // Add this
-                country_origin: product.country_origin,
-                ingredients: product.ingredients,
-                nutritional_info: product.nutritional_info,
-                storage_conditions: product.storage_conditions
-            };
-            this.editImageFile = null;
-            this.editImagePreview = null;
-        },
+<script setup>
+import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { router as inertiaRouter } from '@inertiajs/vue3'
 
-        cancelEdit() {
-            this.editProduct = null;
-            this.editImageFile = null;
-            this.editImagePreview = null;
-        },
+// 🌍 Internationalization Setup
+const { t, locale } = useI18n({ useScope: 'global' })
+const currentLang = ref(localStorage.getItem('lang') || 'en')
+locale.value = currentLang.value
 
-        async updateProduct() {
-            if (!this.editProduct) return;
-            const formData = new FormData();
-            // only append the fields that should be updated
-            const productData = {
-                name: this.editProduct.name,
-                price: this.editProduct.price,
-                amount_value: this.editProduct.amount_value,
-                amount_unit: this.editProduct.amount_unit,
-                brand_id: this.editProduct.brand_id,
-                category_id: this.editProduct.category_id,
-                country_origin: this.editProduct.country_origin,
-                ingredients: this.editProduct.ingredients,
-                nutritional_info: this.editProduct.nutritional_info,
-                storage_conditions: this.editProduct.storage_conditions,
-                _method: 'PUT'
-            };
+watch(currentLang, (newLang) => {
+    locale.value = newLang
+    localStorage.setItem('lang', newLang)
+})
 
-            // append all data to FormData
-            Object.keys(productData).forEach(key => {
-                if (productData[key] !== null && productData[key] !== undefined) {
-                    formData.append(key, productData[key]);
-                }
-            });
+// 📦 Props (data passed from backend via Inertia)
+defineProps({
+    orders: { type: Array, default: () => [] },
+    products: { type: Array, default: () => [] },
+    orderItems: { type: Array, default: () => [] },
+    users: { type: Array, default: () => [] },
+    brands: { type: Array, default: () => [] },
+    categories: { type: Array, default: () => [] },
+})
 
-            // only append image if a new one was selected
-            if (this.editImageFile) {
-                formData.append('image', this.editImageFile);
-            }
+// 🧠 Reactive state
+const activeTab = ref('orders')
+const newProduct = ref({
+    name: '',
+    price: '',
+    amount_value: '',
+    amount_unit: '',
+    brand_id: '',
+    category_id: '',
+    country_origin: '',
+    ingredients: '',
+    nutritional_info: '',
+    storage_conditions: ''
+})
 
-            console.log('Updating product with data:');
-            for (let [key, value] of formData.entries()) {
-                console.log(key, value);
-            }
+const newBrand = ref({ name: '' })
+const newCategory = ref({ name: '' })
+const imageFile = ref(null)
+const imagePreview = ref(null)
+const editProduct = ref(null)
+const editImageFile = ref(null)
+const editImagePreview = ref(null)
+const isAdding = ref(false)
+const isAddingBrand = ref(false)
+const isAddingCategory = ref(false)
 
-            try {
-                await this.$inertia.post(`/admin/products/${this.editProduct.id}`, formData, {
-                    onSuccess: () => {
-                        this.showNotification('Product updated successfully!', 'success');
-                        this.editProduct = null;
-                        this.editImageFile = null;
-                        this.editImagePreview = null;
-                    },
-                    onError: (errors) => {
-                        console.error('Update errors:', errors);
-                        this.showNotification('Error updating product: ' + JSON.stringify(errors), 'error');
-                    }
-                });
+const notification = ref({
+    show: false,
+    message: '',
+    type: 'success'
+})
 
-            } catch (error) {
-                console.error('Error updating product:', error);
-                this.showNotification('Error updating product: ' + error.message, 'error');
-            }
-        },
+// === 💡 Core Functions ===
 
-        async addProduct() {
-            // Validate required fields
-            if (!this.newProduct.name || !this.newProduct.price || !this.newProduct.amount_value ||
-                !this.newProduct.amount_unit || !this.newProduct.brand_id || !this.newProduct.category_id ||
-                !this.imageFile) {
-                this.showNotification('Please fill all required fields and select an image', 'error');
-                return;
-            }
+function startEdit(product) {
+    editProduct.value = { ...product }
+    editImageFile.value = null
+    editImagePreview.value = null
+}
 
-            this.isAdding = true;
+function cancelEdit() {
+    editProduct.value = null
+    editImageFile.value = null
+    editImagePreview.value = null
+}
 
-            const formData = new FormData();
+function formatDate(dateString) {
+    if (!dateString) return 'N/A'
+    const date = new Date(dateString)
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
+}
 
-            // Append all product data
-            Object.keys(this.newProduct).forEach((key) => {
-                if (this.newProduct[key] !== null && this.newProduct[key] !== undefined && this.newProduct[key] !== '') {
-                    formData.append(key, this.newProduct[key]);
-                }
-            });
+async function updateProduct() {
+    if (!editProduct.value) return
+    const formData = new FormData()
 
-            // Append image file
-            if (this.imageFile) {
-                formData.append('image', this.imageFile);
-            }
-
-            // Remove the hardcoded foreign keys since we're getting them from the form
-            // formData.append('brand_id', '1'); // Remove this line
-            // formData.append('category_id', '1'); // Remove this line
-            formData.append('admin_id', '1'); // Keep admin_id if it's still needed
-
-            console.log('Adding new product with data:');
-            for (let [key, value] of formData.entries()) {
-                console.log(key, value);
-            }
-
-            try {
-                await this.$inertia.post('/admin/products', formData, {
-                    onSuccess: () => {
-                        this.showNotification('Product added successfully!', 'success');
-                        this.resetForm();
-                        this.isAdding = false;
-                        // Switch to products tab to see the new product
-                        this.activeTab = 'products';
-                    },
-                    onError: (errors) => {
-                        console.error('Add product errors:', errors);
-                        this.showNotification('Failed to add product: ' + JSON.stringify(errors), 'error');
-                        this.isAdding = false;
-                    }
-                });
-            } catch (error) {
-                console.error('Error adding product:', error);
-                this.showNotification('Error adding product: ' + error.message, 'error');
-                this.isAdding = false;
-            }
-        },
-
-        async addBrand() {
-            if (!this.newBrand.name) {
-                this.showNotification('Please enter a brand name', 'error');
-                return;
-            }
-            this.isAddingBrand = true;
-            try {
-                await this.$inertia.post('/admin/brands', {
-                    name: this.newBrand.name
-                }, {
-                    onSuccess: () => {
-                        this.showNotification('Category added successfully!', 'success');
-                    },
-                    onError: (errors) => {
-                        console.error('Add category errors:', errors);
-                        this.showNotification('Failed to add category: ' + JSON.stringify(errors), 'error');
-                    },
-                    onFinish: () => {
-                        this.newBrand.name = '';
-                        this.isAddingBrand = false;
-                    },
-                });
-            } catch (error) {
-                console.error('Error adding category:', error);
-                this.showNotification('Error adding category: ' + error.message, 'error');
-                this.isAddingCategory = false;
-            }
-        },
-
-        async addCategory() {
-            if (!this.newCategory.name) {
-                this.showNotification('Please enter a category name', 'error');
-                return;
-            }
-
-            this.isAddingCategory = true;
-
-            try {
-                await this.$inertia.post('/admin/categories', {
-                    name: this.newCategory.name
-                }, {
-                    onSuccess: () => {
-                        this.showNotification('Category added successfully!', 'success');
-                        this.newCategory.name = '';
-                        this.isAddingCategory = false;
-                    },
-                    onError: (errors) => {
-                        console.error('Add category errors:', errors);
-                        this.showNotification('Failed to add category: ' + JSON.stringify(errors), 'error');
-                        this.isAddingCategory = false;
-                    }
-                });
-            } catch (error) {
-                console.error('Error adding category:', error);
-                this.showNotification('Error adding category: ' + error.message, 'error');
-                this.isAddingCategory = false;
-            }
-        },
-
-        handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                this.imageFile = file;
-
-                // Create preview
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    this.imagePreview = e.target.result;
-                };
-                reader.readAsDataURL(file);
-
-                console.log('Image selected:', file.name);
-            } else {
-                this.imageFile = null;
-                this.imagePreview = null;
-            }
-        },
-
-        handleEditImageUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                this.editImageFile = file;
-
-                // create preview
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    this.editImagePreview = e.target.result;
-                };
-                reader.readAsDataURL(file);
-
-                console.log('New image selected for edit:', file.name);
-            } else {
-                this.editImageFile = null;
-                this.editImagePreview = null;
-            }
-        },
-
-        deleteRecord(type, id) {
-            if (confirm(`Are you sure you want to delete this ${type}?`)) {
-                // define plural forms mapping
-                const pluralForms = {
-                    'order': 'orders',
-                    'orderitem': 'orderitems',
-                    'product': 'products',
-                    'user': 'users',
-                    'brand': 'brands',
-                    'category': 'categories'
-                };
-
-                // get the correct plural form, fallback - adding 's' as default
-                const pluralType = pluralForms[type] || `${type}s`;
-                this.$inertia.delete(`/admin/${pluralType}/${id}`, {
-                    preserveScroll: true,
-                    onSuccess: () => {
-                        this.showNotification(`${type} deleted successfully!`, 'success');
-                    },
-                    onError: (err) => {
-                        let errorMessage = `Error deleting ${type}`;
-                        if (err && typeof err === 'object') {
-                            errorMessage = err.error || errorMessage;
-                        } else if (err) {
-                            errorMessage = err;
-                        }
-                        this.showNotification(errorMessage, 'error');
-                    },
-                });
-            }
-        },
-
-        resetForm() {
-            this.newProduct = {
-                name: '',
-                price: '',
-                amount_value: '',
-                amount_unit: '',
-                brand_id: '',
-                category_id: '',
-                country_origin: '',
-                ingredients: '',
-                nutritional_info: '',
-                storage_conditions: ''
-            };
-            this.imageFile = null;
-            this.imagePreview = null;
-            // Reset file input
-            const fileInput = document.querySelector('input[type="file"]');
-            if (fileInput) fileInput.value = '';
-        },
-
-        showNotification(message, type = 'success') {
-            this.notification = {
-                show: true,
-                message,
-                type
-            };
-            setTimeout(() => {
-                this.notification.show = false;
-            }, 3000);
-        },
-
-        formatDate(dateString) {
-            if (!dateString) return 'N/A';
-            const date = new Date(dateString);
-            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-        },
-
+    const productData = {
+        name: editProduct.value.name,
+        price: editProduct.value.price,
+        amount_value: editProduct.value.amount_value,
+        amount_unit: editProduct.value.amount_unit,
+        brand_id: editProduct.value.brand_id,
+        category_id: editProduct.value.category_id,
+        country_origin: editProduct.value.country_origin,
+        ingredients: editProduct.value.ingredients,
+        nutritional_info: editProduct.value.nutritional_info,
+        storage_conditions: editProduct.value.storage_conditions,
+        _method: 'PUT'
     }
-};
+
+    Object.keys(productData).forEach((key) => {
+        if (productData[key] !== null && productData[key] !== undefined)
+            formData.append(key, productData[key])
+    })
+
+    if (editImageFile.value) formData.append('image', editImageFile.value)
+
+    try {
+        await inertiaRouter.post(`/admin/products/${editProduct.value.id}`, formData, {
+            onSuccess: () => {
+                showNotification('✅ ' + t('ProductUpdatedSuccessfully'), 'success')
+                editProduct.value = null
+                editImageFile.value = null
+                editImagePreview.value = null
+            },
+            onError: (errors) => {
+                console.error('Update errors:', errors)
+                showNotification('❌ ' + t('ErrorUpdatingProduct'), 'error')
+            }
+        })
+    } catch (error) {
+        console.error('Error updating product:', error)
+        showNotification('❌ ' + error.message, 'error')
+    }
+}
+
+async function addProduct() {
+    if (
+        !newProduct.value.name ||
+        !newProduct.value.price ||
+        !newProduct.value.amount_value ||
+        !newProduct.value.amount_unit ||
+        !newProduct.value.brand_id ||
+        !newProduct.value.category_id ||
+        !imageFile.value
+    ) {
+        showNotification('⚠️ ' + t('PleaseFillRequiredFieldsAndSelectImage'), 'error')
+        return
+    }
+
+    isAdding.value = true
+
+    const formData = new FormData()
+    Object.keys(newProduct.value).forEach((key) => {
+        if (newProduct.value[key] !== null && newProduct.value[key] !== undefined && newProduct.value[key] !== '')
+            formData.append(key, newProduct.value[key])
+    })
+    formData.append('image', imageFile.value)
+    formData.append('admin_id', '1')
+
+    try {
+        await inertiaRouter.post('/admin/products', formData, {
+            onSuccess: () => {
+                showNotification('✅ ' + t('ProductAddedSuccessfully'), 'success')
+                resetForm()
+                isAdding.value = false
+                activeTab.value = 'products'
+            },
+            onError: (errors) => {
+                console.error('Add product errors:', errors)
+                showNotification('❌ ' + t('FailedToAddProduct'), 'error')
+                isAdding.value = false
+            }
+        })
+    } catch (error) {
+        console.error('Error adding product:', error)
+        showNotification('❌ ' + error.message, 'error')
+        isAdding.value = false
+    }
+}
+
+async function addBrand() {
+    if (!newBrand.value.name) {
+        showNotification('⚠️ ' + t('PleaseEnterBrandName'), 'error')
+        return
+    }
+    isAddingBrand.value = true
+    try {
+        await inertiaRouter.post('/admin/brands', { name: newBrand.value.name }, {
+            onSuccess: () => showNotification('✅ ' + t('BrandAddedSuccessfully'), 'success'),
+            onError: (errors) => {
+                console.error('Add brand errors:', errors)
+                showNotification('❌ ' + t('FailedToAddBrand'), 'error')
+            },
+            onFinish: () => {
+                newBrand.value.name = ''
+                isAddingBrand.value = false
+            }
+        })
+    } catch (error) {
+        console.error('Error adding brand:', error)
+        showNotification('❌ ' + error.message, 'error')
+        isAddingBrand.value = false
+    }
+}
+
+async function addCategory() {
+    if (!newCategory.value.name) {
+        showNotification('⚠️ ' + t('PleaseEnterCategoryName'), 'error')
+        return
+    }
+
+    isAddingCategory.value = true
+    try {
+        await inertiaRouter.post('/admin/categories', { name: newCategory.value.name }, {
+            onSuccess: () => {
+                showNotification('✅ ' + t('CategoryAddedSuccessfully'), 'success')
+                newCategory.value.name = ''
+                isAddingCategory.value = false
+            },
+            onError: (errors) => {
+                console.error('Add category errors:', errors)
+                showNotification('❌ ' + t('FailedToAddCategory'), 'error')
+                isAddingCategory.value = false
+            }
+        })
+    } catch (error) {
+        console.error('Error adding category:', error)
+        showNotification('❌ ' + error.message, 'error')
+        isAddingCategory.value = false
+    }
+}
+
+function handleFileUpload(event) {
+    const file = event.target.files[0]
+    if (file) {
+        imageFile.value = file
+        const reader = new FileReader()
+        reader.onload = (e) => (imagePreview.value = e.target.result)
+        reader.readAsDataURL(file)
+    } else {
+        imageFile.value = null
+        imagePreview.value = null
+    }
+}
+
+function handleEditImageUpload(event) {
+    const file = event.target.files[0]
+    if (file) {
+        editImageFile.value = file
+        const reader = new FileReader()
+        reader.onload = (e) => (editImagePreview.value = e.target.result)
+        reader.readAsDataURL(file)
+    } else {
+        editImageFile.value = null
+        editImagePreview.value = null
+    }
+}
+
+function deleteRecord(type, id) {
+    if (confirm(t('AreYouSureDeleteThis', { type }))) {
+        const pluralForms = {
+            order: 'orders',
+            orderitem: 'orderitems',
+            product: 'products',
+            user: 'users',
+            brand: 'brands',
+            category: 'categories'
+        }
+        const pluralType = pluralForms[type] || `${type}s`
+
+        inertiaRouter.delete(`/admin/${pluralType}/${id}`, {
+            preserveScroll: true,
+            onSuccess: () => showNotification(`✅ ${t('DeletedSuccessfully')}`, 'success'),
+            onError: (err) => {
+                let errorMessage = `❌ ${t('ErrorDeleting')}`
+                if (err && typeof err === 'object') errorMessage = err.error || errorMessage
+                else if (err) errorMessage = err
+                showNotification(errorMessage, 'error')
+            }
+        })
+    }
+}
+
+function resetForm() {
+    newProduct.value = {
+        name: '',
+        price: '',
+        amount_value: '',
+        amount_unit: '',
+        brand_id: '',
+        category_id: '',
+        country_origin: '',
+        ingredients: '',
+        nutritional_info: '',
+        storage_conditions: ''
+    }
+    imageFile.value = null
+    imagePreview.value = null
+    const fileInput = document.querySelector('input[type="file"]')
+    if (fileInput) fileInput.value = ''
+}
+
+function showNotification(message, type = 'success') {
+    notification.value = { show: true, message, type }
+    setTimeout(() => (notification.value.show = false), 3000)
+}
 </script>
 
 <style scoped>
@@ -1211,6 +1146,73 @@ input[type="file"] {
 .add-category-form .form {
     max-width: 400px;
     margin: 0;
+}
+
+/* HEADER BAR */
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background-color: #fff;
+    border-bottom: 2px solid #420d65;
+    margin-bottom: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    width: 45px;
+    height: auto;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    color: #420d65;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+/* === Language Switcher === */
+.lang-switcher {
+    background-color: #fff;
+    color: #420d65;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 2px solid #420d65;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.lang-switcher:hover {
+    background-color: #420d65;
+    color: #fff;
+}
+
+/* Responsive Header */
+@media (max-width: 600px) {
+    .admin-header {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .logo-text {
+        font-size: 1.2rem;
+    }
+
+    .lang-switcher {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+    }
 }
 
 @media (max-width: 768px) {
